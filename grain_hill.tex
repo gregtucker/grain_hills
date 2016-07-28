@@ -79,43 +79,76 @@ TEXT
 
 \introduction  %% \introduction[modified heading if necessary]
 
-Ok, what's the point here? It's really that, well, a couple of things. You know, we need a theory for steep slopes. Need to honor
-
-Hillslopes take on a delightful array of forms...
-
-That is to say, there are lots of different kinds of hillslopes
-
 Hillslopes take on a rich variety of forms. Their profile shapes may be convex-upward, concave-upward, planar, or some combination of these. Some slopes are completely mantled with soil, whereas others are bare rock, and still others draped in a discontinuous layer of mobile regolith. The processes understood to be responsible for shaping them are equally varied, ranging from disturbance-driven creep to dissolution to large-scale mass movement events.
 
 Considerable research has been devoted to understanding the evolution of soil-mantled slopes that are primarily governed by disturbance-driven creep, such as down-slope soil transport by biotic and abiotic soil-mixing processes. As a result, the geomorphology community has mathematical models that account well for observed slope forms and patterns of regolith thickness \citep[e.g.,][]{roering2008how}. Furthermore, stochastic-transport theory provides a mechanistic link between the statistics of particle motion, the resultant average rates of downslope transport, and the emergence of convex-upward, soil-mantled slope forms \citep{culling,furbish}.
 
-One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport model \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. Rocky slopes are rarely completely barren; more commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
+One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport model \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relative fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS]. 
 
-The geomorphology community has a well-developed continuum-mechanics theory for the evolution of 
+Rocky slopes are rarely completely barren; more commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
 
-Mathematical models for the evolution of convex, soil-mantled hillslopes, founded on ...
+An additional issue, which pertains to both rocky and soil-mantled slopes, is the connection between sediment motion at the scale of motion ``events'', and longer-term average sediment flux, which forms the basis for continuum models of hillslope evolution. Recent theoretical and experiment work has begun to forge a mechanistic connection between these scales [REFS Furbish especially, building on earlier work by Culling]. However, the community's resources for computational analysis of particle-level dynamics remain limited [REFS], lagging behind developments in the understanding of fluvial sediment transport [REFS Schmeeckle etc.].
 
-well, look, some of the basic issues are:
+To further our understanding of how grain-level weathering and transport translate into hillslope evolution, both for hillslopes in general and rocky slopes in particular, it would be useful to have a computational framework with which to conduct experiments. Ideally, such a framework should be sophisticated enough to capture the essence of weathering and granular mechanics, while remaining simple enough to involve only a small number of parameters and providing reasonable computational efficiency.
 
-- we don't have good models for the evolution of relatively steep, rocky slopes
+Our aim in this paper is to describe one such computational framework, test whether it is capable of reproducing commonly observed hillslope-profile forms, and examine how its parameters relate to the bulk-behavior parameters used in conventional continuum models of soil creep and regolith production. The model uses a pairwise, continuous-time stochastic (CTS) approach to combine a lattice-grain model [REFS] with rules for stochastic bedrock-to-regolith conversion (``weathering'') and disturbance of surface regolith particles.
 
-- we have continuum mathematical models for soil-mantled slopes, as well as stochastic-process models that link the statistics of particle motion to slope form and long-term evolution (Furbish). But we don't have much in the way of a computational framework that links these two views, allowing one to experiment with how processes associated with individual disturbance and sediment-motion events translate into hillslope forms and dynamics.
-
-It's really these two that we're addressing here...
+We begin with ... [outline sections of the paper]
 
 
 
 
-\section{HEADING}
+
+
+\section{Background}
+
+Do we go all the way back to Gilbert? probably, but quite briefly. 
+
+gilbert reasoned that the rate of release of rock or saprolite to disaggregated material should depend on the thickness of the overlying regolith cover, because XYZ. this was later codified into the popular inverse-exponential and ``humped curve'' formulas [ahnert, heimsath, anderson, etc]. consistent with cosmo nuclides [heim, small, etc]. lacks mechanistic basis.
+
+Davis and Gilbert enunciated the view of convex soil-mantled slopes, turned into math by culling, who also nodded to underlying probabilistic basis.
+
+diffusion theory captures convex slopes, and is consistent with cosmos [mckean, small, ...]
+
+modified to account for accelerated motion, nonlinear, andrews and bucknam, howard, roering
+
+also modified for account for depth dependence
+
+process blind; some specific formulations for particular types of disturbance process (e.g., frost creep) (just mentioning in passing)
+
+Furbish work that relates bulk flux of sediment to the statistical mechanics of grain motion, leading to diffusion-like principles. Foufoula nonlocal and fractional calculus.
+
+hillslope cellular and particle models review: jyotsna and haff, tucker and bradley, roering and ?.
+
+meanwhile, in the granular mechanics community, a whole variety of cellular models (see refs in T et al 2016)
+
+one of our aims in this paper is to forge a link between the lattice-grain models used in the granular mechanics community, and theories for hillslope evolution in the geomorphology community.
+
+
+\section{Model Description}
+
+Lattice-grain model 
+
+works on pairwise CTS principle; explain briefly
+
+brief overview of LG rules and framework; refer to Tucker et al. 2016
+
+Some kind of demonstrations / examples. Silo again? Sand-pile?
+
+Weathering rule: rock turns to regolith
+
+Disturbance rule: 
+
+Uplift
+
+Scaling and nondimensionalization
+
+
+\section{Results}
 TEXT
 
-\subsection{HEADING}
-TEXT
 
-\subsubsection{HEADING}
-TEXT
-
-
+\section{Discussion}
 
 
 \conclusions  %% \conclusions[modified heading if necessary]
