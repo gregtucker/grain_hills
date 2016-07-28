@@ -1,0 +1,315 @@
+%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%% ---------------------------------
+%% This template should be used for copernicus.cls
+%% The class file and some style files are bundled in the Copernicus Latex Package which can be downloaded from the different journal webpages.
+%% For further assistance please contact the Copernicus Publications at: publications@copernicus.org
+%% http://publications.copernicus.org
+
+
+%% Please use the following documentclass and Journal Abbreviations for Discussion Papers and Final Revised Papers.
+
+
+%% 2-Column Papers and Discussion Papers
+\documentclass[esurf, manuscript]{copernicus}
+
+
+
+
+
+%% \usepackage commands included in the copernicus.cls:
+%\usepackage[german, english]{babel}
+%\usepackage{tabularx}
+%\usepackage{cancel}
+%\usepackage{multirow}
+%\usepackage{supertabular}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{amsthm}
+%\usepackage{float}
+%\usepackage{subfig}
+%\usepackage{rotating}
+
+
+\begin{document}
+
+\title{A lattice grain model of hillslope evolution}
+
+
+% \Author[affil]{given_name}{surname}
+
+\Author[1]{Gregory E.}{Tucker}
+\Author[]{}{}
+\Author[]{}{}
+
+\affil[1]{Cooperative Institute for Research in Environmental Science (CIRES) and Department of Geological Sciences, University of Colorado, Boulder, CO 80305 USA}
+\affil[]{ADDRESS}
+
+%% The [] brackets identify the author with the corresponding affiliation. 1, 2, 3, etc. should be inserted.
+
+
+
+\runningtitle{TEXT}
+
+\runningauthor{TEXT}
+
+\correspondence{NAME (EMAIL)}
+
+
+
+\received{}
+\pubdiscuss{} %% only important for two-stage journals
+\revised{}
+\accepted{}
+\published{}
+
+%% These dates will be inserted by Copernicus Publications during the typesetting process.
+
+
+\firstpage{1}
+
+\maketitle
+
+
+
+\begin{abstract}
+TEXT
+\end{abstract}
+
+
+
+\introduction  %% \introduction[modified heading if necessary]
+
+Ok, what's the point here? It's really that, well, a couple of things. You know, we need a theory for steep slopes. Need to honor
+
+Hillslopes take on a delightful array of forms...
+
+That is to say, there are lots of different kinds of hillslopes
+
+Hillslopes take on a rich variety of forms. Their profile shapes may be convex-upward, concave-upward, planar, or some combination of these. Some slopes are completely mantled with soil, whereas others are bare rock, and still others draped in a discontinuous layer of mobile regolith. The processes understood to be responsible for shaping them are equally varied, ranging from disturbance-driven creep to dissolution to large-scale mass movement events.
+
+Considerable research has been devoted to understanding the evolution of soil-mantled slopes that are primarily governed by disturbance-driven creep, such as down-slope soil transport by biotic and abiotic soil-mixing processes. As a result, the geomorphology community has mathematical models that account well for observed slope forms and patterns of regolith thickness \citep[e.g.,][]{roering2008how}. Furthermore, stochastic-transport theory provides a mechanistic link between the statistics of particle motion, the resultant average rates of downslope transport, and the emergence of convex-upward, soil-mantled slope forms \citep{culling,furbish}.
+
+One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport model \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. Rocky slopes are rarely completely barren; more commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
+
+The geomorphology community has a well-developed continuum-mechanics theory for the evolution of 
+
+Mathematical models for the evolution of convex, soil-mantled hillslopes, founded on ...
+
+well, look, some of the basic issues are:
+
+- we don't have good models for the evolution of relatively steep, rocky slopes
+
+- we have continuum mathematical models for soil-mantled slopes, as well as stochastic-process models that link the statistics of particle motion to slope form and long-term evolution (Furbish). But we don't have much in the way of a computational framework that links these two views, allowing one to experiment with how processes associated with individual disturbance and sediment-motion events translate into hillslope forms and dynamics.
+
+It's really these two that we're addressing here...
+
+
+
+
+\section{HEADING}
+TEXT
+
+\subsection{HEADING}
+TEXT
+
+\subsubsection{HEADING}
+TEXT
+
+
+
+
+\conclusions  %% \conclusions[modified heading if necessary]
+TEXT
+
+
+
+
+\appendix
+\section{}    %% Appendix A
+
+\subsection{}                               %% Appendix A1, A2, etc.
+
+
+\authorcontribution{TEXT}
+
+\begin{acknowledgements}
+TEXT
+\end{acknowledgements}
+
+
+%% REFERENCES
+
+%% The reference list is compiled as follows:
+
+\begin{thebibliography}{}
+
+\bibitem[AUTHOR(YEAR)]{LABEL}
+REFERENCE 1
+
+\bibitem[AUTHOR(YEAR)]{LABEL}
+REFERENCE 2
+
+\end{thebibliography}
+
+%% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
+%% authors experienced with BibTeX only have to include the following two lines:
+%%
+%% \bibliographystyle{copernicus}
+%% \bibliography{example.bib}
+%%
+%% URLs and DOIs can be entered in your BibTeX file as:
+%%
+%% URL = {http://www.xyz.org/~jones/idx_g.htm}
+%% DOI = {10.5194/xyz}
+
+
+%% LITERATURE CITATIONS
+%%
+%% command                        & example result
+%% \citet{jones90}|               & Jones et al. (1990)
+%% \citep{jones90}|               & (Jones et al., 1990)
+%% \citep{jones90,jones93}|       & (Jones et al., 1990, 1993)
+%% \citep[p.~32]{jones90}|        & (Jones et al., 1990, p.~32)
+%% \citep[e.g.,][]{jones90}|      & (e.g., Jones et al., 1990)
+%% \citep[e.g.,][p.~32]{jones90}| & (e.g., Jones et al., 1990, p.~32)
+%% \citeauthor{jones90}|          & Jones et al.
+%% \citeyear{jones90}|            & 1990
+
+
+
+%% FIGURES
+
+%% ONE-COLUMN FIGURES
+
+%%f
+%\begin{figure}[t]
+%\includegraphics[width=8.3cm]{FILE NAME}
+%\caption{TEXT}
+%\end{figure}
+%
+%%% TWO-COLUMN FIGURES
+%
+%%f
+%\begin{figure*}[t]
+%\includegraphics[width=12cm]{FILE NAME}
+%\caption{TEXT}
+%\end{figure*}
+%
+%
+%%% TABLES
+%%%
+%%% The different columns must be seperated with a & command and should
+%%% end with \\ to identify the column brake.
+%
+%%% ONE-COLUMN TABLE
+%
+%%t
+%\begin{table}[t]
+%\caption{TEXT}
+%\begin{tabular}{column = lcr}
+%\tophline
+%
+%\middlehline
+%
+%\bottomhline
+%\end{tabular}
+%\belowtable{} % Table Footnotes
+%\end{table}
+%
+%%% TWO-COLUMN TABLE
+%
+%%t
+%\begin{table*}[t]
+%\caption{TEXT}
+%\begin{tabular}{column = lcr}
+%\tophline
+%
+%\middlehline
+%
+%\bottomhline
+%\end{tabular}
+%\belowtable{} % Table Footnotes
+%\end{table*}
+%
+%
+%%% NUMBERING OF FIGURES AND TABLES
+%%%
+%%% If figures and tables must be numbered 1a, 1b, etc. the following command
+%%% should be inserted before the begin{} command.
+%
+%\addtocounter{figure}{-1}\renewcommand{\thefigure}{\arabic{figure}a}
+%
+%
+%%% MATHEMATICAL EXPRESSIONS
+%
+%%% All papers typeset by Copernicus Publications follow the math typesetting regulations
+%%% given by the IUPAC Green Book (IUPAC: Quantities, Units and Symbols in Physical Chemistry,
+%%% 2nd Edn., Blackwell Science, available at: http://old.iupac.org/publications/books/gbook/green_book_2ed.pdf, 1993).
+%%%
+%%% Physical quantities/variables are typeset in italic font (t for time, T for Temperature)
+%%% Indices which are not defined are typeset in italic font (x, y, z, a, b, c)
+%%% Items/objects which are defined are typeset in roman font (Car A, Car B)
+%%% Descriptions/specifications which are defined by itself are typeset in roman font (abs, rel, ref, tot, net, ice)
+%%% Abbreviations from 2 letters are typeset in roman font (RH, LAI)
+%%% Vectors are identified in bold italic font using \vec{x}
+%%% Matrices are identified in bold roman font
+%%% Multiplication signs are typeset using the LaTeX commands \times (for vector products, grids, and exponential notations) or \cdot
+%%% The character * should not be applied as mutliplication sign
+%
+%
+%%% EQUATIONS
+%
+%%% Single-row equation
+%
+%\begin{equation}
+%
+%\end{equation}
+%
+%%% Multiline equation
+%
+%\begin{align}
+%& 3 + 5 = 8\\
+%& 3 + 5 = 8\\
+%& 3 + 5 = 8
+%\end{align}
+%
+%
+%%% MATRICES
+%
+%\begin{matrix}
+%x & y & z\\
+%x & y & z\\
+%x & y & z\\
+%\end{matrix}
+%
+%
+%%% ALGORITHM
+%
+%\begin{algorithm}
+%\caption{…}
+%\label{a1}
+%\begin{algorithmic}
+%…
+%\end{algorithmic}
+%\end{algorithm}
+%
+%
+%%% CHEMICAL FORMULAS AND REACTIONS
+%
+%%% For formulas embedded in the text, please use \chem{}
+%
+%%% The reaction environment creates labels including the letter R, i.e. (R1), (R2), etc.
+%
+%\begin{reaction}
+%%% \rightarrow should be used for normal (one-way) chemical reactions
+%%% \rightleftharpoons should be used for equilibria
+%%% \leftrightarrow should be used for resonance structures
+%\end{reaction}
+%
+%
+%%% PHYSICAL UNITS
+%%%
+%%% Please use \unit{} and apply the exponential notation
+
+
+\end{document}
