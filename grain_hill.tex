@@ -129,9 +129,28 @@ one of our aims in this paper is to forge a link between the lattice-grain model
 
 The model combines a cellular automaton representation of granular mechanics with rules for weathering of rock to soil and for episodic disturbance of soil. Cellular automata are widely used in the granular mechanics community, because they can represent the essential physics of granular materials at a reasonably low computational cost \citep{REFS}. Because the principles are often to similar to those of lattice-gas automata in fluid dynamics \citep[e.g.,][]{}, cellular automata for granular mechanics are sometimes referred to as lattice-grain models (LGrMs).
 
-Our approach starts with a two-dimensional continuous-time stochastic lattice-grain model. The model is described in detail by \citet{tucker2016celllab}; here we present a brief overview of its rules and behavior. The framework is based on the pairwise method developed by Narteau and colleagues \citep{REFS} and applied to problems as diverse as eolian dune dynamics and the core-mantle interface.
+\subsection{CTS Lattice-Grain Model}
 
-In the CTS Lattice-Grain Model, the domain consists of a lattice of hexagonal cells. Each cell is assigned a state...
+Our approach starts with a two-dimensional continuous-time stochastic lattice-grain model. The model is described in detail by \citet{tucker2016celllab}; here we present a only brief overview of its rules and behavior. The framework is based on the pairwise method developed by Narteau and colleagues \citep{REFS} and applied to problems as diverse as eolian dune dynamics and the core-mantle interface.
+
+In the CTS Lattice-Grain Model, the domain consists of a lattice of hexagonal cells. Each cell is assigned one of eight states (Table XX). These states represents the nature and motion status of the material: state 0 represents fluid, states 1--6 represent a grain moving in one of the six lattice directions, and state 7 indicates a stationary grain. For purposes of modeling hillslope evolution, we add an additional state (8) to represent rock.
+
+Like other lattice-grain models, the CTS Lattice-Grain Model is designed to represent, in a simple way, the motion and interaction of an ensemble of grains in a gravitational field. The physics of the material are represented by a set of transition rules, in which a given adjacent pair of states is assigned a certain probability per unit time of undergoing a transition to a different pair. For example, consider a vertically aligned pair of cells in which the top cell has state 4 (moving downward) and the bottom cell state 0 (empty/fluid). Downward motion (falling) is represented by a transition in which the two states switch places (Figure XX).
+
+Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions (Figure XX). Inelastic (frictional) collisions are represented by a similar set of rules in which one or both colliding particles become stationary. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle. An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$.
+
+Tests of the CTS Lattice-Grain Model show that it reproduces several basic aspects of granular behavior \citep{tucker2016celllab}. For example, when gravity and friction are de-activated, the model conserves kinetic energy. Figure~XX illustrates a simulation of the emptying of a silo to form an angle-of-repose grain pile. For our purposes, what matters most is simply that the model captures, in a reasonable way, the response of particles on a slope to episodic disturbance events.
+
+\subsection{Weathering and Soil Creep}
+
+Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified rate $R_w$ [1/T] of transition to a grain-air pair. This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no weathering can take place.
+
+
+The transition rule also mimics 
+
+... go on to describe disturbance and weathering ... 
+
+Each adjacent pair of cells has a specified probability per unit time of undergoing a {\em transition}, in which one or both states change. For example, to grain motion 
 
 Lattice-grain model 
 
