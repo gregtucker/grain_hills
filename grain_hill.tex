@@ -83,13 +83,13 @@ Hillslopes take on a rich variety of forms. Their profile shapes may be convex-u
 
 Considerable research has been devoted to understanding the evolution of soil-mantled slopes that are primarily governed by disturbance-driven creep, such as down-slope soil transport by biotic and abiotic soil-mixing processes. As a result, the geomorphology community has mathematical models that account well for observed slope forms and patterns of regolith thickness \citep[e.g.,][]{roering2008how}. Furthermore, stochastic-transport theory provides a mechanistic link between the statistics of particle motion, the resultant average rates of downslope transport, and the emergence of convex-upward, soil-mantled slope forms \citep{culling,furbish}.
 
-One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport model \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relative fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS]. 
+One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport mode \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relatively fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS]. 
 
-Rocky slopes are rarely completely barren; more commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
+Rocky slopes are rarely completely barren. More commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
 
-An additional issue, which pertains to both rocky and soil-mantled slopes, is the connection between sediment motion at the scale of motion ``events'', and longer-term average sediment flux, which forms the basis for continuum models of hillslope evolution. Recent theoretical and experiment work has begun to forge a mechanistic connection between these scales [REFS Furbish especially, building on earlier work by Culling]. However, the community's resources for computational analysis of particle-level dynamics remain limited [REFS], lagging behind developments in the understanding of fluvial sediment transport [REFS Schmeeckle etc.].
+An additional issue, which pertains to both rocky and soil-mantled slopes, is the connection between sediment movement at the scale of individual ``motion events'', and the resulting longer-term average sediment flux, which forms the basis for continuum models of hillslope evolution. Recent theoretical and experiment work has begun to forge a mechanistic connection between these scales [REFS Furbish especially, building on earlier work by Culling]. However, the community's resources for computational analysis of particle-level dynamics remain limited [REFS], lagging behind developments in the understanding of fluvial sediment transport [REFS Schmeeckle etc.].
 
-To further our understanding of how grain-level weathering and transport translate into hillslope evolution, both for hillslopes in general and rocky slopes in particular, it would be useful to have a computational framework with which to conduct experiments. Ideally, such a framework should be sophisticated enough to capture the essence of weathering and granular mechanics, while remaining simple enough to involve only a small number of parameters and providing reasonable computational efficiency.
+To further our understanding of how grain-level weathering and transport processes translate into hillslope evolution, both for hillslopes in general and rocky slopes in particular, it would be useful to have a computational framework with which to conduct experiments. Ideally, such a framework should be sophisticated enough to capture the essence of weathering and granular mechanics, while remaining simple enough to involve only a small number of parameters and providing reasonable computational efficiency.
 
 Our aim in this paper is to describe one such computational framework, test whether it is capable of reproducing commonly observed hillslope-profile forms, and examine how its parameters relate to the bulk-behavior parameters used in conventional continuum models of soil creep and regolith production. The model uses a pairwise, continuous-time stochastic (CTS) approach to combine a lattice-grain model [REFS] with rules for stochastic bedrock-to-regolith conversion (``weathering'') and disturbance of surface regolith particles.
 
@@ -131,46 +131,79 @@ The model combines a cellular automaton representation of granular mechanics wit
 
 \subsection{CTS Lattice-Grain Model}
 
-Our approach starts with a two-dimensional continuous-time stochastic lattice-grain model. The model is described in detail by \citet{tucker2016celllab}; here we present a only brief overview of its rules and behavior. The framework is based on the pairwise method developed by Narteau and colleagues \citep{REFS} and applied to problems as diverse as eolian dune dynamics and the core-mantle interface.
+Our approach starts with a two-dimensional continuous-time stochastic (``CTS'') lattice-grain model. The model is described in detail by \citet{tucker2016celllab}; here we present a only brief overview of its rules and behavior. The framework is based on the pairwise method developed by Narteau and colleagues \citep{REFS} and applied to problems as diverse as eolian dune dynamics and the core-mantle interface.
 
-In the CTS Lattice-Grain Model, the domain consists of a lattice of hexagonal cells. Each cell is assigned one of eight states (Table XX). These states represents the nature and motion status of the material: state 0 represents fluid, states 1--6 represent a grain moving in one of the six lattice directions, and state 7 indicates a stationary grain. For purposes of modeling hillslope evolution, we add an additional state (8) to represent rock.
+In the CTS Lattice-Grain Model, the domain consists of a lattice of hexagonal cells. Each cell is assigned one of eight states (Table XX). These states represents the nature and motion status of the material: state 0 represents fluid, states 1--6 represent a grain moving in one of the six lattice directions, and state 7 indicates a stationary grain. For purposes of modeling hillslope evolution, we add an additional state (8) to represent rock. [FIGURE WITH 4X4 HEX GRID ILLUSTRATING THE DIFFERENT STATES, SEE PHOTO OF WHITEBOARD]
 
 Like other lattice-grain models, the CTS Lattice-Grain Model is designed to represent, in a simple way, the motion and interaction of an ensemble of grains in a gravitational field. The physics of the material are represented by a set of transition rules, in which a given adjacent pair of states is assigned a certain probability per unit time of undergoing a transition to a different pair. For example, consider a vertically aligned pair of cells in which the top cell has state 4 (moving downward) and the bottom cell state 0 (empty/fluid). Downward motion (falling) is represented by a transition in which the two states switch places (Figure XX).
 
-Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions (Figure XX). Inelastic (frictional) collisions are represented by a similar set of rules in which one or both colliding particles become stationary. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle. An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$.
+Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions (Figure XX). These rules are similar to the collision rules used in deterministic lattice-gas automata, with the main difference being that they account for the stochastic nature of transition events. Inelastic (frictional) collisions are represented by a similar set of rules in which one or both colliding particles become stationary, representing loss of momentum and kinetic energy as a result of the collision. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle. An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$.
 
-Tests of the CTS Lattice-Grain Model show that it reproduces several basic aspects of granular behavior \citep{tucker2016celllab}. For example, when gravity and friction are de-activated, the model conserves kinetic energy. Figure~XX illustrates a simulation of the emptying of a silo to form an angle-of-repose grain pile. For our purposes, what matters most is simply that the model captures, in a reasonable way, the response of particles on a slope to episodic disturbance events.
+One limitation of the CTS Lattice-Grain model is that falling grains do not accelerate through time; instead, they have a fixed transition probability that implies a statistically uniform downward fall velocity. This treatment is obviously unrealistic for particles falling in a vacuum, though it is consistent with a terminal settling velocity for grains immersed in fluid.
+
+Tests of the CTS Lattice-Grain Model show that it reproduces several basic aspects of granular behavior \citep{tucker2016celllab}. For example, when gravity and friction are de-activated, the model conserves kinetic energy. When gravity and friction are active, the model reproduces some of the common behaviors observed with granular materials. For example, Figure~XX illustrates a simulation of the emptying of a silo to form an angle-of-repose grain pile. For our purposes, what matters most is simply that the model captures, in a reasonable way, the response of particles on a slope to episodic disturbance events.
 
 \subsection{Weathering and Soil Creep}
 
-Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified rate $R_w$ [1/T] of transition to a grain-air pair. This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no weathering can take place.
+Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified probability per unit time, $R_w$ [1/T], of transition to a grain-air pair. This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no weathering can take place. [FIGURE SHOWING WEATHERING EVENT FOLLOWED BY VERTICAL DISTURBANCE EVENT]
+
+Soil creep is modeled by a transition rule that mimics the process of episodic disturbance of surface soil. For each resting grain that is adjacent to an air cell, there is a specified probability per unit time, $R_d$ [1/T], that the soil and air will exchange places, representing movement. The soil cell is also be converted from a stationary state to a state of motion (Figure XX). An advantage of this approach is that it mimics, in a general way, the effectively stochastic disturbance processes that are understood to drive soil creep. Using these event-based approach makes it possible to study how bulk behavior, such as the diffusion-like net downslope transport of soil, emerges from an ensemble of individual events.
 
 
-The transition rule also mimics 
+\subsection{Cells as Grain Aggregates}
 
-... go on to describe disturbance and weathering ... 
+Natural soil disturbance events usually impact many grains at once. Raindrop impacts on bare soil typically dislodge several grains at once \citep{furbishrainsplash}. Excavation of an animal burrowing disturbs a volume a grains equal to the volume of the burrow, and the fall of a tree may mobilize a volume of soil similar to the volume of the tree's root mound. Observations of such processes suggest that there may be a characteristic volume of disturbance that in some cases may be much larger than the volume of a single grain. For this reason, we treat soil cells as being grain aggregates, with a length scale (width of a cell) $\delta$ and a volume scale $\delta^3$.
 
-Each adjacent pair of cells has a specified probability per unit time of undergoing a {\em transition}, in which one or both states change. For example, to grain motion 
 
-Lattice-grain model 
+\subsection{Boundary conditions}
 
-works on pairwise CTS principle; explain briefly
+The 2D model domain consists of a cross-section of a hypothetical hillslope, on which particles move within the cross-sectional plane. Any soil cells that reach the model's side or top boundaries disappear. This treatment is meant to represent the presence of a stream channel at the base of each side of the model hillslope; particles reaching these channels are assumed to be eroded. Progressive lowering of baselevel at the two model boundaries is treated by moving the interior cells upward and adding a new row of rock or soil cells along the bottom row. A new row of cells is added with frequency $T_u$.
 
-brief overview of LG rules and framework; refer to Tucker et al. 2016
 
-Some kind of demonstrations / examples. Silo again? Sand-pile?
+\subsection{Scaling and Nondimensionalization}
 
-Weathering rule: rock turns to regolith
+The model has four parameters: the disturbance rate, $d$ [cells/T], weathering rate, $w$ [cells/T], baselevel lowering frequency, $\tau$ [T], and width of domain, $\lambda$ [cells]. Once we define the width of a cell, $\delta$ [L], we can define fully dimensional versions of the four parameters:
+\begin{eqnarray}
+D = d\delta, \\
+W = w\delta, \\
+U = \delta / \tau, \\
+L = \lambda \delta .
+\end{eqnarray}
+Consider the case of dynamic equilibrium, in which the rate of baselevel lowering is balanced by the hillslope's rate of erosion. The mean height of this steady state hillslope, $H$, is a function of the five parameters:
+\begin{equation}
+H = f(D, W, U, L, \delta).
+\end{equation}
+Buckingham's Pi Theorem dictates that these five variables, which collectively include dimensions of length and time, may be grouped into three dimensionless quantities:
+\begin{equation}
+\frac{H}{\delta} = f\left( \frac{D}{U}, \frac{W}{U}, \frac{L}{\delta} \right)
+\label{Hf}
+\end{equation}
+Noting the definitions above, equation (\ref{Hf}) is equivalent to
+\begin{equation}
+h = f\left( d\tau, w\tau, \lambda \right).
+\end{equation}
+One can similarly define a dimensionless regolith thickness, $r = R/\delta$, where $R$ is the dimensional equivalent; it too depends on the three dimensionless parameters that represent disturbance rate $d\tau$, weathering rate, $w\tau$, and hillslope length, $\lambda$, respectively. For a hillslope composed entirely of soil, $r$ and $h$ depend solely on $d\tau$ and $\lambda$.
 
-Disturbance rule: 
+\subsection{Blocks}
 
-Uplift
+The foregoing model is designed to represent regolith composed of gravel-sized and finer grains: material fine enough that it is susceptible to being moved by processes such as animal burrowing, frost heave, tree throw, and so on. Some hillslopes, however, are adorned with grains that are simply too large to be displaced significantly by such processes. For example, \citet{glade2015blocks} presented a case study and model of slopes formed beneath a resistant rock unit that periodically sheds meter-scale or larger blocks. On at least some of these types of slope, the distance between surface blocks and their source unit is considerably greater than the distance they could roll during an initial release event [CITE POLISH PAPER]. This observation implies that the blocks are transported down slope by a process undermining. \citet{glade2015blocks} hypothesized that erosion of soil beneath and immediately downhill can cause a block to topple, and hence move a distance comparable to its own diameter in each such event.
 
-Scaling and nondimensionalization
+We wish to capture this form of ``too big to disturb'' behavior in the CTS model. The CTS approach, at least as it is defined here, does not lend itself to variations in grain size or geometry. Instead, we introduce an additional type of particle that represents the behavior of blocks rather than treating their difference in size explicitly. In a sense, the approach can be viewed as treating blocks as having greater density, rather than greater size, than other grains. A block particle differs from normal soil grains in that it cannot be disturbed. Motion of a block particle can only occur under two circumstances: when it lies directly above an air cell (in which case it falls vertically, trading places with the air cell), and when it lies above and to the side of an air cell (in which case it falls downslope at a 30$^\circ$ angle). These rules mimic the undermining process discussed by \citet{glade2015blocks}.
+
+As in the \citet{glade2015blocks} model, block particles can also undergo weathering. Here, weathering is treated in a probabilistic fashion: blocks are treated the same as bedrock cells, and will can undergo a conversion to normal soil with probability $w$ when they are adjacent to an air cell.
+
+This simple treatment of blocks allows us... 
 
 
 \section{Results}
-TEXT
+
+Ok, so what cases do we consider?
+
+1 - soil-only hillslopes
+
+2 - rocky hillslopes
+
+3 - heavy particles
 
 
 \section{Discussion}
