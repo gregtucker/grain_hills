@@ -83,11 +83,11 @@ Hillslopes take on a rich variety of forms. Their profile shapes may be convex-u
 
 Considerable research has been devoted to understanding the evolution of soil-mantled slopes that are primarily governed by disturbance-driven creep, such as down-slope soil transport by biotic and abiotic soil-mixing processes. As a result, the geomorphology community has mathematical models that account well for observed slope forms and patterns of regolith thickness \citep[e.g.,][]{roering2008how}. Furthermore, stochastic-transport theory provides a mechanistic link between the statistics of particle motion, the resultant average rates of downslope transport, and the emergence of convex-upward, soil-mantled slope forms \citep{culling,furbish}.
 
-One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport mode \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relatively fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS]. 
+One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport mode \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relatively fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS].
 
 Rocky slopes are rarely completely barren. More commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
 
-An additional issue, which pertains to both rocky and soil-mantled slopes, is the connection between sediment movement at the scale of individual ``motion events'', and the resulting longer-term average sediment flux, which forms the basis for continuum models of hillslope evolution. Recent theoretical and experiment work has begun to forge a mechanistic connection between these scales [REFS Furbish especially, building on earlier work by Culling]. However, the community's resources for computational analysis of particle-level dynamics remain limited [REFS], lagging behind developments in the understanding of fluvial sediment transport [REFS Schmeeckle etc.].
+An additional issue, which pertains to both rocky and soil-mantled slopes, is the connection between sediment movement at the scale of individual ``motion events,'' and the resulting longer-term average sediment flux, which forms the basis for continuum models of hillslope evolution. Recent theoretical and experiment work has begun to forge a mechanistic connection between these scales [REFS Furbish especially, building on earlier work by Culling]. However, the community's resources for computational analysis of particle-level dynamics remain limited [REFS], lagging behind developments in the understanding of fluvial sediment transport [REFS Schmeeckle etc.].
 
 To further our understanding of how grain-level weathering and transport processes translate into hillslope evolution, both for hillslopes in general and rocky slopes in particular, it would be useful to have a computational framework with which to conduct experiments. Ideally, such a framework should be sophisticated enough to capture the essence of weathering and granular mechanics, while remaining simple enough to involve only a small number of parameters and providing reasonable computational efficiency.
 
@@ -190,12 +190,20 @@ The foregoing model is designed to represent regolith composed of gravel-sized a
 
 We wish to capture this form of ``too big to disturb'' behavior in the CTS model. The CTS approach, at least as it is defined here, does not lend itself to variations in grain size or geometry. Instead, we introduce an additional type of particle that represents the behavior of blocks rather than treating their difference in size explicitly. In a sense, the approach can be viewed as treating blocks as having greater density, rather than greater size, than other grains. A block particle differs from normal soil grains in that it cannot be disturbed. Motion of a block particle can only occur under two circumstances: when it lies directly above an air cell (in which case it falls vertically, trading places with the air cell), and when it lies above and to the side of an air cell (in which case it falls downslope at a 30$^\circ$ angle). These rules mimic the undermining process discussed by \citet{glade2015blocks}.
 
-As in the \citet{glade2015blocks} model, block particles can also undergo weathering. Here, weathering is treated in a probabilistic fashion: blocks are treated the same as bedrock cells, and will can undergo a conversion to normal soil with probability $w$ when they are adjacent to an air cell.
-
-This simple treatment of blocks allows us... 
+As in the \citet{glade2015blocks} model, block particles can also undergo weathering. Here, weathering is treated in a probabilistic fashion: blocks are treated the same as bedrock cells, and will can undergo a conversion to normal soil with probability $w$ when they are adjacent to an air cell. This simple treatment of blocks captures, in a simple way, the weathering of blocks as they move down slope.
 
 
 \section{Results}
+
+\subsection{Fully soil-mantled hillslope}
+
+We start by considering the case of fully soil-mantled hillslopes, in which the supply of mobile regolith is effectively unlimited. 
+
+Figures:
+
+o Parabolic vs angle-of-repose slopes (and maybe one in between)
+
+
 
 Ok, so what cases do we consider?
 
