@@ -1,0 +1,23 @@
+# Input file template for Grain Hill model
+number_of_node_rows:
+10
+number_of_node_columns:
+{L}
+report_interval: time interval for reporting output to user (real-time seconds)
+3600.0
+run_duration: duration of run, seconds
+1.0
+output_interval:
+20000.0
+settling_rate:
+220000000.0
+disturbance_rate:
+{D}
+uplift_interval:
+{U}
+plot_interval:
+20000.0
+friction_coef:
+1.0
+show_plots:
+False

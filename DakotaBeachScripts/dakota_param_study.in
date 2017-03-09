@@ -1,0 +1,31 @@
+# Dakota Input File
+environment
+  tabular_data
+    tabular_data_file = 'dakota.dat'
+
+method
+  multidim_parameter_study
+    partitions = 4 4 4
+
+variables
+  continuous_design = 3
+    lower_bounds = -3 2 0.7
+    upper_bounds = -1 4 1.7
+    descriptors = 'D' 'U' 'L'
+
+interface
+  fork
+  analysis_driver = 'python /home/gtucker/Runs/GrainHill/Test2/parallel_driver.py'
+  parameters_file = 'params.in'
+  results_file = 'results.out'
+  work_directory 
+    named 'run'
+    directory_tag
+    directory_save 
+  file_save
+
+responses
+  response_functions = 2
+  response_descriptors = 'Zmax', 'Smedian'
+  no_gradients
+  no_hessians
