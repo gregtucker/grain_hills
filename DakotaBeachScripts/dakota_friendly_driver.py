@@ -44,14 +44,14 @@ print(domain_length)
 t1 = params['uplift_interval'] * num_cols
 print('Time for domain rise:')
 print(t1)
-# Time to generate, on average, L/2 disturbance events per column
-t2 = num_cols / params['disturbance_rate']
-print('Time for L/2 disturbances per column:')
+# Time to generate, on average, 10 * L disturbance events per column
+t2 = 10 * num_cols / params['disturbance_rate']
+print('Time for 10 L disturbances per column:')
 print(t2)
 # Take the minimum
 tt = min(t1, t2)
-# Time to have at least two uplift events
-t3 = 2 * params['uplift_interval']
+# Time to have at least ten uplift events
+t3 = 10 * params['uplift_interval']
 # Take the max
 params['run_duration'] = max(tt, t3)
 if params['run_duration'] > 580000.0:
