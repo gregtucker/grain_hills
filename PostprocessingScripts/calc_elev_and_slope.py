@@ -56,7 +56,7 @@ def get_input_and_output_names(argv):
     if len(argv) < 2:
         in_path = DEFAULT_INPUT_PATH
     else:
-        in_name = argv[1]
+        in_path = argv[1]
 
     return in_path, in_name, out_name
 
