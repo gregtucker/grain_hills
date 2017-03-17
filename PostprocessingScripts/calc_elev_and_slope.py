@@ -114,7 +114,7 @@ def write_output(results_list, out_name):
     outfile = open(out_name, 'w')
     outfile.write('Run number,Max height,Mean height,Mean gradient\n')
     for item in results_list:
-        outstr = (str(item[0]) + ',' + str(item[1]) + str(item[2]) + ',' 
+        outstr = (str(item[0]) + ',' + str(item[1]) + ',' + str(item[2]) + ',' 
                   + str(item[3]) + '\n')
         outfile.write(outstr)
     outfile.close()
