@@ -85,7 +85,7 @@ def process_model_output_data(in_path, in_name):
         if item[0] == 'G':
     
             # Read the Landlab grid and pull out the node_state field
-            g = load_grid(item + '/' + in_name)
+            g = load_grid(in_path + '/' + item + '/' + in_name)
             ns = g.at_node['node_state']
             
             # Get the elevation profile
