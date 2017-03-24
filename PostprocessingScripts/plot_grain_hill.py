@@ -34,9 +34,21 @@ def plot_hill(grid, filename=None):
     # (Note: the latter option freezes execution until user dismisses window)
     if filename is not None:
         plt.savefig(filename, bbox_inches='tight')
+        plt.clf()
         print('Figure saved to ' + filename)
     else:
         plt.show()
+        
+        
+def run(infile_name, plot_file_name=None):
+    """
+    Read grid, generate plot.
+    """
+    # Read in the model run
+    grid = load_grid(infile_name)
+
+    # Create the plot
+    plot_hill(grid, plot_file_name)
 
 
 def main():
@@ -54,12 +66,7 @@ def main():
     else:
         plot_file_name = None
 
-    # Read in the model run
-    grid = load_grid(infile_name)
-
-    # Create the plot
-    plot_hill(grid, plot_file_name)
-
+    run(infile_name, plot_file_name)
 
 if __name__ == '__main__':
     main()
