@@ -156,9 +156,16 @@ Tests of the CTS Lattice-Grain Model show that it reproduces several basic aspec
 
 \subsection{Weathering and Soil Creep}
 
-Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified probability per unit time, $R_w$ [1/T], of transition to a grain-air pair. This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no weathering can take place. [FIGURE SHOWING WEATHERING EVENT FOLLOWED BY VERTICAL DISTURBANCE EVENT]
+Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified probability per unit time, $R_w$ [1/T], of transition to a grain-air pair (Figure~{wxdist}, top). This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no further weathering can take place.
 
-Soil creep is modeled by a transition rule that mimics the process of episodic disturbance of surface soil. For each resting grain that is adjacent to an air cell, there is a specified probability per unit time, $R_d$ [1/T], that the soil and air will exchange places, representing movement. The soil cell is also be converted from a stationary state to a state of motion (Figure XX). An advantage of this approach is that it mimics, in a general way, the effectively stochastic disturbance processes that are understood to drive soil creep. Using these event-based approach makes it possible to study how bulk behavior, such as the diffusion-like net downslope transport of soil, emerges from an ensemble of individual events.
+%f
+\begin{figure*}[t]
+\includegraphics[width=8cm]{Figures/grain_hill_weathering_disturbance.pdf}
+\caption{Transitions representing rock-to-regolith transformation by weathering (top), and regolith disturbance (bottom), illustrated for one of the six possible orientations.}
+\label{wxdist}
+\end{figure*}
+
+Soil creep is modeled by a transition rule that mimics the process of episodic disturbance of surface soil. For each resting grain that is adjacent to an air cell, there is a specified probability per unit time, $R_d$ [1/T], that the soil and air will exchange places, representing movement. The soil cell is also be converted from a stationary state to a state of motion (Figure~\ref{wxdist}, bottom). An advantage of this approach is that it mimics, in a general way, the effectively stochastic disturbance processes that are understood to drive soil creep. Using this event-based approach makes it possible to study how bulk behavior, such as the diffusion-like net downslope transport of soil, emerges from an ensemble of individual events.
 
 
 \subsection{Cells as Grain Aggregates}
@@ -201,25 +208,36 @@ The foregoing model is designed to represent regolith composed of gravel-sized a
 
 We wish to capture this form of ``too big to disturb'' behavior in the CTS model. The CTS approach, at least as it is defined here, does not lend itself to variations in grain size or geometry. Instead, we introduce an additional type of particle that represents the behavior of blocks rather than treating their difference in size explicitly. In a sense, the approach can be viewed as treating blocks as having greater density, rather than greater size, than other grains. A block particle differs from normal soil grains in that it cannot be disturbed. Motion of a block particle can only occur under two circumstances: when it lies directly above an air cell (in which case it falls vertically, trading places with the air cell), and when it lies above and to the side of an air cell (in which case it falls downslope at a 30$^\circ$ angle). These rules mimic the undermining process discussed by \citet{glade2017block}.
 
-As in the \citet{glade2017block} model, block particles can also undergo weathering. Here, weathering is treated in a probabilistic fashion: blocks are treated the same as bedrock cells, and will can undergo a conversion to normal soil with probability $w$ when they are adjacent to an air cell. This simple treatment of blocks captures, in a simple way, the weathering of blocks as they move down slope.
+As in the \citet{glade2017block} model, block particles can also undergo weathering. Here, weathering is treated in a probabilistic fashion: blocks are treated the same as bedrock cells, and will can undergo a conversion to normal soil with probability $w$ when they are adjacent to an air cell. This treatment of blocks captures, in a simple way, the weathering of blocks as they move down slope.
 
 
 \section{Results}
 
 \subsection{Fully soil-mantled hillslope}
 
-We start by considering the case of fully soil-mantled hillslopes, in which the supply of mobile regolith is effectively unlimited. 
+We start by considering the case of fully soil-mantled hillslopes, in which the supply of mobile regolith is effectively unlimited. Under this condition, the grain-hill model represents a testable mechanistic hypothesis: that a transport-limited, soil-mantled hillslope behaves essentially as a granular medium subject to periodic, quasi-random disturbance events. This concept was also the essence of the acoustic-disturbance experiments by \citet{roering2001hillslope}. To test the hypothesis, we run the grain hill model with a constant rate of material uplift relative to baselevel until the system reaches steady state, to determine whether its steady form is smoothly convex upward (when the gradient is below the failure threshold) to planar (when the gradient lies at or near the failure threshold). Model runs were performed using a XX-row by 580-column lattice. Disturbance rates were varied from 0.001 yr$^{-1}$ to 0.1 yr$^{-1}$ and intervals between relative-uplift events from 100 to 10,000 yr.  
 
-Figures:
-
-o Parabolic vs angle-of-repose slopes (and maybe one in between)
+Results show that the grain-hill model produces parabolic to planar hillslope forms, depending on the ratio of disturbance to uplift rates, which is encapsulated in the dimensionless parameter $d' = d \tau$ (Figure~\ref{tlim}). At high $d'$ (frequent disturbance and/or slow baselevel fall), hillslopes relief is low and the form is smoothly convex upward (Figure~\ref{tlim}, lower right). At somewhat lower $d'$, the lower part of the slope approaches a threshold angle while the upper part remains smoothly convex (Figure~\ref{tlim}, middle diagonal). At low $d'$, the form becomes predominantly planar and achieves a threshold relief that is insensitive for further increases in $d'$.
 
 %f
 \begin{figure*}[t]
 \includegraphics{Figures/simple_hills_3x3.pdf}
 \caption{Equilibrium topographic cross-sections using only soil particles (no rock) and a variety of disturbance frequencies ($d$) and time interval between baselevel fall events ($\tau$). Fast basal incision and/or infrequent disturbance leads to planar threshold hillslopes; slow basal incision and/or frequent disturbance leads to parabolic hillslopes.}
+\label{tlim}
 \end{figure*}
 
+Scaling of mean height as a function of $d'$ is shown in Figure~\ref{tlimscaling}. The figure shows results for 125 model runs spanning two orders of magnitude in each parameter ($d$, $\tau$, and $\lambda$) in half-decade intervals. For any given hillslope length, there are three regimes of behavior. Low $d'$ (upper left of graph) leads to threshold hillslopes, in which relief depends only on hillslope length. Under moderate $d'$, relief scales inversely with $d'$, as expected from linear diffusion theory. At high $d'$, we have a finite-size regime in which hillslope relief is comparable to the disturbance scale, $\delta$ (cell size in the model); in other words, the hill is only one or a few cells high.
+
+%f
+\begin{figure*}[t]
+\includegraphics[width=8cm]{Figures/mean_ht_vs_dist_rate.pdf}
+\caption{}
+\label{tlimscaling}
+\end{figure*}
+
+[NEXT UP: EFFECTIVE DIFFUSIVITY]
+
+I guess the question here is how does disturbance rate relate to effective diffusivity? This is probably considered in some Furbishy papers, which I should probably re-read. In classic diffusion, you've got diffusivity equal to hop-length variance over characteristic time scale. But here of course it's a bit different because the hop length is biased by the topography, rather than a difference in concentration.
 
 Ok, so what cases do we consider?
 
@@ -262,7 +280,7 @@ Figure~\ref{frictional} illustrates the transition rules for frictional-collisio
 \label{frictional}
 \end{figure*}
 
-\subsection{Graity Rules}
+\subsection{Gravity Rules}
 
 Figure~\ref{gravity} illustrates the transition rules for gravitational acceleration. The bottom row shows the ``falling on a slope'' rule, which effectively imposes a 30$^\circ$ angle of repose.
 
