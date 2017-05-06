@@ -141,7 +141,22 @@ State & Description \\
 
 Like other lattice-grain models, the CTS Lattice-Grain Model is designed to represent, in a simple way, the motion and interaction of an ensemble of grains in a gravitational field. The physics of the material are represented by a set of transition rules, in which a given adjacent pair of states is assigned a certain probability per unit time of undergoing a transition to a different pair. For example, consider a vertically aligned pair of cells in which the top cell has state 4 (moving downward) and the bottom cell state 0 (empty/fluid). Downward motion (falling) is represented by a transition in which the two states switch places (Figure~\ref{lattice}).
 
-Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions. These rules are similar to the collision rules used in deterministic lattice-gas automata, with the main difference being that they account for the stochastic nature of transition events. Inelastic (frictional) collisions are represented by a similar set of rules in which one or both colliding particles become stationary, representing loss of momentum and kinetic energy as a result of the collision. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle. An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$. The set of lattice-grain rules is summarized in Appendix~A, and discussed by \citet{tucker2016celllab}.
+% OK, SO NEED TO GET RID OF THE ELASTIC FIGURE, EXCEPT MOTION AND LEGEND, WHICH COULD BE ADDED TO THE FRICTIONAL FIGURE
+
+%Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions. These rules are similar to the collision rules used in deterministic lattice-gas automata, with the main difference being that they account for the stochastic nature of transition events. 
+We assume that biophysical disturbance events such as the growth of roots and burrowing by animals, and the settling motions that follow, tend to impart low kinetic energy, with ``low'' defined as ballistic displacement lengths that are short relative to hillslope length and comparable to or less than the characteristic disturbance-zone thickness. We view such motions as being dominated by frictional dissipation rather than by transfer of kinetic energy by elastic impacts. This view is similar to the reasoning of \citet{furbish2009statistical} that the mean-free-path of mobile grains will typically be short relative to hillslope length, scaling with the grain radius and particle concentration. For this reason, unlike the lattice-grain model of \citet{tucker2016celllab}, we consider here only inelastic collisions (Figure~\ref{frictional}). These inelastic (frictional) collisions are represented by a set of rules in which one or both colliding particles become stationary, representing loss of momentum and kinetic energy as a result of the collision. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle (Figure~\ref{gravity}). An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$.
+
+\begin{figure*}[t]
+\includegraphics{Figures/lattice_grain_friction_rules.pdf}
+\caption{Rules for motion and frictional (inelastic) collisions, illustrated here for one of the six lattice directions.}
+\label{frictional}
+\end{figure*}
+
+\begin{figure*}[t]
+\includegraphics{Figures/lattice_grain_gravity_rules.pdf}
+\caption{Illustration of gravitational rules. The bottom row shows the ``falling on a slope'' rule, which effectively imposes a 30$^\circ$ angle of repose. Modified from \citet{tucker2016celllab}.}
+\label{gravity}
+\end{figure*}
 
 One limitation of the CTS Lattice-Grain model is that falling grains do not accelerate through time; instead, they have a fixed transition probability that implies a statistically uniform downward fall velocity. This treatment is obviously unrealistic for particles falling in a vacuum, though it is consistent with a terminal settling velocity for grains immersed in fluid.
 
@@ -156,7 +171,7 @@ Tests of the CTS Lattice-Grain Model show that it reproduces several basic aspec
 
 \subsection{Weathering and Soil Creep}
 
-Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified probability per unit time, $R_w$ [1/T], of transition to a grain-air pair (Figure~{wxdist}, top). This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no further weathering can take place.
+Weathering of rock to form mobile regolith is modeled with a transition rule: when a rock cell lies adjacent to an air cell, there is a specified probability per unit time, $R_w$ [1/T], of transition to a grain-air pair (Figure~\ref{wxdist}, top). This treatment means that the effective maximum weathering rate, in terms of the propagation of a weathering front, is cell diameter, $\delta$, times $R_w$. An indirect consequence of this approach is that the weathering rate declines with increasing regolith thickness. As average regolith thickness increases, the fraction of the surface where rock is in contact with air diminishes, and consequently so too does the average transition rate. A limitation of the approach is that when the rock is completely mantled, no further weathering can take place.
 
 %f
 \begin{figure*}[t]
@@ -165,7 +180,9 @@ Weathering of rock to form mobile regolith is modeled with a transition rule: wh
 \label{wxdist}
 \end{figure*}
 
-Soil creep is modeled by a transition rule that mimics the process of episodic disturbance of surface soil. For each resting grain that is adjacent to an air cell, there is a specified probability per unit time, $R_d$ [1/T], that the soil and air will exchange places, representing movement. The soil cell is also be converted from a stationary state to a state of motion (Figure~\ref{wxdist}, bottom). An advantage of this approach is that it mimics, in a general way, the effectively stochastic disturbance processes that are understood to drive soil creep. Using this event-based approach makes it possible to study how bulk behavior, such as the diffusion-like net downslope transport of soil, emerges from an ensemble of individual events.
+Soil creep is modeled by a transition rule that mimics the process of episodic disturbance of surface soil. For each resting grain that is adjacent to an air cell, there is a specified probability per unit time, $R_d$ [1/T], that the soil and air will exchange places, representing movement. The soil cell is also be converted from a stationary state to a state of motion (Figure~\ref{wxdist}, bottom). An advantage of this approach is that it mimics, in a general way, the effectively stochastic disturbance processes that are understood to drive soil creep. Our definition of $R_d$ is equivalent to the activation rate, $N_a$, in the probabilistic theory for soil creep developed by \citet{furbish2009statistical}. When combined with the lattice-grain gravitational rules, the resulting cellular model captures both the scattering (disturbance) and settling (gravitational) behavior articulated by \citet{furbish2009statistical}. In the grain-hill cellular model, as in their theory, downslope soil flux arises because, on average, scattering occurs normal to the local surface while setting is vertical. The grain-hill model includes another element not considered in the \citet{furbish2009statistical} theory: an increase in (downward) scattering rate for particles on slopes steeper than 30$^\circ$. This behavior, as illustrated below, will promote a nonlinear relationship between gradient and flux and lead to the possibility of threshold slopes.
+
+%Using this event-based approach makes it possible to study how bulk behavior, such as the diffusion-like net downslope transport of soil, emerges from an ensemble of individual events.
 
 
 \subsection{Cells as Grain Aggregates}
@@ -257,38 +274,7 @@ TEXT
 
 
 
-\appendix
-\section{Transition Rules in the Lattice-Grain Model}    %% Appendix A
-
-\subsection{Elastic Collision Rules}
-
-Figure~\ref{elastic} illustrates the transition rules for motion and elastic grain transitions. The rules encompass the various possible collision geometries, including head-on, oblique, and impact from behind when one grain overtakes another. These transition rules conserve average kinetic energy, because average velocity is set by the motion transition rate and each elastic collision changes directions but not velocities.
-
-\begin{figure*}[t]
-\includegraphics{Figures/elastic_collision_rules.pdf}
-\caption{Illustration of elastic collision rules. Modified from \citet{tucker2016celllab}.}
-\label{elastic}
-\end{figure*}
-
-\subsection{Frictional Collision Rules}
-
-Figure~\ref{frictional} illustrates the transition rules for frictional-collision grain transitions. Kinetic energy is not conserved.
-
-\begin{figure*}[t]
-\includegraphics{Figures/lattice_grain_friction_rules.pdf}
-\caption{Illustration of frictional (inelastic) collision rules. Modified from \citet{tucker2016celllab}.}
-\label{frictional}
-\end{figure*}
-
-\subsection{Gravity Rules}
-
-Figure~\ref{gravity} illustrates the transition rules for gravitational acceleration. The bottom row shows the ``falling on a slope'' rule, which effectively imposes a 30$^\circ$ angle of repose.
-
-\begin{figure*}[t]
-\includegraphics{Figures/lattice_grain_gravity_rules.pdf}
-\caption{Illustration of gravitational rules. Modified from \citet{tucker2016celllab}.}
-\label{gravity}
-\end{figure*}
+%\appendix
 
 
 \authorcontribution{TEXT}
