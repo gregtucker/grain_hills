@@ -252,9 +252,31 @@ Scaling of mean height as a function of $d'$ is shown in Figure~\ref{tlimscaling
 \label{tlimscaling}
 \end{figure*}
 
-[NEXT UP: EFFECTIVE DIFFUSIVITY]
+The behavior of the grain hill model in its simple, transport-limited configuration can be compared to diffusion theory, which relates volumetric sediment flux per unit contour length to topographic gradient:
+\begin{equation}
+\mathbf{q}_s = -D \frac{\partial \eta}{\partial x}
+\end{equation}
+where $\eta$ is land-surface height, $x$ is horizontal distance, and $D$ is an effective transport coefficient. The \citet{furbish2009statistical} probabilistic theory for transport due to particle scattering and settling formulates $D$ as
+\begin{equation}
+D = k R h \overline{N_a \left( 1 - \frac{c}{c_m}\right)^2} \cos^2 \theta
+\end{equation}
+where $k$ is a dimensionless coefficient, $R$ is particle radius, $h$ is active soil thickness, $N_a$ is the activation rate, $\theta$ is slope angle, $c$ is particle concentration, and $c_m$ is a maximum concentration. The over-bar denotes an average over the active soil thickness. For the grain hill model, $h$ scales with the characteristic disturbance depth, $\delta$. Further, because we treat grain aggregates, we may also assume $R\sim \delta$. Therefore, we have the prediction that
+\begin{equation}
+D = a \delta^2 N_a \cos^2 \theta
+\end{equation}
+where $a$ is a dimensionless proportionality constant.  
 
-I guess the question here is how does disturbance rate relate to effective diffusivity? This is probably considered in some Furbishy papers, which I should probably re-read. In classic diffusion, you've got diffusivity equal to hop-length variance over characteristic time scale. But here of course it's a bit different because the hop length is biased by the topography, rather than a difference in concentration.
+In the grain hill model, the mean expected activation rate, $N_a$, depends on gradient. On a flat surface, $N_a$ is equal to the mean disturbance rate, $d$. On a sloping surface that is gentler than the 30$^\circ$ effective angle of repose, $N_a$ has a weak dependence on gradient because the probability per time that a particle will be mobilized depends on the number of its six faces that are exposed to a fluid cell. At a gradient of exactly 30$^\circ$, two faces will be exposed, such that $N_a = XXX$ [FIGURE OUT THE PROBABILITIES HERE]. Above 30$^\circ$, the rate increases dramatically because gravitational dislodgment is activated (Figure~\ref{gravity}, bottom row).  
+
+[OK, WHAT WE'RE AFTER HERE IS ULTIMATELY A CONSIDERATION OF HOW TO RELATE $D$ TO THE PARAMETER $d$ --- AND A DEMONSTRATION THAT GH MODEL IS FULLY CONSISTENT WITH STATISTICALLY BASED TREATMENT OF SOIL CREEP, WITH THE ADDED COMPONENT OF ANGLE-OF-REPOSE BEHAVIOR. AS WELL AS AN EMPIRICAL WAY TO SET $d$ BASED ON ESTIMATES OF $D$]
+
+The hillslope forms produced by the grain hill model are similar to those ...
+
+The parabolic-to-planar character of the slope forms ...
+
+The behavior illustrated in Figure~\ref{tlim} is quite similar ...
+
+
 
 Ok, so what cases do we consider?
 
