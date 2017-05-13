@@ -255,6 +255,7 @@ Scaling of mean height as a function of $d'$ is shown in Figure~\ref{tlimscaling
 The behavior of the grain hill model in its simple, transport-limited configuration can be compared to diffusion theory, which relates volumetric sediment flux per unit contour length to topographic gradient:
 \begin{equation}
 \mathbf{q}_s = -D \frac{\partial \eta}{\partial x}
+\label{qs}
 \end{equation}
 where $\eta$ is land-surface height, $x$ is horizontal distance, and $D$ is an effective transport coefficient. The \citet{furbish2009statistical} probabilistic theory for transport due to particle scattering and settling formulates $D$ as
 \begin{equation}
@@ -266,7 +267,27 @@ D = a \delta^2 N_a \cos^2 \theta
 \end{equation}
 where $a$ is a dimensionless proportionality constant.  
 
-In the grain hill model, the mean expected activation rate, $N_a$, depends on gradient. On a flat surface, $N_a$ is equal to the mean disturbance rate, $d$. On a sloping surface that is gentler than the 30$^\circ$ effective angle of repose, $N_a$ has a weak dependence on gradient because the probability per time that a particle will be mobilized depends on the number of its six faces that are exposed to a fluid cell. At a gradient of exactly 30$^\circ$, two faces will be exposed. In this case, the random variable representing time to disturbance is the minimum of two exponentially distributed random variables (that is, the time to next disturbance at face 1, and the time at face 2). The distribution of the minimum of two independent exponential random variables with the same mean is itself exponential, with the expected value equal to half the mean. Thus, with two faces exposed (at 30$^\circ$, the mean activation rate is $N_a = 2d$. Above 30$^\circ$, the rate increases dramatically because gravitational dislodgment is activated (Figure~\ref{gravity}, bottom row).
+In the grain hill model, the mean expected activation rate, $N_a$, depends on gradient. On a flat surface, $N_a$ is equal to the mean disturbance rate, $d$. On a sloping surface that is gentler than the 30$^\circ$ effective angle of repose, $N_a$ has a weak dependence on gradient because the probability per time that a particle will be mobilized depends on the number of its six faces that are exposed to a fluid cell. At a gradient of exactly 30$^\circ$, two faces will be exposed. In this case, the random variable representing time to disturbance is the minimum of two exponentially distributed random variables (that is, the time to next disturbance at face 1, and the time at face 2). The distribution of the minimum of two independent exponential random variables with the same mean is itself exponential, with the expected value equal to half the original distribution's mean. Thus, with two faces exposed (at 30$^\circ$), the mean activation rate is $N_a = 2d$. Above 30$^\circ$, the rate increases dramatically because gravitational dislodgment is activated (Figure~\ref{gravity}, bottom row). Thus, the grain hill model incorporates an additional nonlinear relationship between flux and gradient inasmuch as $N_a$ depends on gradient.
+
+We can derive the effective diffusivity, $D$, from the modeled topography by applying the expected relationship between mean elevation and diffusivity. At steady state, mass balance implies that
+\begin{equation}
+\mathbf{q}_s = E x
+\end{equation}
+where $E$ is the rate of erosion---equal to the rate of material uplift relative to baselevel---and $x$ is distance from the ridge top. Substituting equation (\ref{qs}) and rearranging,
+\begin{equation}
+\frac{d \eta}{d x} = -\frac{E}{D(x)} x
+\end{equation}
+Integrating and then averaging over $x$, we can solve for the average elevation, $\overline{\eta}$:
+\begin{equation}
+\overline{\eta} = -\frac{E}{3 \overline{D}} L^2
+\end{equation}
+where $L$ is the length of the slope from ridge top to base, and $\overline{D}$ is now the average value of the diffusion-like coefficient along the slope. We can then invert this to find $\overline{D}$:
+\begin{equation}
+\overline{D} = -\frac{E}{3 \overline{\eta}} L^2
+\end{equation}
+
+
+
 
 [OK, WHAT WE'RE AFTER HERE IS ULTIMATELY A CONSIDERATION OF HOW TO RELATE $D$ TO THE PARAMETER $d$ --- AND A DEMONSTRATION THAT GH MODEL IS FULLY CONSISTENT WITH STATISTICALLY BASED TREATMENT OF SOIL CREEP, WITH THE ADDED COMPONENT OF ANGLE-OF-REPOSE BEHAVIOR. AS WELL AS AN EMPIRICAL WAY TO SET $d$ BASED ON ESTIMATES OF $D$]
 
