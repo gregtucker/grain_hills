@@ -269,22 +269,41 @@ where $a$ is a dimensionless proportionality constant.
 
 In the grain hill model, the mean expected activation rate, $N_a$, depends on gradient. On a flat surface, $N_a$ is equal to the mean disturbance rate, $d$. On a sloping surface that is gentler than the 30$^\circ$ effective angle of repose, $N_a$ has a weak dependence on gradient because the probability per time that a particle will be mobilized depends on the number of its six faces that are exposed to a fluid cell. At a gradient of exactly 30$^\circ$, two faces will be exposed. In this case, the random variable representing time to disturbance is the minimum of two exponentially distributed random variables (that is, the time to next disturbance at face 1, and the time at face 2). The distribution of the minimum of two independent exponential random variables with the same mean is itself exponential, with the expected value equal to half the original distribution's mean. Thus, with two faces exposed (at 30$^\circ$), the mean activation rate is $N_a = 2d$. Above 30$^\circ$, the rate increases dramatically because gravitational dislodgment is activated (Figure~\ref{gravity}, bottom row). Thus, the grain hill model incorporates an additional nonlinear relationship between flux and gradient inasmuch as $N_a$ depends on gradient.
 
-We can derive the effective diffusivity, $D$, from the modeled topography by applying the expected relationship between mean elevation and diffusivity. At steady state, mass balance implies that
+We can derive an effective diffusivity, $D_e$, from the modeled topography by applying the expected relationship between mean elevation and diffusivity. Here $D_e$ is defined as that value which, if it were spatially uniform, would yield the same mean steady-state elevation as that produced by the particle model. Framing it this way allows us to interrogate how the effective transport coefficient varies as a function of mean slope gradient. At steady state, mass balance implies that
 \begin{equation}
 \mathbf{q}_s = E x
 \end{equation}
 where $E$ is the rate of erosion---equal to the rate of material uplift relative to baselevel---and $x$ is distance from the ridge top. Substituting equation (\ref{qs}) and rearranging,
 \begin{equation}
-\frac{d \eta}{d x} = -\frac{E}{D(x)} x
+\frac{d \eta}{d x} = -\frac{E}{D(x)} x \approx -\frac{E}{D_e} x
 \end{equation}
 Integrating and then averaging over $x$, we can solve for the average elevation, $\overline{\eta}$:
 \begin{equation}
-\overline{\eta} = -\frac{E}{3 \overline{D}} L^2
+\overline{\eta} = \frac{E}{3 D_e} L^2
 \end{equation}
-where $L$ is the length of the slope from ridge top to base, and $\overline{D}$ is now the average value of the diffusion-like coefficient along the slope. We can then invert this to find $\overline{D}$:
+where $L$ is the length of the slope from ridge top to base. We can then invert this to find $D_e$:
 \begin{equation}
-\overline{D} = -\frac{E}{3 \overline{\eta}} L^2
+D_e = \frac{E}{3 \overline{\eta}} L^2
 \end{equation}
+To examine how $D_e$ scales, we can define a dimensionless form, normalizing by the disturbance frequency, $d$, and the square of active soil thickness (equal to particle diameter), $\delta^2$:
+\begin{equation}
+D_e' = \frac{D_e}{3 d\delta^2} = \frac{EL^2}{3\overline{\eta}d\delta^2}
+\end{equation}
+Noting that $E=\delta/\tau$ and $L/\delta = \lambda$, this is equivalent to
+\begin{equation}
+D_e' = \frac{\lambda^2}{3 \overline{h}d\tau}
+\end{equation}
+where $\overline{h}$ is the mean hillslope height in particle diameters.
+[NOW, FIX THE FIGURE TO INJECT THE FACTOR OF 3, AND REFER TO FIGURE IN TEXT, SHOWING HOW EFFECTIVE DIFFUSIVITY VARIES WITH GRADIENT AND SHOWS ANGLE OF REPOSE BEHAVIOR]
+
+ 
+
+%f
+\begin{figure*}[t]
+\includegraphics[width=8cm]{Figures/dimless_diff_vs_grad.pdf}
+\caption{}
+\label{diffgrad}
+\end{figure*}
 
 
 
