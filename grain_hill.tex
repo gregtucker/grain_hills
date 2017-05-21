@@ -264,6 +264,7 @@ D = k R h \overline{N_a \left( 1 - \frac{c}{c_m}\right)^2} \cos^2 \theta
 where $k$ is a dimensionless coefficient, $R$ is particle radius, $h$ is active soil thickness, $N_a$ is the activation rate, $\theta$ is slope angle, $c$ is particle concentration, and $c_m$ is a maximum concentration. The over-bar denotes an average over the active soil thickness. For the grain hill model, $h$ scales with the characteristic disturbance depth, $\delta$. Further, because we treat grain aggregates, we may also assume $R\sim \delta$. Therefore, we have the prediction that
 \begin{equation}
 D = a \delta^2 N_a \cos^2 \theta
+\label{D}
 \end{equation}
 where $a$ is a dimensionless proportionality constant.  
 
@@ -295,14 +296,20 @@ D_e' = \frac{\lambda^2}{3 \overline{h}d\tau}
 \end{equation}
 where $\overline{h}$ is the mean hillslope height in particle diameters.
 
-As expected, $D_e'$ increases with hillslope gradient (Figure~\ref{diffgrad}). The effective diffusivity approaches an asymptote at 30$^\circ$, representing an angle of repose. The pattern resembles the family of nonlinear flux-gradient curves introduced by \citet{andrews} and explored further by \citet{howard1994detachment} and \citet{roering1999hillslope}. At low gradients, $D_e'$ approaches a value of about 10, which represents the product $a N_a$ in ...
+As expected, $D_e'$ increases with hillslope gradient (Figure~\ref{diffgrad}). The effective diffusivity approaches an asymptote at 30$^\circ$, representing an angle of repose. The pattern resembles the family of nonlinear flux-gradient curves introduced by \citet{andrews} and explored further by \citet{howard1994detachment} and \citet{roering1999hillslope}. At low gradients, $D_e'$ approaches a value of about 10, which represents the product $a N_a(S\rightarrow 0)$ in equation (\ref{D}).
 
-[OK, HERE'S AN ISSUE. ON A ``FLAT'' SLOPE, YOU STILL HAVE AN AVERAGE NUMBER OF FACES EXPOSED AS 2, BECAUSE THE PROTRUDING GRAINS HAVE 3 AND THE RECESSED ONES HAVE ONE. SO BASICALLY YOU HAVE AN AVERAGE DISTURBANCE RATE THAT COMBINES THE RATE FOR 3 WITH THE RATE FOR ONE. SO, CALCULATE THE EXPECTED $N_a(d)$ for this condition...]
+The link between $D_e$ and $d$ provides a way to scale the grain hill model to field-derived estimates of $D$ and $h$. Given the definition of $D_e' = \delta^2 d$ and the observation that $D_e' \approx 10$ at low gradient, an approximate equivalence between $d$ and $D$ is
+\begin{equation}
+D = 10 \delta^2 d.
+\end{equation}
+For example, if one were to assume an active soil thickness of 0.4~m and a low-gradient transport coefficient of $D = 0.01$~m$^2$/yr, and set $\delta$ to the active soil thickness, then
+\begin{equation}
+d = D \delta^{-2} = 0.0625 y^{-1}.
+\end{equation}
+With these values, the simulated hills in Figure~\ref{tlim} would be 232~m long with height ranging from 1.6 to 57.6~m.
 
-[BUT BASICALLY THE POINT IS THAT ONE CAN SET d AND $\delta$ TO ACHIEVE A GIVEN SCALE AND RATE.]
+[NEXT UP: EXPERIMENTS WITH WEATHERING! PERHAPS A VERSION OF THE 3X3 FIGURE RUNS STRETCHED OUT ACROSS A SERIES OF WEATHERING RATES]
 
-
- 
 
 %f
 \begin{figure*}[t]

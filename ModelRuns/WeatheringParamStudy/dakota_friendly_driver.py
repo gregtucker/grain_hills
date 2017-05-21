@@ -7,12 +7,12 @@ his Brake model.
 
 """
 
+import os
+print('dakota_friendly_driver here. cwd = ' + os.getcwd())
 import grain_hill_as_class
 from landlab import load_params
 import numpy as np
 
-import os
-print('dakota_friendly_driver here. cwd = ' + os.getcwd())
 
 grain_hill_as_class = reload(grain_hill_as_class)
 

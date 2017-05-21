@@ -11,9 +11,6 @@ import grain_hill_as_class
 from landlab import load_params
 import numpy as np
 
-import os
-print('dakota_friendly_driver here. cwd = ' + os.getcwd())
-
 grain_hill_as_class = reload(grain_hill_as_class)
 
 def two_node_diff(a):
@@ -57,9 +54,9 @@ tt = min(t1, t2)
 t3 = 10 * params['uplift_interval']
 # Take the max
 params['run_duration'] = max(tt, t3)
-if params['run_duration'] > 580000.0:
-    print('WARNING: something is wrong')
-    params['run_duration'] = 1.0
+#if params['run_duration'] > 580000.0:
+#    print('WARNING: something is wrong')
+#    params['run_duration'] = 1.0
 print('Run duration used:')
 print(params['run_duration'])
 params['plot_interval'] = 1.1 * params['run_duration']
