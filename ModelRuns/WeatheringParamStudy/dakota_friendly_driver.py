@@ -12,7 +12,7 @@ print('dakota_friendly_driver here. cwd = ' + os.getcwd())
 import grain_hill_as_class
 from landlab import load_params
 import numpy as np
-
+import sys
 
 grain_hill_as_class = reload(grain_hill_as_class)
 
@@ -31,19 +31,19 @@ input_file = 'inputs.txt' #DAKOTA creates this
 # read parameter values from file 
 params = load_params(input_file)
 
-domain_length = 10.0 ** params['number_of_node_columns']
-num_cols = int(np.round(domain_length / (dx * 0.866) + 1))
-num_rows = int(np.round(0.5 * domain_length / dx))
+num_cols = params['number_of_node_columns']
+num_rows = int(np.round(0.866 * 0.5 * (num_cols - 1)))
+print('Launching run with ' + str(num_rows) + ' rows and ' + str(num_cols) + ' cols')
 params['number_of_node_columns'] = num_cols
 params['number_of_node_rows'] = num_rows
 params['disturbance_rate'] = 10.0 ** params['disturbance_rate']
 params['uplift_interval'] = 10.0 ** params['uplift_interval']
+wprime = 10.0 ** params['weathering_rate']
+params['weathering_rate'] = wprime / params['uplift_interval']
 
 # Calculate run duration
 #
 # Time for the domain to rise by L/2, where L is # of node cols 
-print('Domain length:')
-print(domain_length)
 t1 = params['uplift_interval'] * num_cols
 print('Time for domain rise:')
 print(t1)
@@ -67,6 +67,7 @@ params['output_interval'] = params['run_duration']
 
 print('Running grainhill, params:')
 print(params)
+sys.stdout.flush()
 
 # instantiate a GrainHill model
 grain_hill = grain_hill_as_class.GrainHill((num_rows, num_cols), **params)
