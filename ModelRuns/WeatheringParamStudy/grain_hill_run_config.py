@@ -9,7 +9,7 @@ Created on Fri May 19 07:42:35 2017
 @author: gtucker
 """
 
-source_path = '/Users/gtucker/Documents/Papers/_InProgress/GrainHill/grain_hills/ModelRuns/WeatheringParamStudy/'
+source_path = '/Users/gtucker/Documents/Papers/_InProgress/GrainHill/grain_hills/ModelRuns/WeatheringParamStudy'
 output_path = '/Users/gtucker/Runs/GrainHill/WeatheringParamStudy'
 
 jobsub = None

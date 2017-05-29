@@ -5,17 +5,17 @@ environment
 
 method
   multidim_parameter_study
-    partitions = 2 2 4
+    partitions = 2 2 3
 
 variables
   continuous_design = 3
-    lower_bounds = -3 2 -2
+    lower_bounds = -3 2 0
     upper_bounds = -1 4 2
     descriptors = 'D' 'U' 'Wprime'
 
 interface
   fork
-  analysis_driver = 'parallel_driver.py'
+  analysis_driver = 'grain_hill_dakota_run_driver.py'
   parameters_file = 'params.in'
   results_file = 'results.out'
   work_directory 
