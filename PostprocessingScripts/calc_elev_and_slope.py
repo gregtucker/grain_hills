@@ -6,6 +6,8 @@ Reads output from a series of GrainHill runs, and for each, calculates:
     1 - the maximum elevation
     2 - the mean elevation
     3 - the mean slope.
+    4 - the mean soil thickness.
+    5 - the fractional soil cover.
 These are written to a csv file.
 """
 
@@ -18,6 +20,36 @@ import numpy as np
 DEFAULT_OUTPUT_NAME = 'grain_hill_results.csv'
 DEFAULT_INPUT_NAME = 'grain_hill_model0001.nc.grid'
 DEFAULT_INPUT_PATH = os.getcwd()
+
+
+def calc_fractional_soil_cover(grid, node_state):
+    """Calculate and return fractional soil versus rock cover."""
+    num_soil_air_faces = 0.0
+    num_rock_air_faces = 0.0
+    
+    for link in range(grid.number_of_links):
+        tail = grid.node_at_link_tail[link]
+        head = grid.node_at_link_head[link]
+        if node_state[tail] == 0:  # if tail is air, see if head is rock/sed
+            if node_state[head] == 7:
+                num_soil_air_faces += 1
+            elif node_state[head] == 8:
+                num_rock_air_faces += 1
+        elif node_state[head] == 0:  # if head is air, see if tail is rock/sed
+            if node_state[tail] == 7:
+                num_soil_air_faces += 1
+            elif node_state[tail] == 8:
+                num_rock_air_faces += 1
+
+    total_surf_faces = num_soil_air_faces + num_rock_air_faces
+    frac_rock = num_rock_air_faces / total_surf_faces
+    frac_soil = num_soil_air_faces / total_surf_faces
+    print('Total number of surface faces: ' + str(total_surf_faces))
+    print('Number of soil-air faces: ' + str(num_soil_air_faces))
+    print('Number of rock-air faces: ' + str(num_rock_air_faces))
+    print('Percent rock-air faces: ' + str(100.0 * frac_rock))
+    print('Percent soil-air faces: ' + str(100.0 * frac_soil))
+    return frac_soil
 
 
 def get_profile_and_soil_thickness(grid, data):
@@ -99,11 +131,16 @@ def process_model_output_data(in_path, in_name):
             # Get mean gradient
             grad_mean = calc_mean_gradient(elev)
             
+            # Get the fractional soil cover
+            frac_soil_cover = calc_fractional_soil_cover(g, ns)
+            
             run_number = item[17:]
             run_number = run_number[:run_number.find('-')]
             print(['run num ' + str(run_number) + ' ' + str(hmax)
-                    + ' ' + str(hmean) + ' ' + str(grad_mean)])
-            results_list.append((int(run_number), hmax, hmean, grad_mean))
+                    + ' ' + str(hmean) + ' ' + str(grad_mean) + ' '
+                    + str(soil) + ' ' + str(frac_soil_cover)])
+            results_list.append((int(run_number), hmax, hmean, grad_mean, soil,
+                                 frac_soil_cover))
 
     results_list.sort()
     return results_list
@@ -112,10 +149,12 @@ def process_model_output_data(in_path, in_name):
 def write_output(results_list, out_name):
     """Write output to a file in csv format."""
     outfile = open(out_name, 'w')
-    outfile.write('Run number,Max height,Mean height,Mean gradient\n')
+    outfile.write(['Run number,Max height,Mean height,Mean gradient,'
+                   + 'Mean soil thickness,Fractional soil cover\n'])
     for item in results_list:
         outstr = (str(item[0]) + ',' + str(item[1]) + ',' + str(item[2]) + ',' 
-                  + str(item[3]) + '\n')
+                  + str(item[3]) + ',' + str(item[4]) + ',' + str(item[5])
+                  +'\n')
         outfile.write(outstr)
     outfile.close()
 
