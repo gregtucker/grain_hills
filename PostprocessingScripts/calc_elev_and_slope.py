@@ -131,16 +131,17 @@ def process_model_output_data(in_path, in_name):
             # Get mean gradient
             grad_mean = calc_mean_gradient(elev)
             
-            # Get the fractional soil cover
+            # Get the mean soil thickness and fractional soil cover
+            soil_mean = np.mean(soil)
             frac_soil_cover = calc_fractional_soil_cover(g, ns)
             
             run_number = item[17:]
             run_number = run_number[:run_number.find('-')]
             print(['run num ' + str(run_number) + ' ' + str(hmax)
                     + ' ' + str(hmean) + ' ' + str(grad_mean) + ' '
-                    + str(soil) + ' ' + str(frac_soil_cover)])
-            results_list.append((int(run_number), hmax, hmean, grad_mean, soil,
-                                 frac_soil_cover))
+                    + str(soil_mean) + ' ' + str(frac_soil_cover)])
+            results_list.append((int(run_number), hmax, hmean, grad_mean,
+                                 soil_mean, frac_soil_cover))
 
     results_list.sort()
     return results_list
@@ -149,12 +150,12 @@ def process_model_output_data(in_path, in_name):
 def write_output(results_list, out_name):
     """Write output to a file in csv format."""
     outfile = open(out_name, 'w')
-    outfile.write(['Run number,Max height,Mean height,Mean gradient,'
-                   + 'Mean soil thickness,Fractional soil cover\n'])
+    outfile.write('Run number,Max height,Mean height,Mean gradient,'
+                  + 'Mean soil thickness,Fractional soil cover\n')
     for item in results_list:
         outstr = (str(item[0]) + ',' + str(item[1]) + ',' + str(item[2]) + ',' 
                   + str(item[3]) + ',' + str(item[4]) + ',' + str(item[5])
-                  +'\n')
+                  + '\n')
         outfile.write(outstr)
     outfile.close()
 
