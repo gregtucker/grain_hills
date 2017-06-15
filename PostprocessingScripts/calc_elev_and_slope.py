@@ -49,7 +49,7 @@ def calc_fractional_soil_cover(grid, node_state):
     print('Number of rock-air faces: ' + str(num_rock_air_faces))
     print('Percent rock-air faces: ' + str(100.0 * frac_rock))
     print('Percent soil-air faces: ' + str(100.0 * frac_soil))
-    return frac_soil
+    return frac_soil, total_surf_faces, num_soil_air_faces, num_rock_air_faces
 
 
 def get_profile_and_soil_thickness(grid, data):
@@ -133,15 +133,16 @@ def process_model_output_data(in_path, in_name):
             
             # Get the mean soil thickness and fractional soil cover
             soil_mean = np.mean(soil)
-            frac_soil_cover = calc_fractional_soil_cover(g, ns)
+            (fs, nsurf, nsoil, nrock) = calc_fractional_soil_cover(g, ns)
             
             run_number = item[17:]
             run_number = run_number[:run_number.find('-')]
             print(['run num ' + str(run_number) + ' ' + str(hmax)
                     + ' ' + str(hmean) + ' ' + str(grad_mean) + ' '
-                    + str(soil_mean) + ' ' + str(frac_soil_cover)])
+                    + str(soil_mean) + ' ' + str(fs) + ' ' + str(nsurf)
+                    + ' ' + str(nsoil) + ' ' + str(nrock)])
             results_list.append((int(run_number), hmax, hmean, grad_mean,
-                                 soil_mean, frac_soil_cover))
+                                 soil_mean, fs, nsurf, nsoil, nrock))
 
     results_list.sort()
     return results_list
@@ -151,11 +152,15 @@ def write_output(results_list, out_name):
     """Write output to a file in csv format."""
     outfile = open(out_name, 'w')
     outfile.write('Run number,Max height,Mean height,Mean gradient,'
-                  + 'Mean soil thickness,Fractional soil cover\n')
+                  + 'Mean soil thickness,Fractional soil cover,'
+                  + 'Total number of surface faces,'
+                  + 'Number of soil-air faces,'
+                  + 'Number of rock-air faces\n')
     for item in results_list:
         outstr = (str(item[0]) + ',' + str(item[1]) + ',' + str(item[2]) + ',' 
                   + str(item[3]) + ',' + str(item[4]) + ',' + str(item[5])
-                  + '\n')
+                  + ',' + str(item[6]) + ',' + str(item[7])
+                  + ',' + str(item[8]) + '\n')
         outfile.write(outstr)
     outfile.close()
 
