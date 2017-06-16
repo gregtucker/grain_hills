@@ -318,7 +318,7 @@ With these values, the simulated hills in Figure~\ref{tlim} would be 232~m long 
 
 \subsection{Hillslope with regolith production from rock}
 
-Having established that the grain hill model reproduces classic soil-mantled hillslope forms, we turn now to the case in which regolith is generated from bedrock with a production rate that may (or may not) limit the rate of erosion. We explore the role of regolith production with a series of model runs in which $w'$ varies from 0.4 to 40. This upper end of this range represents a condition in which the potential maximum rate of regolith production greatly exceeds the rate of baselevel lowering. The lower end represents essentially the minimum rate that still permits dynamic equilibrium.
+Having established that the grain hill model reproduces classic soil-mantled hillslope forms, we turn now to the case in which regolith is generated from bedrock with a production rate that may (or may not) limit the rate of erosion. We explore the role of regolith production with a series of model runs in which $w'$ varies from 0.4 to 40. This upper end of this range represents a condition in which the potential maximum rate of regolith production greatly exceeds the rate of baselevel lowering. The lower end, 0.4, is less than the rate of baselevel fall, and would seem to be insufficient to allow for equilibrium to occur, and yet nonetheless it does.
 
 %f
 \begin{figure*}[t]
@@ -326,6 +326,23 @@ Having established that the grain hill model reproduces classic soil-mantled hil
 \caption{...}
 \label{wxhills3x3}
 \end{figure*}
+
+Relationships among mean gradient, fractional soil cover, $d'$, and $w'$ are illustrated in Figure~\ref{wxing4x4}. For $w' > 1$, the gradient-$d'$ relation (Figure~\ref{wxing4x4}a) has the same pattern as in the purely soil models: a threshold regime at lower $d'$ transitioning to an inverse gradient-$d'$ relation at higher $d'$. This indicates that when the maximum weathering rate (for a flat surface) is substantially greater than the rate of baselevel fall, we recapture transport-limited conditions. With $w'<1$, however, the hillslope achieves an equilibrium gradient that is greater than that for the transport-limited case, and at lower $d'$, is greater than the threshold angle (Figures~\ref{wxing4x4}a,b).
+
+We can also examine the fractional soil cover, which is defined here as the number of rock-air cell pairs divided by the total number cell pairs at which air meets either soil or rock (Figures~\ref{wxing4x4}c,d). The fractional soil cover shows relatively little sensitivity to $d'$ (Figure~\ref{wxing4x4}c). The cover approaches unity for high $w'$ and $d'$, but systematically declines with $w'$ when $w'$ is below about 10. (Note that the data points representing $d' = 1000$ and $w' > 1$ have hillslope heights of only a few particles, and therefore sensitive to finite-size effects).
+
+%f
+\begin{figure*}[t]
+\includegraphics[width=12cm]{Figures/wxing_slope_frac_cover.pdf}
+\caption{...}
+\label{wxing4x4}
+\end{figure*}
+
+[FROM HERE: discuss seeming paradox that with a fixed particle weathering probability, model finds an equilibrium even when the weathering probability is lower than the uplift rate. how and why does that work? answer is that there is an additional feedback: the surface area of exposed rock. this is controlled by 3 things: the euclidean length of the hillslope, which is controlled by the mean gradient; the roughness of the surface; and the fractional soil cover. model must achieve an equilibrium in which the surface area times weathering rate equals the uplift rate times projected hillslope length. show plot indicating that it does indeed do this. probably save discussion of the extent to which this is a valid analogy for nature until the discussion.]
+
+[... One feedback is about slope length: naively, with a planar slope that erodes at rate w in the slope normal direction, the vertical lowering rate would be w / cos theta. So at equilibrium with erosion rate E, cos theta = w / E, when w < E]
+
+
 
 
 \subsection{Rock collapse}
