@@ -340,14 +340,24 @@ We can also examine the fractional soil cover, which is defined here as the numb
 
 The models with $w' < 1$ present a seeming paradox: how is it possible to achieve an equilibrium form when the maximum weathering rate appears to be lower than the rate of uplift relative to baselevel? The solution to the paradox lies in surface area. The surface area of rock that is exposed to weathering is not fixed, but rather depends on the overall slope length, the terrain roughness, and the fractional soil cover. To appreciate the first effect, consider a planar slope at angle $\theta$ with no soil cover. If $w\delta$ represents the maximum slope-normal bedrock weathering rate, then the vertical rate is simply $w\delta / \cos \theta$. All else equal, increasing gradient will increase vertical weathering rate, thereby providing a feedback between gradient and rock lowering rate. A second feedback relates to topographic roughness: all else equal, a rougher surface will experience a greater weathering rate because it provides more surface area. The third feedback, which is embedded in the depth-dependent soil production hypothesis \citep{REFS} lies in soil cover: the greater the exposure of rock (or the thinner the cover), the faster the average rate of rock-to-soil conversion will be. In the grain hill model, this third feedback is represented by fractional bedrock exposure (since weathering only occurs when rock cells are juxtaposed with air cells).
 
-To test whether these are indeed the feedbacks responsible for equilibrium topography in the grain hill model, we can compare the rate of material influx (uplift relative to baselevel) with the expected rate of rock-to-soil conversion. In the grain hill model, the expected rate of rock-to-soil conversion, $R$, in cross-sectional area per time, is the product of weathering rate per slope length, $w$, the width of a cell, $\delta$, and the total length of exposed rock, $\delta_f N_{ra}$,
+To test whether these are indeed the feedbacks responsible for equilibrium topography in the grain hill model, we can compare the rate of material influx (uplift relative to baselevel) with the expected rate of rock-to-soil conversion. In the grain hill model, the expected rate of rock-to-soil conversion, $R$, in cross-sectional area per time, is the product of weathering rate per cell face, $w$, the area of a cell, $A$, and the number of rock-air cell faces, $N_{ra}$,
 \begin{equation}
-R = w \delta \delta_f N_{ra},
+R = w A N_{ra},
 \end{equation}
-where $N_{ra}$ is the number of cell faces that juxtapose rock and air, and $\delta_f$ is the length of one face. The rate of material addition due to uplift relative to baselevel, $U$, again in cross-sectional area per time, is the height of a cell, $\delta$, times the horizontal width of the domain, $\lambda \delta$, divided by the interval between uplift events, $\tau$:
+The rate of material addition due to uplift relative to baselevel, $U$, again in cross-sectional area per time, is the area of a cell, $A$, times the horizontal width of the domain in cells, $N_H$, divided by the interval between uplift events, $\tau$:
 \begin{equation}
-U = \delta^2 \lambda / \tau.
+U = N_H A / \tau.
 \end{equation}
+Equality between rock uplift and weathering can be expressed as:
+\begin{equation}
+\frac{1}{\tau} = w\frac{N_{ra}}{N_H}.
+\end{equation}
+The ratio on the right side represents the surface-area effect, in the form of surface area exposed to weathering per unit horizontal area. The balance is illustrated in Figure~\ref{wxinguplift}, which compares the left-hand and right-hand terms for each of the 125 model runs with weathering. Each data point represents a single snapshot in time, and so scatter is to be expected. To help diagnose the scatter around the 1:1 line, the data are divided into quintiles by fractional soil cover, $F_s$. Many of the points that fall off the 1:1 line, especially at the high end (higher $1/\tau$), come from runs with $F_s>80\%$; with very few exposed rock-air pairs, a small fluctuation in the $N_{ra}$ can produce a relatively large change in predicted weathering rate. At the low end, many of the points above the 1:1 line come from runs with a maximum height of only a few cells, which are subject to finite-size effects.
+
+The main message of Figure~\ref{wxinguplift} is that the grain hill model demonstrates an equilibrium adjustment between rock uplift and rock weathering, with the latter controlled by exposed surface area. 
+
+[FROM HERE: well, this all raises the question: if the equilibrium adjusts both fractional cover AND slope surface area, what determines how much of each? Presumably it's about transport too. Also note that there are NO cases with zero soil cover! There is always some cover effect. Likewise, both cover and surface area depend on slope: thus, weathering rate itself is slope-sensitive!!]
+
 
 %f
 \begin{figure*}[t]
@@ -359,9 +369,7 @@ U = \delta^2 \lambda / \tau.
 
 
 
-[FROM HERE: discuss seeming paradox that with a fixed particle weathering probability, model finds an equilibrium even when the weathering probability is lower than the uplift rate. how and why does that work? answer is that there is an additional feedback: the surface area of exposed rock. this is controlled by 3 things: the euclidean length of the hillslope, which is controlled by the mean gradient; the roughness of the surface; and the fractional soil cover. model must achieve an equilibrium in which the surface area times weathering rate equals the uplift rate times projected hillslope length. show plot indicating that it does indeed do this. probably save discussion of the extent to which this is a valid analogy for nature until the discussion.]
 
-[... One feedback is about slope length: naively, with a planar slope that erodes at rate w in the slope normal direction, the vertical lowering rate would be w / cos theta. So at equilibrium with erosion rate E, cos theta = w / E, when w < E]
 
 
 
@@ -370,7 +378,6 @@ U = \delta^2 \lambda / \tau.
 
 
 
-[NEXT UP: EXPERIMENTS WITH WEATHERING!]
 
 
 
