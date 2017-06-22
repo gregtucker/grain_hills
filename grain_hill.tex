@@ -83,7 +83,7 @@ Hillslopes take on a rich variety of forms. Their profile shapes may be convex-u
 
 Considerable research has been devoted to understanding the evolution of soil-mantled slopes that are primarily governed by disturbance-driven creep, such as down-slope soil transport by biotic and abiotic soil-mixing processes. As a result, the geomorphology community has mathematical models that account well for observed slope forms and patterns of regolith thickness \citep[e.g.,][]{roering2008well}. Furthermore, stochastic-transport theory provides a mechanistic link between the statistics of particle motion, the resultant average rates of downslope transport, and the emergence of convex-upward, soil-mantled slope forms \citep{culling,furbish}.
 
-One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport mode \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relatively fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS].
+One gap that remains, however, lies in understanding steep, rocky slopes. ``Rocky'' implies slopes that lack a continuous soil cover; here, transport laws that assume the existence such a cover no longer apply. ``Steep'' implies angles approaching or exceeding the effective angle of repose for loose, granular material, so that ravel may be an important transport mode \citep[e.g.][]{gabet,lamb,stock} and particles have the potential to fall as soon as they are released from bedrock. This type of relatively fast, long-distance transport does not fit comfortably in the framework of standard diffusion-based models of hillslope soil transport, which derive from an underlying assumption that the characteristic length scale of motion is short relative to the length of the slope [REFS]. [ADD FIGURE WITH SOME FIELD PHOTOS AND/OR LIDAR IMAGES OF ROCKY SLOPES, INCLUDING AT LEAST ONE WITH VERTICAL CLIFF SECTIONS AND ONE WITH BLOCKS]
 
 Rocky slopes are rarely completely barren. More commonly, they have a patchy cover of loose scree, which could either retard rock weathering by shielding the rock surface from moisture or temperature fluctuations, or enhance it by trapping water and allowing limited plant growth. A discontinuous cover does not fit easily within the popular exponential-decay regolith-production models [SOME REF], which assume an essentially continuous soil mantle.
 
@@ -354,10 +354,7 @@ Equality between rock uplift and weathering can be expressed as:
 \end{equation}
 The ratio on the right side represents the surface-area effect, in the form of surface area exposed to weathering per unit horizontal area. The balance is illustrated in Figure~\ref{wxinguplift}, which compares the left-hand and right-hand terms for each of the 125 model runs with weathering. Each data point represents a single snapshot in time, and so scatter is to be expected. To help diagnose the scatter around the 1:1 line, the data are divided into quintiles by fractional soil cover, $F_s$. Many of the points that fall off the 1:1 line, especially at the high end (higher $1/\tau$), come from runs with $F_s>80\%$; with very few exposed rock-air pairs, a small fluctuation in the $N_{ra}$ can produce a relatively large change in predicted weathering rate. At the low end, many of the points above the 1:1 line come from runs with a maximum height of only a few cells, which are subject to finite-size effects.
 
-The main message of Figure~\ref{wxinguplift} is that the grain hill model demonstrates an equilibrium adjustment between rock uplift and rock weathering, with the latter controlled by exposed surface area. 
-
-[FROM HERE: well, this all raises the question: if the equilibrium adjusts both fractional cover AND slope surface area, what determines how much of each? Presumably it's about transport too. Also note that there are NO cases with zero soil cover! There is always some cover effect. Likewise, both cover and surface area depend on slope: thus, weathering rate itself is slope-sensitive!!]
-
+The main message of Figure~\ref{wxinguplift} is that the grain hill model demonstrates an equilibrium adjustment between rock uplift and rock weathering. The weathering rate does not have a fixed upper ``speed limit,'' but rather is set by the latter controlled by exposed surface area, which in turn is a function of gradient, roughness, and soil cover. Solutions with a discontinuous soil cover are indicative of this adjustment. Slopes can grow arbitrarily steep, with weathering and erosion increasingly attacking from the sides as the gradient rises. 
 
 %f
 \begin{figure*}[t]
@@ -367,33 +364,34 @@ The main message of Figure~\ref{wxinguplift} is that the grain hill model demons
 \end{figure*}
 
 
+\subsection{Rock collapse and vertical cliffs}
+
+Some rock slopes display a ``ramp and cliff'' morphology, in which a vertical rock face stands above an inclined, often sediment-mantled buttress (Figure~\ref{}). Although common in sedimentary rocks where a resistant unit forms the cliff and a weaker unit the buttress, the same morphology is sometimes found in apparently homogeneous lithology (Figure~\ref{}). The cliff portion of such slopes suggests a process of undermining and collapse, with the cliff-forming material being cohesive enough to maintain a vertical face but too weak to support overhangs. [CHECK HOWARD REVIEW PAPER FOR TERMINOLOGY AND MECHANISMS]
+
+To explore the origins of ramp-and-cliff morphology, we consider a version of the grain hill model that adds an extra rule to represent collapse: any rock particle that directly overlies air has the possibility to transition to a falling soil particle, with the same rate as gravitational transition from resting to falling---in other words, as soon as a rock particle has been undermined, it behaves like cohesionless material.
+
+This rule produces a morphology with slopes that are roughly planar, and display ramp-and-cliff morphology in detail, with patchy accumulations of soil on the ramps (Figure~\ref{collapserule}). With $w'\le 1$, gradient and soil cover depend strongly on $w'$ and show little or no sensitivity to $d'$. When $w' \ll 1$, the hillslope forms resemble pinnacles.
+
+%f
+\begin{figure*}[t]
+\includegraphics[width=12cm]{Figures/collapse_rule.pdf}
+\caption{...}
+\label{collapserule}
+\end{figure*}
 
 
+[The point is that (a) the collapse rule produces slope-rampart forms, and they can become arbitrarily steep.]
+
+\subsection{Blocks}
+
+o intro para discussing existence of blocks, referencing rachel and charlie work. can only move by rolling/topping following initial release from rock, or undermining.
+
+o quick summary of how they are treated here
+
+o what experiments to run? don't need to look again at slope width. might as well simplify to have just soil in between. that leaves two parameters: angle and thickness. angle is already dimensionless; thickness is relative to slope length. so you have three dimensionless params: $d'$, $\beta$, and $T'$. But there's no more steady state except in the case of 
+ 
 
 
-
-
-
-\subsection{Rock collapse}
-
-
-
-
-
-
-
-
-
-
-
-
-Ok, so what cases do we consider?
-
-1 - soil-only hillslopes
-
-2 - rocky hillslopes
-
-3 - heavy particles
 
 
 \section{Discussion}
