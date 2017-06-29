@@ -370,7 +370,7 @@ Some rock slopes display a ``ramp and cliff'' morphology, in which a vertical ro
 
 To explore the origins of ramp-and-cliff morphology, we consider a version of the grain hill model that adds an extra rule to represent collapse: any rock particle that directly overlies air has the possibility to transition to a falling soil particle, with the same rate as gravitational transition from resting to falling---in other words, as soon as a rock particle has been undermined, it behaves like cohesionless material.
 
-This rule produces a morphology with slopes that are roughly planar, and display ramp-and-cliff morphology in detail, with patchy accumulations of soil on the ramps (Figure~\ref{collapserule}). With $w'\le 1$, gradient and soil cover depend strongly on $w'$ and show little or no sensitivity to $d'$. When $w' \ll 1$, the hillslope forms resemble pinnacles.
+This rule produces a morphology with slopes that are roughly planar, and display ramp-and-cliff morphology in detail, with patchy accumulations of soil on the ramps (Figure~\ref{collapserule}). With $w'\le 1$, gradient and soil cover depend strongly on $w'$ and show little or no sensitivity to $d'$. When $w' \ll 1$, the hillslope forms resemble pinnacles. These examples demonstrate two combined feedbacks between weathering and baselevel fall: the surface area susceptible to weathering, and the frequency and magnitude of material collapse through undermining.
 
 %f
 \begin{figure*}[t]
@@ -379,8 +379,6 @@ This rule produces a morphology with slopes that are roughly planar, and display
 \label{collapserule}
 \end{figure*}
 
-
-[The point is that (a) the collapse rule produces slope-rampart forms, and they can become arbitrarily steep.]
 
 \subsection{Blocks}
 
@@ -391,6 +389,11 @@ o quick summary of how they are treated here
 o what experiments to run? don't need to look again at slope width. might as well simplify to have just soil in between. that leaves two parameters: angle and thickness. angle is already dimensionless; thickness is relative to slope length. so you have three dimensionless params: $d'$, $\beta$, and $T'$. But there's no more steady state except in the case of 
  
 
+\section*{TODO LIST}
+\begin{itemize}
+\item Make a version of the weathering-collapse script that runs all four cases
+\item Construct a folder organization for code repo 
+\end{itemize}
 
 
 
