@@ -62,7 +62,7 @@ def get_block_hill_colormap():
     sky = '#D0E4F2'
     mob = '#D98859'
     block = '#000000'
-    clist = [sky, mob, mob, mob, mob, mob, mob, sed, rock, block]
+    clist = [sky, mob, mob, mob, mob, mob, mob, sed, sed, block]
     return mpl.colors.ListedColormap(clist)
     
 def plot_hill(grid, filename=None):
@@ -88,25 +88,26 @@ def plot_hill(grid, filename=None):
 # Dictionary for parameters
 params = {}
 
-num_cols = 5
+num_cols = 33
 params['number_of_node_columns'] = num_cols
-#num_rows = int(np.round(0.866 * 1.3 * (num_cols - 1)))
-num_rows = 5
+num_rows = int(np.round(0.866 * 1.0 * (num_cols - 1)))
+#num_rows = 5
 params['number_of_node_rows'] = num_rows
 params['disturbance_rate'] = 0.01
-params['uplift_interval'] = 10.0
-params['weathering_rate'] = 0.01
-params['run_duration'] = 40.0
+params['uplift_interval'] = 100.0
+params['weathering_rate'] = 0.0001
+params['run_duration'] = 2000.0
 params['show_plots'] = True
-params['plot_interval'] = 1.0
+params['plot_interval'] = 10.0
 params['output_interval'] = 1.1 * params['run_duration']
 params['report_interval'] = 20.0
 params['settling_rate'] = 220000000.0
 params['friction_coef'] = 1.0
-params['rock_state_for_uplift'] = 8
-params['opt_rock_collapse'] = 1.0
-params['block_layer_dip_angle'] = 0.0
-params['block_layer_thickness'] = 2.0,
+params['rock_state_for_uplift'] = 7
+params['opt_rock_collapse'] = False
+params['block_layer_dip_angle'] = 45.0
+params['block_layer_thickness'] = 5.0
+params['y0_top'] = -(0.866 * num_cols - 3.0)
 params['cmap'] = get_block_hill_colormap()
 
 
@@ -116,6 +117,8 @@ bh = block_hill.BlockHill((num_rows, num_cols), **params)
 # plot
 
 #run the model
+#for i in range(len(bh.ca.node_pair)):
+#    print i, bh.ca.node_pair[i], bh.ca.n_xn[i], bh.ca.xn_to[i]
 bh.run()
 
 # compute and write the results
@@ -134,5 +137,7 @@ myfile.write(str(max_elev) + ' ' + str(mean_grad) + ' ' + str(frac_soil)
              + '\n')
 myfile.close()
 
+#for i in range(25):
+#    print(bh.ca.node_state[i])
 # Make a plot to file
 #plot_hill(bh.grid, 'rock_collapse_dp0wp-1.png')
