@@ -88,7 +88,7 @@ def plot_hill(grid, filename=None):
 # Dictionary for parameters
 params = {}
 
-num_cols = 33
+num_cols = 101
 params['number_of_node_columns'] = num_cols
 num_rows = int(np.round(0.866 * 1.0 * (num_cols - 1)))
 #num_rows = 5
@@ -96,18 +96,18 @@ params['number_of_node_rows'] = num_rows
 params['disturbance_rate'] = 0.01
 params['uplift_interval'] = 100.0
 params['weathering_rate'] = 0.0001
-params['run_duration'] = 2000.0
+params['run_duration'] = 3000.0
 params['show_plots'] = True
-params['plot_interval'] = 10.0
+params['plot_interval'] = 1.0
 params['output_interval'] = 1.1 * params['run_duration']
 params['report_interval'] = 20.0
 params['settling_rate'] = 220000000.0
 params['friction_coef'] = 1.0
 params['rock_state_for_uplift'] = 7
 params['opt_rock_collapse'] = False
-params['block_layer_dip_angle'] = 45.0
+params['block_layer_dip_angle'] = 30.0
 params['block_layer_thickness'] = 5.0
-params['y0_top'] = -(0.866 * num_cols - 3.0)
+params['y0_top'] = -(0.866 * num_cols) * np.tan(np.pi * 30.0 / 180.0)
 params['cmap'] = get_block_hill_colormap()
 
 

@@ -364,6 +364,38 @@ The main message of Figure~\ref{wxinguplift} is that the grain hill model demons
 \end{figure*}
 
 
+\subsection{Comparison between weathering rule and inverse-exponential model}
+
+The most popular function to describe soil production from bedrock is the decaying exponential formula proposed by \citet{ahnert}, which has proved consistent with estimates of production rate obtained using cosmogenic radionuclides \citep{heimsath1997soil,small1999}. The production rate is given by:
+\begin{equation}
+P = P_0 \exp \left( -H / H_* \right),
+\end{equation}
+where $P_0$ is the maximum (bare bedrock) production rate, $H$ is soil thickness, and $H_*$ is a depth-decay scale on the order of decimeters \citep{}. On a flat surface, assuming no erosion or deposition, the expected rate of change of $H$ over time is:
+\begin{equation}
+\frac{dH}{dt} = \frac{\rho_r}{\rho_s} (1-\omega ) P_0 \exp \left( -H / H_* \right),
+\label{dHdt}
+\end{equation}
+where $\rho_r$ and $\rho_s$ are the bulk densities of parent material and soil, respectively, and $\omega$ is the fraction of parent material removed in solution upon weathering. Starting from a bare surface, and assuming isovolumetric weathering, ($\rho_s = (1-\omega ) \rho_r$), the expected soil thickness as a function of time can be found by integrating equation (\ref{dHdt}):
+\begin{equation}
+\frac{H}{H_*} = \ln \left[ \frac{P_0}{H_*} t + 1 \right]
+\end{equation}
+We can compare this with the behavior of the cellular weathering rule by running the case of a flat, initially bare-rock surface from which weathered material may neither enter nor leave (Figure~\ref{flatwxing}). When the disturbance rate is zero, the cellular weathering model asymptotically approaches a steady soil thickness of exactly one cell (thickness = $\delta$). This is so because the model allows weathering to occur only when rock cells are exposed to air cells, and there is no disturbance process that would juxtapose rock and air once the initial weathered layer has formed. At first glance, this behavior appears wildly unrealistic: in the real world, weathering processes ... well the point is that for phys wxing, if one relaxes to say "near" the surface instead of strictly at it, then the approximation isn't too terrible... the realism comes in the fact that you need to bring intact parent material close to the physical processes that damage it, and once you have a layer comparable in thickness to the depth extent of those processes, the material becomes insulated---UNLESS you have a disturbance process... moreover wxing and dist may be one and the same process.
+
+
+ok, what i'm after here is the idea that when the weathering rule is coupled with disturbance, you don't just get a single-cell layer of weathered stuff and then it stops.
+
+so we need a plot showing, say, cases of $d/w$ = 0, 0.1, 1, and 10.
+
+
+%f
+\begin{figure*}[t]
+%\includegraphics[width=12cm]{Figures/flat_wxing.pdf}
+\caption{...}
+\label{flatwxing}
+\end{figure*}
+
+
+
 \subsection{Rock collapse and vertical cliffs}
 
 Some rock slopes display a ``ramp and cliff'' morphology, in which a vertical rock face stands above an inclined, often sediment-mantled buttress (Figure~\ref{}). Although common in sedimentary rocks where a resistant unit forms the cliff and a weaker unit the buttress, the same morphology is sometimes found in apparently homogeneous lithology (Figure~\ref{}). The cliff portion of such slopes suggests a process of undermining and collapse, with the cliff-forming material being cohesive enough to maintain a vertical face but too weak to support overhangs. [CHECK HOWARD REVIEW PAPER FOR TERMINOLOGY AND MECHANISMS]
@@ -384,20 +416,29 @@ This rule produces a morphology with slopes that are roughly planar, and display
 
 o intro para discussing existence of blocks, referencing rachel and charlie work. can only move by rolling/topping following initial release from rock, or undermining.
 
-o quick summary of how they are treated here
+o aim is to determine whether the essence of the mixed continuum-discrete model of Glade et al can be reproduced using the CTS technique
 
-o what experiments to run? don't need to look again at slope width. might as well simplify to have just soil in between. that leaves two parameters: angle and thickness. angle is already dimensionless; thickness is relative to slope length. so you have three dimensionless params: $d'$, $\beta$, and $T'$. But there's no more steady state except in the case of 
+o quick summary of how blocks are treated here. Note that Glade model assumes blocks never roll far; the CTS model relaxes that to some extent by allowing the possibility of multiple disturbance events on a 30+ slope in close succession (even though each is a separate event)
+
+o runs: not a full-on sensitivity analysis or parameter exploration, but rather 4 examples, with layer dip of 0, 30, 60, and 90. Note that technique allows mix of effectively t-lim and w-lim or ``motion-lim'' without having to explicitly assume an equation form.
  
-
-\section*{TODO LIST}
-\begin{itemize}
-\item Make a version of the weathering-collapse script that runs all four cases
-\item Construct a folder organization for code repo 
-\end{itemize}
-
 
 
 \section{Discussion}
+
+o CTS technique provides a way to study how discrete-event processes translate into morphological evolution
+
+o in some sense, closer to the underlying processes
+
+o possible to connect GrainHill parameters with more conventional parameters $D$, $P_0$; provides a sort of consistency check between continuum mechanics and events
+
+o allows inspection of particle statistics (but we haven't shown it...)
+
+o true 2D: can capture attack from side as well as top
+
+o limitations: wxing more or less halts once you've got a few particle depths of regolith, so can't do deep chem wxing without additional rules; no way (yet) to have motion or non-motion at angle of repose (i.e., at 30 deg ALWAYS move eventually, no ultimate stability, but this could be added).
+
+o one could build on the basic framework to explore hypotheses; for example, chemical or water infiltration particles. chief downside is complexity.
 
 
 \conclusions  %% \conclusions[modified heading if necessary]
