@@ -111,6 +111,8 @@ Our approach starts with a two-dimensional continuous-time stochastic (``CTS'') 
 
 In the CTS Lattice-Grain Model, the domain consists of a lattice of hexagonal cells. Each cell is assigned one of eight states (Table~\ref{statetable}). These states represents the nature and motion status of the material: state 0 represents fluid, states 1--6 represent a grain moving in one of the six lattice directions, and state 7 indicates a stationary grain. For purposes of modeling hillslope evolution, we add an additional state (8) to represent rock. Figure~\ref{lattice} illustrates these states, with an example of a single transition in which a falling grain switches places with the fluid cell below it.
 
+[MODIFY THE FIGURES FOR CTS RULES TO ELIMINATE THE ``FALLING WHEN ABOVE ANOTHER GRAIN'' SET]
+
 %t
 \begin{table}[t]
 \caption{States in the lattice grain hillslope model.}
@@ -141,7 +143,7 @@ State & Description \\
 
 Like other lattice-grain models, the CTS Lattice-Grain Model is designed to represent, in a simple way, the motion and interaction of an ensemble of grains in a gravitational field. The physics of the material are represented by a set of transition rules, in which a given adjacent pair of states is assigned a certain probability per unit time of undergoing a transition to a different pair. For example, consider a vertically aligned pair of cells in which the top cell has state 4 (moving downward) and the bottom cell state 0 (empty/fluid). Downward motion (falling) is represented by a transition in which the two states switch places (Figure~\ref{lattice}).
 
-% OK, SO NEED TO GET RID OF THE ELASTIC FIGURE, EXCEPT MOTION AND LEGEND, WHICH COULD BE ADDED TO THE FRICTIONAL FIGURE
+% OK, SO NEED TO GET RID OF THE ELASTIC FIGURE, EXCEPT MOTION AND LEGEND, WHICH COULD BE ADDED TO THE FRICTIONAL FIGURE. AND MODIFY THE GRAV FIGURE SO IT NO LONGER HAS FALLING-WHEN-ABOVE-OTHER TRNS. 
 
 %Elastic collisions are represented by a set of rules in which two adjacent grains that are converging have a given probability per unit time of rebounding and changing their directions. These rules are similar to the collision rules used in deterministic lattice-gas automata, with the main difference being that they account for the stochastic nature of transition events. 
 We assume that biophysical disturbance events such as the growth of roots and burrowing by animals, and the settling motions that follow, tend to impart low kinetic energy, with ``low'' defined as ballistic displacement lengths that are short relative to hillslope length and comparable to or less than the characteristic disturbance-zone thickness. We view such motions as being dominated by frictional dissipation rather than by transfer of kinetic energy by elastic impacts. This view is similar to the reasoning of \citet{furbish2009statistical} that the mean-free-path of mobile grains will typically be short relative to hillslope length, scaling with the grain radius and particle concentration. For this reason, unlike the lattice-grain model of \citet{tucker2016celllab}, we consider here only inelastic collisions (Figure~\ref{frictional}). These inelastic (frictional) collisions are represented by a set of rules in which one or both colliding particles become stationary, representing loss of momentum and kinetic energy as a result of the collision. Gravity is represented by transitions in which a rising grain decelerates to become stationary, a stationary grain accelerates downward to become a falling particle, and a grain moving upward at an angle accelerates downward to move downward at an angle (Figure~\ref{gravity}). An additional rule allows for acceleration of a particle resting on a slope: a stationary particle adjacent to a fluid cell below it and to one side may transition to a moving particle. Importantly for our purposes, this latter rule effectively imposes an angle of repose at 30$^\circ$.
@@ -236,6 +238,8 @@ We start by considering the case of fully soil-mantled hillslopes, in which the 
 
 Results show that the grain-hill model produces parabolic to planar hillslope forms, depending on the ratio of disturbance to uplift rates, which is encapsulated in the dimensionless parameter $d' = d \tau$ (Figure~\ref{tlim}). At high $d'$ (frequent disturbance and/or slow baselevel fall), hillslopes relief is low and the form is smoothly convex upward (Figure~\ref{tlim}, lower right). At somewhat lower $d'$, the lower part of the slope approaches a threshold angle while the upper part remains smoothly convex (Figure~\ref{tlim}, middle diagonal). At low $d'$, the form becomes predominantly planar and achieves a threshold relief that is insensitive for further increases in $d'$.
 
+[RE-RUN ALL WITH MODIFIED RULE SET, AND RE-PLOT]
+
 %f
 \begin{figure*}[t]
 \includegraphics{Figures/simple_hills_3x3.pdf}
@@ -320,6 +324,8 @@ With these values, the simulated hills in Figure~\ref{tlim} would be 232~m long 
 
 Having established that the grain hill model reproduces classic soil-mantled hillslope forms, we turn now to the case in which regolith is generated from bedrock with a production rate that may (or may not) limit the rate of erosion. We explore the role of regolith production with a series of model runs in which $w'$ varies from 0.4 to 40. This upper end of this range represents a condition in which the potential maximum rate of regolith production greatly exceeds the rate of baselevel lowering. The lower end, 0.4, is less than the rate of baselevel fall, and would seem to be insufficient to allow for equilibrium to occur, and yet nonetheless it does.
 
+[RE-RUN AND RE-PLOT WITH MODIFIED RULE SET]
+
 %f
 \begin{figure*}[t]
 \includegraphics[width=8cm]{Figures/weathered_hills_3x3.pdf}
@@ -330,6 +336,8 @@ Having established that the grain hill model reproduces classic soil-mantled hil
 Relationships among mean gradient, fractional soil cover, $d'$, and $w'$ are illustrated in Figure~\ref{wxing4x4}. For $w' > 1$, the gradient-$d'$ relation (Figure~\ref{wxing4x4}a) has the same pattern as in the purely soil models: a threshold regime at lower $d'$ transitioning to an inverse gradient-$d'$ relation at higher $d'$. This indicates that when the maximum weathering rate (for a flat surface) is substantially greater than the rate of baselevel fall, we recapture transport-limited conditions. With $w'<1$, however, the hillslope achieves an equilibrium gradient that is greater than that for the transport-limited case, and at lower $d'$, is greater than the threshold angle (Figures~\ref{wxing4x4}a,b).
 
 We can also examine the fractional soil cover, which is defined here as the number of rock-air cell pairs divided by the total number cell pairs at which air meets either soil or rock (Figures~\ref{wxing4x4}c,d). The fractional soil cover shows relatively little sensitivity to $d'$ (Figure~\ref{wxing4x4}c). The cover approaches unity for high $w'$ and $d'$, but systematically declines with $w'$ when $w'$ is below about 10. (Note that the data points representing $d' = 1000$ and $w' > 1$ have hillslope heights of only a few particles, and therefore sensitive to finite-size effects).
+
+[RE-RUN AND RE-PLOT WITH MODIFIED RULE SET]
 
 %f
 \begin{figure*}[t]
@@ -355,6 +363,8 @@ Equality between rock uplift and weathering can be expressed as:
 The ratio on the right side represents the surface-area effect, in the form of surface area exposed to weathering per unit horizontal area. The balance is illustrated in Figure~\ref{wxinguplift}, which compares the left-hand and right-hand terms for each of the 125 model runs with weathering. Each data point represents a single snapshot in time, and so scatter is to be expected. To help diagnose the scatter around the 1:1 line, the data are divided into quintiles by fractional soil cover, $F_s$. Many of the points that fall off the 1:1 line, especially at the high end (higher $1/\tau$), come from runs with $F_s>80\%$; with very few exposed rock-air pairs, a small fluctuation in the $N_{ra}$ can produce a relatively large change in predicted weathering rate. At the low end, many of the points above the 1:1 line come from runs with a maximum height of only a few cells, which are subject to finite-size effects.
 
 The main message of Figure~\ref{wxinguplift} is that the grain hill model demonstrates an equilibrium adjustment between rock uplift and rock weathering. The weathering rate does not have a fixed upper ``speed limit,'' but rather is set by the latter controlled by exposed surface area, which in turn is a function of gradient, roughness, and soil cover. Solutions with a discontinuous soil cover are indicative of this adjustment. Slopes can grow arbitrarily steep, with weathering and erosion increasingly attacking from the sides as the gradient rises. 
+
+[RE-RUN AND RE-PLOT WITH MODIFIED RULE SET]
 
 %f
 \begin{figure*}[t]
