@@ -1,11 +1,12 @@
 How the Grain Hill Dakota runs work
 May 2017
 
-Start by copying the following files into your master run folder:
+Start by modifying the file launch_gh_dakota_local.sh or launch_gh_dakota_beach.sh, or
+whatever else is the appropriate launch script:
 
-o dakota_param_study.in
-o grain_hill_dakota_run_driver.py
-o [TODO: ADD FILES]
+o set the SOURCEDIR variable to be the directory in which your source files live
+o set the RUNDIR variable to be the directory in which you want Dakota to run (this is
+also the directory in which Dakota will make run.1, run.2, etc., subdirectories)
 
 In the file grain_hill_run_config.py, set the source path (i.e., the directory containing
 the model files) and the "jobsub" option, which should be "None" (for local), or "qsub"
@@ -13,10 +14,11 @@ the model files) and the "jobsub" option, which should be "None" (for local), or
 
 Run:
 
-dakota -i dakota_param_study.in -o dakota.out > run.log &
-
+./launch_gh_dakota_<option>.sh
 
 What happens:
+
+o launch_gh_dakota_<option>.sh copies some files and starts Dakota
 
 o Dakota picks parameter values for a run, then calls the analysis driver
   grain_hill_dakota_run_driver.py

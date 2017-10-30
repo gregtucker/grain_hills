@@ -8,19 +8,23 @@ import os
 import shutil
 import sys
 from subprocess import call
-from grain_hill_run_config import source_path #, output_path #, jobsub
+from grain_hill_run_config import (source_path, input_path, output_path,
+                                   jobsub, run_script)
 
+
+print('grain_hill_dakota_run_driver.py here')
+sys.stdout.flush()
 
 # 1. Copy needed files to the right place. Specifically:
 #
-#    - Copy "inputs_template.txt" from the source directory to the "run.N"
+#    - Copy "inputs_template.txt" from the input directory to the "run.N"
 #      directory for the current run (where "N" is the run number). This
 #      "run.N" directory should be the current directory.
 #
 input_template = 'inputs_template.txt'
-print('Copying ' + input_template + ' from ' + source_path + ' to '
+print('  copying ' + input_template + ' from ' + source_path + ' to '
       + os.getcwd())
-shutil.copy(os.path.join(source_path, input_template), os.curdir)
+shutil.copy(os.path.join(input_path, input_template), os.curdir)
 
 
 # 2. Configure the input file: Use `dprepro` (from $DAKOTA_DIR/bin) to 
@@ -36,11 +40,43 @@ shutil.copy(os.path.join(source_path, input_template), os.curdir)
 #        the default values from the template input file, plus the actual
 #        (varying run-to-run) values from params.in for this particular run.
 #
+print('  calling Dakota dprepro utility...')
 input_file = 'inputs.txt'
 call(['dprepro', sys.argv[1], input_template, input_file])
 
 
+# 3. Copy the run script to the current directory.
+print('  copying run script to the current directory...')
+shutil.copy(os.path.join(source_path, run_script), os.curdir)
+shutil.copy(os.path.join(source_path, 'grain_hill_as_class.py'), os.curdir)
+shutil.copy(os.path.join(source_path, 'cts_model.py'), os.curdir)
+shutil.copy(os.path.join(source_path, 'lattice_grain.py'), os.curdir)
+shutil.copy(os.path.join(input_path, 'grain_hill_dakota_friendly_driver.py'),
+                         os.curdir)
 
+
+# 4. Run the model. Do so either through a PBS submission script, or just by
+# running a simpler script (if serial/local model). Note that `qsub`
+# returns immediately, so jobs do not block if running on an HPC.
+if jobsub == 'qsub':
+    job_name = 'GrainHill-Dakota' + os.path.splitext(os.getcwd())[-1]
+    print('  launching qsub of job ' + job_name)
+    sys.stdout.flush()
+
+    from grain_hill_run_config import home_path, work_path, scratch_path
+
+    print('  work_path = ' + work_path)
+    shutil.copy(os.path.join(input_path, 'qsub'), os.curdir)
+    call(['qsub', '-N', job_name, run_script, home_path, work_path, scratch_path])
+    #call(['qsub', '-N', job_name, os.path.join(source_path, run_script),
+    #      source_path, input_path, work_path, home_path, scratch_path])
+    #call(['qsub', '-N', job_name, os.path.join(output_path, run_script)])
+
+elif jobsub == None:
+    print('  running local script ' + run_script)
+    call([run_script, source_path, input_path])
+
+print('grain_hill_dakota_run_driver.py DONE.')
 
 
 

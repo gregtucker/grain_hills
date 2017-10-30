@@ -2,9 +2,9 @@
 number_of_node_rows:
 10
 number_of_node_columns:
-580
+129
 report_interval: time interval for reporting output to user (real-time seconds)
-3600.0
+15.0
 run_duration: duration of run, seconds
 1.0
 output_interval:
@@ -21,5 +21,7 @@ plot_interval:
 20000.0
 friction_coef:
 1.0
+rock_state_for_uplift:
+8
 show_plots:
 False

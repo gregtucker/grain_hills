@@ -5,7 +5,7 @@ environment
 
 method
   multidim_parameter_study
-    partitions = 2 2 3
+    partitions = 2 2 2
 
 variables
   continuous_design = 3
@@ -25,7 +25,7 @@ interface
   file_save
 
 responses
-  response_functions = 2
-  response_descriptors = 'Zmax', 'Smedian'
+  response_functions = 3
+  response_descriptors = 'Zmax', 'Smean', 'frac_soil'
   no_gradients
   no_hessians
