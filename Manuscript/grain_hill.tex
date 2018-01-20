@@ -70,13 +70,13 @@
 \maketitle
 
 
-
+%\newpage
 \begin{abstract}
 This paper describes and explores a new continuous-time stochastic cellular automaton model of hillslope evolution. The Grain Hill model provides a computational framework with which to study slope forms that arise from stochastic disturbance and rock weathering events. The model operates on a hexagonal lattice, with cell states representing fluid, rock, and grain aggregates that are either stationary or in a state of motion in one of the six cardinal lattice directions. The model can reproduce a range of common slope forms, from fully soil mantled to rocky or partially mantled, and from convex-upward to planar shapes. An optional additional state represents large blocks that cannot be displaced upward by disturbance events. With the addition of this state, the model captures the morphology of hogbacks, scarps, and similar features. In its simplest form, the model has only three process parameters, which represent disturbance frequency, characteristic disturbance depth, and baselevel lowering rate, respectively. Incorporating physical weathering of rock adds one additional parameter, representing the characteristic rock weathering rate. These parameters are not arbitrary but rather have a direct link with corresponding parameters in continuum theory. Comparison between observed and modeled slope forms demonstrates that the model can reproduce both the shape and scale of real hillslope profiles. Model experiments highlight the importance of regolith cover fraction in governing both the downslope mass transport rate and the rate of physical weathering. Equilibrium rocky hillslope profiles are possible even when the rate of baselevel lowering exceeds the nominal bare-rock weathering rate, because increases in both slope gradient and roughness can allow for rock weathering rates that are greater than the flat-surface maximum. Examples of transient relaxation of steep, rocky slopes predict the formation of a regolith-mantled pediment that migrates headward through time while maintaining a sharp slope break.
 
 \end{abstract}
 
-
+%\newpage
 
 \introduction  %% \introduction[modified heading if necessary]
 
@@ -479,19 +479,8 @@ We examine model runs in which a resistant rock layer is embedded in a weak sedi
 
 
 \section{Comparison to field sites}
-% * <hobleyd@cardiff.ac.uk> 2018-01-15T14:30:01.302Z:
-% 
-% > Comparison to field sites
-% I really like the cleanness of this section as now written. I am finding it very convincing!
-% 
-% ^ <gtucker@colorado.edu> 2018-01-15T14:31:51.372Z:
-% 
-% Good!
-%
-% ^.
 
-We perform a basic validation of the Grain Hill model by comparing its output to real field sites, testing whether the model is capable of reproducing realistic hillslope forms at the correct spatial scale under known boundary conditions. Field sites were chosen such that model boundary conditions could be derived from independent field estimates of rate parameters such as $D_s$ and the rate of baselevel fall. %To perform this test...It is of interest to determine whether, given field estimates of rate parameters such as $D_s$ and the rate of baselevel fall, the Grain Hill model is capable of reproducing realistic hillslope forms at the correct spatial scale. 
-To perform this test, we consider two examples: a convex-upward, soil-mantled hillslope in Gabilan Mesa, California, USA (Figure~\ref{threeslopes}a,b), and a steep, quasi-planar, discontinuously mantled hillslope in the Yucaipa Ridge, California, USA (Figure~\ref{threeslopes}c,d). For each of these two case studies, the hillslopes appear to be approximately at steady state, and independent estimates exist for the rate of baselevel fall, $U$ \citep{binnie2007tectonic,perron2009formation,perron2012root}.  We estimated the effective transport coefficient, $D_s$,  for the profiles shown in Figure~\ref{threeslopes}a,c by measuring the second derivative of the one-dimensional hillslope elevation profiles, $\frac{\partial^2 \eta}{\partial x^2}$, and solving for  $D_s$ using
+We perform a basic validation of the Grain Hill model by comparing its output to real field sites, testing whether the model is capable of reproducing realistic hillslope forms at the correct spatial scale under known boundary conditions. Field sites were chosen such that model boundary conditions could be derived from independent field estimates of rate parameters such as $D_s$ and the rate of baselevel fall. To perform this test, we consider two examples: a convex-upward, soil-mantled hillslope in Gabilan Mesa, California, USA (Figure~\ref{threeslopes}a,b), and a steep, quasi-planar, discontinuously mantled hillslope in the Yucaipa Ridge, California, USA (Figure~\ref{threeslopes}c,d). For each of these two case studies, the hillslopes appear to be approximately at steady state, and independent estimates exist for the rate of baselevel fall, $U$ \citep{binnie2007tectonic,perron2009formation,perron2012root}.  We estimated the effective transport coefficient, $D_s$,  for the profiles shown in Figure~\ref{threeslopes}a,c by measuring the second derivative of the one-dimensional hillslope elevation profiles, $\frac{\partial^2 \eta}{\partial x^2}$, and solving for  $D_s$ using
 \begin{equation}
 D_s = - \frac{U}{\frac{\partial^2 \eta}{\partial x^2}}.
 \label{measureD}
@@ -499,27 +488,6 @@ D_s = - \frac{U}{\frac{\partial^2 \eta}{\partial x^2}}.
 For the Gabilan Mesa profile, we  estimated the profile-averaged effective transport coefficient as 0.0345~m$^2$y$^{-1}$. The effective rate of baselevel lowering has been estimated at $U \approx 1.47\times 10^{-4}$~m y$^{-1}$ \citep{perron2012root}. To construct a Grain Hill model for the Gabilan profile, we begin by assuming a characteristic disturbance depth of $\delta=1$~m. This value was chosen to be consistent with measured soil depths that typically range between 0.2 and 1.2~m \citep{johnstone2017soil}. We treat the system as transport-limited, consisting of mobile material, so that weathering is not explicitly modeled. The disturbance parameter, $d$, is then calculated from the independently estimated value of $D_s$ using equation~(\ref{Ds}). The interval between uplift events is $\tau = \delta / U \approx 6800$~y. The resulting modeled equilibrium profile provides a reasonably good match to the observed Gabilan profile, with a convex-upward shape and a hilltop height of about 45~m above the slope base (Figure~\ref{simprofiles}a).
 
 For Yucaipa Ridge, we estimated the transport coefficient at $D_s\sim0.028$~m$^2$y$^{-1}$ on the basis of hilltop curvature and an estimated effective rate of baselevel lowering of  $\approx$0.0027~my$^{-1}$ \citep{binnie2007tectonic}. Using equation~(\ref{Ds}), this equates to a disturbance-rate parameter $d=0.00468$~y$^{-1}$ and an uplift interval of 370~y in the Grain Hill model. Bedrock outcrops are common on the Yucaipa Ridge hillslopes, implying a thin, discontinuous regolith cover. We therefore treat the system as consisting of bedrock that must be weathered before it can become mobile. Because we do not have independent information on the effective maximum rock weathering rate, the Yucaipa case is a somewhat weaker test: we can only ask whether there exists a geologically reasonable value of $w$ such that the model reproduces the observed relief and shape of the slope profile. Through trial and error, we find that with a weathering rate parameter $w=0.002$~y$^{-1}$ (which corresponds to a maximum regolith production rate of 2~mm y$^{-1}$), the model does a credible job of capturing the shape and size of the Yucaipa profile (compare Figure~\ref{threeslopes}c with Figure~\ref{simprofiles}b). Although this particular value was obtained through a simple calibration process, it is at least both geologically reasonable and, as one might expect, somewhat lower than the rate of baselevel lowering.
-
-% * <hobleyd@cardiff.ac.uk> 2018-01-15T14:30:44.869Z:
-% 
-% > compare Figure~\ref{threeslopes}c with Figure~\ref{simprofiles}b
-% I suspect a reviewer will ask you to overlay fig 2 onto fig 19, but let's wait and see.
-% If we do end up having to do this, you could also illustrate the transient profiles that evolve on the way to the equilibrium form, maybe?
-% 
-% ^.
-% * <hobleyd@cardiff.ac.uk> 2018-01-15T14:14:13.272Z:
-% 
-% > Using a weathering rate parameter $w=0.002$~y$^{-1}$ (which corresponds to a maximum regolith production rate of 2~mm y$^{-1}$)
-% This choice of parameter comes across as arbitrary. Justify it here, separate from the discussion.
-% In addition, on what basis is the delta sed depth term selected? You appear to just have carried it over from Gabilan - but you've just said the soil character is really different here, so this doesn't work very well.
-% 
-% ^.
-% * <hobleyd@cardiff.ac.uk> 2018-01-15T14:11:11.407Z:
-% 
-% > Using equation~(\ref{Ds}),
-% Hold up! This equation assumes theta->0. On threshold, rocky hillslopes, that's definitely not true. What is the consequence of this?
-% 
-% ^.
 
 \begin{figure*}[t]
 \includegraphics{Figures/sim_field_profiles.pdf}
@@ -529,50 +497,6 @@ For Yucaipa Ridge, we estimated the transport coefficient at $D_s\sim0.028$~m$^2
 
 These two examples demonstrate that the Grain Hill model parameters are not arbitrary, but instead can be linked through straightforward reasoning to field estimates of transport efficiency and baselevel lowering. When one does so, the model successfully reproduces both the shape and scale of observed slopes.
 
-% references that need to be added:
-% 
-%Johnstone, Samuel A., K. Dana Chadwick, Miguel Frias, Gabriel Tagliaro, and George E. Hilley. 2017. “Soil Development over Mud-Rich Rocks Produces Landscape-Scale Erosional Instabilities in the Northern Gabilan Mesa, California.” GSA Bulletin 129 (9–10):1266–79. https://doi.org/10.1130/B31546.1.
-%
-%Perron, J. Taylor, James W. Kirchner, and William E. Dietrich. 2009. “Formation of Evenly Spaced Ridges and Valleys.” Nature 460 (7254):502–5. https://doi.org/10.1038/nature08174.
-%
-%Perron, J. Taylor, Paul W. Richardson, Ken L. Ferrier, and Mathieu Lapôtre. 2012. “The Root of Branching River Networks.” Nature 492 (7427):100–103. https://doi.org/10.1038/nature11672.
-
-
-
-% DH: Seems like authors rarely actually display cross sectional (i.e., z-x) data for sites, as you can't really simply collapse these kinds of plots as hillslope length matters. This would seem sensible for us to do as well. However, we can still raid pubs for data to fit. This set follows Simon Mudd's group's selection of sites, which one would presume is a fair reflection of the best places in which this has been done, considering that group's interests.
-
-% NB: 
-% , provides a pretty comprehensive global compilation of diffusivities (i.e. "sediment transport coefficient" for a nonlinear flux law) as their Table 1.
-
-% \subsection{OCR}
-
-% o Roering et al 1999. Nonlinear diffusion site. Provides plots of gradient vs curvature (fig 6), which we could fit, for 5 sites. Provides K values for each... K = 0.0031 - 0.0045 m2/y. S\_c = 1.22 - 1.35. U = 0.1 mm/y. rho\_r/rho\_s = 2.
-
-% o Grieve et al. 2016, ESurf, ESPL. Sc = 0.79 in both. This value also constrains the relief:hillslope length relationship, which would be a great test; see ESPL fig 10. Grieve favours slightly higher U; he has 0.1<U<0.3 \& 0.07<E<0.15 in ESPL. Believes this lsc to be in steady state. \emph{NB: Stuart's hillslope length is in *plan view*} "Slopes are too steep to sustain a regolith mantle."
-
-% o Roering et al 2007. A larger set of params; see Table 1. Gives K~0.003, S\_c~1.2, E=0.1, L\_H~57+/-15 (from slope break position), measured R~39+/-11, though Grieve's re-analysis calls a bunch of these values into question.
-
-% \subsection{Gabilan Mesa}
-
-% o Roering et al 2007. S\_c~1.2+/-0.4. K~0.038+100\%/-60\%!! 0.14<E<0.74, density\_ratio\~1.5, L\_H~72+/-18, R~37+/-7. Again, some may be questionable.
-
-% o Grieve et al 2016a,b. S\_c~0.8. Points out this is a mean, and Roering is a max value for the lsc. Lsc in steady state. Again, ESPL Fig 10 gives R-L relation, which is sensitive to S\_c.
-
-% \subsection{Cascade Ridge, Sierra Nevada}
-
-% This is Martin Hurst's 2012 site, but his paper is less useful data-wise. Better is Grieve 2016a,b:
-
-% o Grieve 2016a,b. Reproduces Hurst's data in R* E* space. Note R* = R / (S\_c * L\_H), E* = -2 * hilltop\_curvature * L\_H / S\_c. Both note this and Hurst tell us this lsc is in disequilibrium, tho unclear whether the individual hillslopes are in topo equilibrium despite this. 0.72(Grieve)<S\_c<0.8(Hurst); Grieve wonders if this might be different in different bits of the lsc, accounting for the range. location in R*E* space suggests a range from linear-style to thresholded behaviour.
-
-% \subsection{Coweeta}
-
-% This is the Coweeta hydrologic Laboratory, NC. (Nearly a CZO, Greg!) Only Grieve 2016 has worked the R*E* stuff here, tho see Hales for more stuff. S\_c~0.57, which seems super low. Ton of noise in this one that needs smoothing out. Less spatial variation in E than in CR, though still some. Grieve believes on basis of river alluviation and anomalous S\_c that this lsc is in true disequilibrium, and that R* is depressed and the hillslopes are decaying (see also Dragonsback in Hurst et al., 2013, Science).
-
-% \subsection{Other}
-
-% o Long shot: Avouac and Peltzer, 1993, JGR have some nice actual drawn profiles through fault scarp decay structures. The problem seems to be that all the work that likes to show the actual hillslope profiles is old, so it's hard to extract the imagery and figure quality tends to be low.
-
-% o Seems like the paper would benefit greatly from a graphic showing direct comparison of finite volume linear/nonlinear diffusive modelling output alongside the cellular output. It would be less cool than a comparison to true field data, but arguably more illustrative?
 
 \section{Discussion}
 
@@ -628,200 +552,6 @@ This research was supported by the US National Science Foundation (EAR-1349390 a
 \bibliographystyle{copernicus}
 \bibliography{gt_library.bib}
 
-%\begin{thebibliography}{}
-
-%\bibitem[AUTHOR(YEAR)]{LABEL}
-%REFERENCE 1
-
-%\bibitem[AUTHOR(YEAR)]{LABEL}
-%REFERENCE 2
-
-%\end{thebibliography}
-
-%% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
-%% authors experienced with BibTeX only have to include the following two lines:
-%%
-%% \bibliographystyle{copernicus}
-%% \bibliography{example.bib}
-%%
-%% URLs and DOIs can be entered in your BibTeX file as:
-%%
-%% URL = {http://www.xyz.org/~jones/idx_g.htm}
-%% DOI = {10.5194/xyz}
-
-
-%% LITERATURE CITATIONS
-%%
-%% command                        & example result
-%% \citet{jones90}|               & Jones et al. (1990)
-%% \citep{jones90}|               & (Jones et al., 1990)
-%% \citep{jones90,jones93}|       & (Jones et al., 1990, 1993)
-%% \citep[p.~32]{jones90}|        & (Jones et al., 1990, p.~32)
-%% \citep[e.g.,][]{jones90}|      & (e.g., Jones et al., 1990)
-%% \citep[e.g.,][p.~32]{jones90}| & (e.g., Jones et al., 1990, p.~32)
-%% \citeauthor{jones90}|          & Jones et al.
-%% \citeyear{jones90}|            & 1990
-
-
-
-%% FIGURES
-
-%% ONE-COLUMN FIGURES
-
-%%f
-%\begin{figure}[t]
-%\includegraphics[width=8.3cm]{FILE NAME}
-%\caption{TEXT}
-%\end{figure}
-%
-%%% TWO-COLUMN FIGURES
-%
-%%f
-%\begin{figure*}[t]
-%\includegraphics[width=12cm]{FILE NAME}
-%\caption{TEXT}
-%\end{figure*}
-%
-%
-%%% TABLES
-%%%
-%%% The different columns must be seperated with a & command and should
-%%% end with \\ to identify the column brake.
-%
-%%% ONE-COLUMN TABLE
-%
-%%t
-%\begin{table}[t]
-%\caption{TEXT}
-%\begin{tabular}{column = lcr}
-%\tophline
-%
-%\middlehline
-%
-%\bottomhline
-%\end{tabular}
-%\belowtable{} % Table Footnotes
-%\end{table}
-%
-%%% TWO-COLUMN TABLE
-%
-%%t
-%\begin{table*}[t]
-%\caption{TEXT}
-%\begin{tabular}{column = lcr}
-%\tophline
-%
-%\middlehline
-%
-%\bottomhline
-%\end{tabular}
-%\belowtable{} % Table Footnotes
-%\end{table*}
-%
-%
-%%% NUMBERING OF FIGURES AND TABLES
-%%%
-%%% If figures and tables must be numbered 1a, 1b, etc. the following command
-%%% should be inserted before the begin{} command.
-%
-%\addtocounter{figure}{-1}\renewcommand{\thefigure}{\arabic{figure}a}
-%
-%
-%%% MATHEMATICAL EXPRESSIONS
-%
-%%% All papers typeset by Copernicus Publications follow the math typesetting regulations
-%%% given by the IUPAC Green Book (IUPAC: Quantities, Units and Symbols in Physical Chemistry,
-%%% 2nd Edn., Blackwell Science, available at: http://old.iupac.org/publications/books/gbook/green_book_2ed.pdf, 1993).
-%%%
-%%% Physical quantities/variables are typeset in italic font (t for time, T for Temperature)
-%%% Indices which are not defined are typeset in italic font (x, y, z, a, b, c)
-%%% Items/objects which are defined are typeset in roman font (Car A, Car B)
-%%% Descriptions/specifications which are defined by itself are typeset in roman font (abs, rel, ref, tot, net, ice)
-%%% Abbreviations from 2 letters are typeset in roman font (RH, LAI)
-%%% Vectors are identified in bold italic font using \vec{x}
-%%% Matrices are identified in bold roman font
-%%% Multiplication signs are typeset using the LaTeX commands \times (for vector products, grids, and exponential notations) or \cdot
-%%% The character * should not be applied as mutliplication sign
-%
-%
-%%% EQUATIONS
-%
-%%% Single-row equation
-%
-%\begin{equation}
-%
-%\end{equation}
-%
-%%% Multiline equation
-%
-%\begin{align}
-%& 3 + 5 = 8\\
-%& 3 + 5 = 8\\
-%& 3 + 5 = 8
-%\end{align}
-%
-%
-%%% MATRICES
-%
-%\begin{matrix}
-%x & y & z\\
-%x & y & z\\
-%x & y & z\\
-%\end{matrix}
-%
-%
-%%% ALGORITHM
-%
-%\begin{algorithm}
-%\caption{?}
-%\label{a1}
-%\begin{algorithmic}
-%?
-%\end{algorithmic}
-%\end{algorithm}
-%
-%
-%%% CHEMICAL FORMULAS AND REACTIONS
-%
-%%% For formulas embedded in the text, please use \chem{}
-%
-%%% The reaction environment creates labels including the letter R, i.e. (R1), (R2), etc.
-%
-%\begin{reaction}
-%%% \rightarrow should be used for normal (one-way) chemical reactions
-%%% \rightleftharpoons should be used for equilibria
-%%% \leftrightarrow should be used for resonance structures
-%\end{reaction}
-%
-%
-%%% PHYSICAL UNITS
-%%%
-%%% Please use \unit{} and apply the exponential notation
-
-
-%\section{Background}
-%
-%Do we go all the way back to Gilbert? probably, but quite briefly. 
-%
-%gilbert reasoned that the rate of release of rock or saprolite to disaggregated material should depend on the thickness of the overlying regolith cover, because XYZ. this was later codified into the popular inverse-exponential and ``humped curve'' formulas [ahnert, heimsath, anderson, etc]. consistent with cosmo nuclides [heim, small, etc]. lacks mechanistic basis.
-%
-%Davis and Gilbert enunciated the view of convex soil-mantled slopes, turned into math by culling, who also nodded to underlying probabilistic basis.
-%
-%diffusion theory captures convex slopes, and is consistent with cosmos [mckean, small, ...]
-%
-%modified to account for accelerated motion, nonlinear, andrews and bucknam, howard, roering
-%
-%also modified for account for depth dependence
-%
-%process blind; some specific formulations for particular types of disturbance process (e.g., frost creep) (just mentioning in passing)
-%
-%Furbish work that relates bulk flux of sediment to the statistical mechanics of grain motion, leading to diffusion-like principles. Foufoula nonlocal and fractional calculus.
-%
-%hillslope cellular and particle models review: jyotsna and haff, tucker and bradley, roering and ?.
-%
-%meanwhile, in the granular mechanics community, a whole variety of cellular models (see refs in T et al 2016)
-%
-%one of our aims in this paper is to forge a link between the lattice-grain models used in the granular mechanics community, and theories for hillslope evolution in the geomorphology community.
 
 
 \end{document}
