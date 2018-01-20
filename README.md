@@ -8,8 +8,11 @@ This repository includes:
 
 3) Input files and run scripts for model runs in the paper
 
-(Note that two series of 5x5x5 parameter study runs were conducted on
+The two series of 5x5x5 parameter study runs were conducted on
 the Community Surface Dynamics Modeling System [CSDMS] Beach 
 supercomputer, and the scripts to implement those runs in parallel
-are somewhat involved.)
+are somewhat involved.
+
+I haven't meticulously gone through and removed temporary exploratory
+files that are no longer needed, so caveat mutator. 
 
