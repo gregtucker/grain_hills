@@ -25,20 +25,21 @@ class GrainHill(CTSModel):
                  disturbance_rate=1.0, weathering_rate=1.0, 
                  uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
                  rock_state_for_uplift=7, opt_rock_collapse=False,
-                 show_plots=True, initial_state_grid=None, **kwds):
+                 show_plots=True, initial_state_grid=None, 
+                 opt_track_grains=False, **kwds):
         """Call the initialize() method."""
         self.initializer(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
                         friction_coef, rock_state_for_uplift,
                         opt_rock_collapse, show_plots, initial_state_grid,
-                        **kwds)
+                        opt_track_grains, **kwds)
 
     def initializer(self, grid_size, report_interval, run_duration,
                    output_interval, settling_rate, disturbance_rate,
                    weathering_rate, uplift_interval, plot_interval,
                    friction_coef, rock_state_for_uplift, opt_rock_collapse,
-                   show_plots, initial_state_grid, **kwds):
+                   show_plots, initial_state_grid, opt_track_grains, **kwds):
         """Initialize the grain hill model."""
         self.settling_rate = settling_rate
         self.disturbance_rate = disturbance_rate
@@ -47,6 +48,7 @@ class GrainHill(CTSModel):
         self.plot_interval = plot_interval
         self.friction_coef = friction_coef
         self.rock_state = rock_state_for_uplift  # 7 (resting sed) or 8 (rock)
+        self.opt_track_grains = opt_track_grains
         if opt_rock_collapse:
             self.collapse_rate = self.settling_rate
         else:
@@ -64,9 +66,22 @@ class GrainHill(CTSModel):
                                           initial_state_grid=initial_state_grid,
                                           **kwds)
 
+        # Set some things related to property-swapping and/or callback fn
+        # if the user wants to track grain motion.
+        if opt_track_grains:
+            propid = self.ca.propid
+            propdata = self.ca.prop_data
+            propreset = self.ca.prop_reset_value
+        else:
+            propid = None
+            propdata = None
+            propreset = None
+
         self.uplifter = LatticeUplifter(self.grid, 
-                                        self.grid.at_node['node_state'])
-                                        
+                                        self.grid.at_node['node_state'],
+                                        propid=propid, prop_data=propdata,
+                                        prop_reset_value=propreset)
+
     def node_state_dictionary(self):
         """
         Create and return dict of node states.
@@ -82,7 +97,8 @@ class GrainHill(CTSModel):
         """
         xn_list = lattice_grain_transition_list(g=self.settling_rate,
                                                 f=self.friction_coef,
-                                                motion=self.settling_rate)
+                                                motion=self.settling_rate,
+                                                swap=self.opt_track_grains)
         xn_list = self.add_weathering_and_disturbance_transitions(xn_list,
                     self.disturbance_rate, self.weathering_rate,
                     collapse_rate=self.collapse_rate)

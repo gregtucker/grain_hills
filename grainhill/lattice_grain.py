@@ -26,7 +26,7 @@ def lattice_grain_node_states():
     return ns_dict
 
 
-def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0):
+def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False):
     """
     Creates and returns a list of Transition() objects to represent state
     transitions for simple granular mechanics model.
@@ -85,12 +85,12 @@ def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0):
     f *= motion
 
     # Rule 1: Transitions for particle movement into an empty cell
-    xn_list.append( Transition((1,0,0), (0,1,0), motion, 'motion') )
-    xn_list.append( Transition((2,0,1), (0,2,1), motion, 'motion') )
-    xn_list.append( Transition((3,0,2), (0,3,2), motion, 'motion') )
-    xn_list.append( Transition((0,4,0), (4,0,0), motion, 'motion') )
-    xn_list.append( Transition((0,5,1), (5,0,1), motion, 'motion') )
-    xn_list.append( Transition((0,6,2), (6,0,2), motion, 'motion') )
+    xn_list.append( Transition((1,0,0), (0,1,0), motion, 'motion', swap) )
+    xn_list.append( Transition((2,0,1), (0,2,1), motion, 'motion', swap) )
+    xn_list.append( Transition((3,0,2), (0,3,2), motion, 'motion', swap) )
+    xn_list.append( Transition((0,4,0), (4,0,0), motion, 'motion', swap) )
+    xn_list.append( Transition((0,5,1), (5,0,1), motion, 'motion', swap) )
+    xn_list.append( Transition((0,6,2), (6,0,2), motion, 'motion', swap) )
 
     # Rule 2: Transitions for head-on collision: elastic
     if p_elast > 0.0:
