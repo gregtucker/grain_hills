@@ -26,7 +26,8 @@ def lattice_grain_node_states():
     return ns_dict
 
 
-def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False):
+def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False,
+                                  callback=None):
     """
     Creates and returns a list of Transition() objects to represent state
     transitions for simple granular mechanics model.
@@ -42,6 +43,12 @@ def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False):
         come to a halt.
     motion : float (optional)
         Rate of motion (cells per time unit)
+    swap : bool (optional)
+        Whether to swap properties for motion transition; set to True if you
+        want to track grain position via the 'propid' array.
+    callback : function (optional)
+        Function to be called after each transition. Used to implement custom
+        handling of properties that evolve over time at each cell.
 
     Returns
     -------
@@ -76,6 +83,26 @@ def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False):
         9. IO-IO-sm => OO-OO-sm (30-degree collision)
         10. IO-RE => RE-OU (oblique collision with rest particle)
         11. IO-WA => OO-WA (oblique collision with wall)
+
+    Examples
+    --------
+    >>> xnl = lattice_grain_transition_list()
+    >>> len(xnl) # 6 motion plus 117 elastic
+    123
+    >>> def fn():
+    ...     return 'test'
+    >>> xnl = lattice_grain_transition_list(f=1.0, callback=fn)
+    >>> len(xnl) # 6 motion plus 87 frictional
+    93
+    >>> xnl[0].prop_update_fn()
+    'test'
+    >>> xnl = lattice_grain_transition_list(g=1.0, f=1.0, swap=True)
+    >>> len(xnl) # 6 motion plus 87 frictional plus 48 gravitational
+    141
+    >>> xnl[5].swap_properties
+    True
+    >>> xnl[6].swap_properties
+    False
     """
     xn_list = []
 
@@ -85,16 +112,16 @@ def lattice_grain_transition_list(g=0.0, f=0.0, motion=1.0, swap=False):
     f *= motion
 
     # Rule 1: Transitions for particle movement into an empty cell
-    xn_list.append( Transition((1,0,0), (0,1,0), motion, 'motion', swap) )
-    xn_list.append( Transition((2,0,1), (0,2,1), motion, 'motion', swap) )
-    xn_list.append( Transition((3,0,2), (0,3,2), motion, 'motion', swap) )
-    xn_list.append( Transition((0,4,0), (4,0,0), motion, 'motion', swap) )
-    xn_list.append( Transition((0,5,1), (5,0,1), motion, 'motion', swap) )
-    xn_list.append( Transition((0,6,2), (6,0,2), motion, 'motion', swap) )
+    xn_list.append( Transition((1,0,0), (0,1,0), motion, 'motion', swap, callback) )
+    xn_list.append( Transition((2,0,1), (0,2,1), motion, 'motion', swap, callback) )
+    xn_list.append( Transition((3,0,2), (0,3,2), motion, 'motion', swap, callback) )
+    xn_list.append( Transition((0,4,0), (4,0,0), motion, 'motion', swap, callback) )
+    xn_list.append( Transition((0,5,1), (5,0,1), motion, 'motion', swap, callback) )
+    xn_list.append( Transition((0,6,2), (6,0,2), motion, 'motion', swap, callback) )
 
     # Rule 2: Transitions for head-on collision: elastic
     if p_elast > 0.0:
-        xn_list.append( Transition((1,4,0), (4,1,0), p_elast/3, 'head-on collision') )
+        xn_list.append( Transition((1,4,0), (4,1,0), p_elast/3, 'head-on collision', False, callback) )
         xn_list.append( Transition((1,4,0), (3,6,0), p_elast/3, 'head-on collision') )
         xn_list.append( Transition((1,4,0), (5,2,0), p_elast/3, 'head-on collision') )
         xn_list.append( Transition((2,5,1), (5,2,1), p_elast/3, 'head-on collision') )
