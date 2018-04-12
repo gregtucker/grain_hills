@@ -13,6 +13,12 @@ from landlab.ca.celllab_cts import Transition
 def lattice_grain_node_states():
     """
     Create and return dict of states for lattice-grain model.
+    
+    Examples
+    --------
+    >>> nsd = lattice_grain_node_states()
+    >>> len(nsd)
+    9
     """
     ns_dict = { 0 : 'empty', 
                 1 : 'moving up',
