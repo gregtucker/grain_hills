@@ -184,4 +184,5 @@ TSWLatexianTemp*
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 *.pyc
+*.egg-info
 
