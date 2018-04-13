@@ -26,20 +26,21 @@ class GrainHill(CTSModel):
                  uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
                  rock_state_for_uplift=7, opt_rock_collapse=False,
                  show_plots=True, initial_state_grid=None, 
-                 opt_track_grains=False, **kwds):
+                 opt_track_grains=False, callback_fn=None, **kwds):
         """Call the initialize() method."""
         self.initializer(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
                         friction_coef, rock_state_for_uplift,
                         opt_rock_collapse, show_plots, initial_state_grid,
-                        opt_track_grains, **kwds)
+                        opt_track_grains, callback_fn=None, **kwds)
 
     def initializer(self, grid_size, report_interval, run_duration,
                    output_interval, settling_rate, disturbance_rate,
                    weathering_rate, uplift_interval, plot_interval,
                    friction_coef, rock_state_for_uplift, opt_rock_collapse,
-                   show_plots, initial_state_grid, opt_track_grains, **kwds):
+                   show_plots, initial_state_grid, opt_track_grains,
+                   callback_fn, **kwds):
         """Initialize the grain hill model."""
         self.settling_rate = settling_rate
         self.disturbance_rate = disturbance_rate
@@ -49,6 +50,7 @@ class GrainHill(CTSModel):
         self.friction_coef = friction_coef
         self.rock_state = rock_state_for_uplift  # 7 (resting sed) or 8 (rock)
         self.opt_track_grains = opt_track_grains
+        self.callback_fn = callback_fn
         if opt_rock_collapse:
             self.collapse_rate = self.settling_rate
         else:
@@ -82,6 +84,33 @@ class GrainHill(CTSModel):
                                         propid=propid, prop_data=propdata,
                                         prop_reset_value=propreset)
 
+        self.initialize_timing(output_interval, plot_interval, uplift_interval,
+                               report_interval)
+
+    def initialize_timing(self, output_interval, plot_interval,
+                          uplift_interval, report_interval):
+        """Set up variables related to timing of uplift, output, reporting"""
+        
+        self.current_time = 0.0
+
+        # Next time for output to file
+        self.next_output = output_interval
+        
+        # Next time for a plot
+        if self._show_plots:
+            self.next_plot = plot_interval
+        else:
+            self.next_plot = self.run_duration + 1
+
+        # Next time for a progress report to user
+        self.next_report = report_interval
+
+        # Next time to add baselevel adjustment
+        self.next_uplift = uplift_interval
+        
+        # Iteration numbers, for output files
+        self.output_iteration = 1
+
     def node_state_dictionary(self):
         """
         Create and return dict of node states.
@@ -98,7 +127,8 @@ class GrainHill(CTSModel):
         xn_list = lattice_grain_transition_list(g=self.settling_rate,
                                                 f=self.friction_coef,
                                                 motion=self.settling_rate,
-                                                swap=self.opt_track_grains)
+                                                swap=self.opt_track_grains,
+                                                callback=self.callback_fn)
         xn_list = self.add_weathering_and_disturbance_transitions(xn_list,
                     self.disturbance_rate, self.weathering_rate,
                     collapse_rate=self.collapse_rate)
@@ -197,62 +227,50 @@ class GrainHill(CTSModel):
         
         return nsg
 
-
-    def run(self):
+    def run(self, to=None):
         """Run the model."""
-
-        # Work out the next times to plot and output
-        next_output = self.output_interval
-        if self._show_plots:
-            next_plot = self.plot_interval
+        if to is None:
+            run_to = self.run_duration
         else:
-            next_plot = self.run_duration + 1
+            run_to = to
 
-        # Next time for a progress report to user
-        next_report = self.report_interval
-
-        # And baselevel adjustment
-        next_uplift = self.uplift_interval
-
-        current_time = 0.0
-        output_iteration = 1
-        while current_time < self.run_duration:
+        while self.current_time < run_to:
 
             # Figure out what time to run to this iteration
-            next_pause = min(next_output, next_plot)
-            next_pause = min(next_pause, next_uplift)
-            next_pause = min(next_pause, self.run_duration)
+            next_pause = min(self.next_output, self.next_plot)
+            next_pause = min(next_pause, self.next_uplift)
+            next_pause = min(next_pause, run_to)
     
             # Once in a while, print out simulation and real time to let the user
             # know that the sim is running ok
             current_real_time = time.time()
-            if current_real_time >= next_report:
-                print('Current sim time' + str(current_time) + '(' + \
-                      str(100 * current_time / self.run_duration) + '%)')
-                next_report = current_real_time + self.report_interval
-    
-            # Run the model forward in time until the next output step
-            self.ca.run(next_pause, self.ca.node_state) 
-                   #plot_each_transition=pet, plotter=self.ca_plotter)
-            current_time = next_pause
+            if current_real_time >= self.next_report:
+                print('Current sim time' + str(self.current_time) + '(' + \
+                      str(100 * self.current_time / self.run_duration) + '%)')
+                self.next_report = current_real_time + self.report_interval
+
+            # Run until next pause
+            self.ca.run(next_pause, self.ca.node_state)
+            self.current_time = next_pause
 
             # Handle output to file
-            if current_time >= next_output:
-                self.write_output(self.grid, 'grain_hill_model', output_iteration)
-                output_iteration += 1
-                next_output += self.output_interval
+            if self.current_time >= self.next_output:
+                self.write_output(self.grid, 'grain_hill_model',
+                                  self.output_iteration)
+                self.output_iteration += 1
+                self.next_output += self.output_interval
 
             # Handle plotting on display
-            if self._show_plots and current_time >= next_plot:
+            if self._show_plots and self.current_time >= self.next_plot:
                 self.ca_plotter.update_plot()
                 axis('off')
-                next_plot += self.plot_interval
+                self.next_plot += self.plot_interval
 
             # Handle uplift
-            if current_time >= next_uplift:
-                self.uplifter.uplift_interior_nodes(self.ca, current_time,
+            if self.current_time >= self.next_uplift:
+                self.uplifter.uplift_interior_nodes(self.ca, self.current_time,
                                                     rock_state=self.rock_state)
-                next_uplift += self.uplift_interval
+                self.next_uplift += self.uplift_interval
         
     def get_profile_and_soil_thickness(self, grid, data):
         """Calculate and return profiles of elevation and soil thickness.
