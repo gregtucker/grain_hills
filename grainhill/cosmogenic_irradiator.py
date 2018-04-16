@@ -38,9 +38,14 @@ class CosmogenicIrradiator(object):
         self.grid = grain_hill_model.ca.grid
         self.prod_rate = prod_rate
         self.decay_depth = decay_depth
+
+        # Cosmo field: create it, or get ref to it if it already exists
         name = 'cosmogenic_nuclide__concentration'
-        self.cosmo = grain_hill_model.ca.grid.add_zeros('node', name)
-        
+        if name in grain_hill_model.ca.grid.at_node:
+            self.cosmo = grain_hill_model.ca.grid.at_node[name]
+        else:
+            self.cosmo = grain_hill_model.ca.grid.add_zeros('node', name)
+
     def add_cosmos(self, duration, cell_width=1.0):
         """Add cosmogenic nuclide content to grains.
 
