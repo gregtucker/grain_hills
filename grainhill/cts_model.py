@@ -23,19 +23,22 @@ class CTSModel(object):
                  grid_orientation='vertical', grid_shape='rect',
                  show_plots=False, cts_type='oriented_hex', 
                  run_duration=1.0, output_interval=1.0e99,
-                 plot_every_transition=False, initial_state_grid=None, **kwds):
+                 plot_every_transition=False, initial_state_grid=None,
+                 prop_data=None, prop_reset_value=None, **kwds):
 
         self.initialize(grid_size, report_interval, grid_orientation,
                         grid_shape, show_plots, cts_type, run_duration,
                         output_interval, plot_every_transition,
-                        initial_state_grid=None, **kwds)
+                        initial_state_grid, prop_data, prop_reset_value,
+                        **kwds)
 
 
     def initialize(self, grid_size=(5, 5), report_interval=5.0,
                  grid_orientation='vertical', grid_shape='rect',
                  show_plots=False, cts_type='oriented_hex', 
                  run_duration=1.0, output_interval=1.0e99,
-                 plot_every_transition=False, initial_state_grid=None, **kwds):
+                 plot_every_transition=False, initial_state_grid=None, 
+                 prop_data=None, prop_reset_value=None, **kwds):
         """Initialize CTSModel."""
         # Remember the clock time, and calculate when we next want to report
         # progress.
@@ -75,16 +78,20 @@ class CTSModel(object):
         # Create the CA object
         if cts_type == 'raster':
             from landlab.ca.raster_cts import RasterCTS
-            self.ca = RasterCTS(self.grid, ns_dict, xn_list, nsg)
+            self.ca = RasterCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
+                                prop_reset_value)
         elif cts_type == 'oriented_raster':
             from landlab.ca.oriented_raster_cts import OrientedRasterCTS
-            self.ca = OrientedRasterCTS(self.grid, ns_dict, xn_list, nsg)
+            self.ca = OrientedRasterCTS(self.grid, ns_dict, xn_list, nsg,
+                                        prop_data, prop_reset_value)
         elif cts_type == 'hex':
             from landlab.ca.hex_cts import HexCTS
-            self.ca = HexCTS(self.grid, ns_dict, xn_list, nsg)
+            self.ca = HexCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
+                             prop_reset_value)
         else:
             from landlab.ca.oriented_hex_cts import OrientedHexCTS
-            self.ca = OrientedHexCTS(self.grid, ns_dict, xn_list, nsg)
+            self.ca = OrientedHexCTS(self.grid, ns_dict, xn_list, nsg,
+                                     prop_data, prop_reset_value)
 
         # Initialize graphics
         self._show_plots = show_plots

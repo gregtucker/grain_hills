@@ -77,3 +77,5 @@ class CosmogenicIrradiator(object):
                     self.cosmo[self.model.ca.propid[node_id]] += (dose_rate
                                                                   * duration)
                     cumulative_depth += cell_width
+                else:
+                    self.cosmo[self.model.ca.propid[node_id]] = 0.0
