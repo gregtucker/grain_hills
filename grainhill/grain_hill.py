@@ -26,21 +26,23 @@ class GrainHill(CTSModel):
                  uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
                  rock_state_for_uplift=7, opt_rock_collapse=False,
                  show_plots=True, initial_state_grid=None, 
-                 opt_track_grains=False, callback_fn=None, **kwds):
+                 opt_track_grains=False, prop_data=None,
+                 prop_reset_value=None, callback_fn=None, **kwds):
         """Call the initialize() method."""
         self.initializer(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
                         friction_coef, rock_state_for_uplift,
                         opt_rock_collapse, show_plots, initial_state_grid,
-                        opt_track_grains, callback_fn=None, **kwds)
+                        opt_track_grains, prop_data, prop_reset_value,
+                        callback_fn, **kwds)
 
     def initializer(self, grid_size, report_interval, run_duration,
                    output_interval, settling_rate, disturbance_rate,
                    weathering_rate, uplift_interval, plot_interval,
                    friction_coef, rock_state_for_uplift, opt_rock_collapse,
-                   show_plots, initial_state_grid, opt_track_grains,
-                   callback_fn, **kwds):
+                   show_plots, initial_state_grid, opt_track_grains, prop_data,
+                   prop_reset_value, callback_fn, **kwds):
         """Initialize the grain hill model."""
         self.settling_rate = settling_rate
         self.disturbance_rate = disturbance_rate
@@ -66,23 +68,22 @@ class GrainHill(CTSModel):
                                           run_duration=run_duration,
                                           output_interval=output_interval,
                                           initial_state_grid=initial_state_grid,
+                                          prop_data=prop_data,
+                                          prop_reset_value=prop_reset_value,
                                           **kwds)
 
         # Set some things related to property-swapping and/or callback fn
         # if the user wants to track grain motion.
-        if opt_track_grains:
-            propid = self.ca.propid
-            propdata = self.ca.prop_data
-            propreset = self.ca.prop_reset_value
-        else:
-            propid = None
-            propdata = None
-            propreset = None
+        #if opt_track_grains:
+        #    propid = self.ca.propid
+        #else:
+        #    propid = None
 
         self.uplifter = LatticeUplifter(self.grid, 
                                         self.grid.at_node['node_state'],
-                                        propid=propid, prop_data=propdata,
-                                        prop_reset_value=propreset)
+                                        propid=self.ca.propid,
+                                        prop_data=self.ca.prop_data,
+                                        prop_reset_value=self.ca.prop_reset_value)
 
         self.initialize_timing(output_interval, plot_interval, uplift_interval,
                                report_interval)
@@ -135,7 +136,8 @@ class GrainHill(CTSModel):
         return xn_list
         
     def add_weathering_and_disturbance_transitions(self, xn_list, d=0.0, w=0.0,
-                                                   collapse_rate=0.0):
+                                                   collapse_rate=0.0,
+                                                   swap=False, callback=None):
         """
         Add transition rules representing weathering and/or grain disturbance
         to the list, and return the list.
@@ -162,12 +164,12 @@ class GrainHill(CTSModel):
 
         # Disturbance rule
         if d > 0.0:
-            xn_list.append( Transition((7,0,0), (0,1,0), d, 'disturbance') )
-            xn_list.append( Transition((7,0,1), (0,2,1), d, 'disturbance') )
-            xn_list.append( Transition((7,0,2), (0,3,2), d, 'disturbance') )
-            xn_list.append( Transition((0,7,0), (4,0,0), d, 'disturbance') )
-            xn_list.append( Transition((0,7,1), (5,0,1), d, 'disturbance') )
-            xn_list.append( Transition((0,7,2), (6,0,2), d, 'disturbance') )
+            xn_list.append( Transition((7,0,0), (0,1,0), d, 'disturbance', swap, callback) )
+            xn_list.append( Transition((7,0,1), (0,2,1), d, 'disturbance', swap, callback) )
+            xn_list.append( Transition((7,0,2), (0,3,2), d, 'disturbance', swap, callback) )
+            xn_list.append( Transition((0,7,0), (4,0,0), d, 'disturbance', swap, callback) )
+            xn_list.append( Transition((0,7,1), (5,0,1), d, 'disturbance', swap, callback) )
+            xn_list.append( Transition((0,7,2), (6,0,2), d, 'disturbance', swap, callback) )
 
         # Weathering rule
         if w > 0.0:
@@ -182,7 +184,7 @@ class GrainHill(CTSModel):
             # will collapse, transitioning to a downward-moving grain
             if collapse_rate > 0.0:
                 xn_list.append( Transition((0,8,0), (4,0,0), collapse_rate,
-                                           'rock collapse'))
+                                           'rock collapse', swap, callback))
 
         if _DEBUG:
             print()

@@ -56,6 +56,10 @@ class CTSModel(object):
         self.create_grid_and_node_state_field(grid_size[0], grid_size[1], 
                                               grid_orientation, grid_shape,
                                               cts_type)
+        
+        # If prop_data is a string, we assume it is a field name
+        if type(prop_data) is str:
+            prop_data = self.grid.add_zeros('node', prop_data)
 
         # Create the node-state dictionary
         ns_dict = self.node_state_dictionary()
