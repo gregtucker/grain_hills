@@ -10,7 +10,7 @@ from numpy import random
 from landlab.io.native_landlab import save_grid
 from landlab.ca.celllab_cts import Transition, CAPlotter
 from matplotlib.pyplot import axis
-
+from six import string_types
 
 class CTSModel(object):
     """
@@ -58,7 +58,7 @@ class CTSModel(object):
                                               cts_type)
         
         # If prop_data is a string, we assume it is a field name
-        if type(prop_data) is str:
+        if isinstance(prop_data, string_types):
             prop_data = self.grid.add_zeros('node', prop_data)
 
         # Create the node-state dictionary
