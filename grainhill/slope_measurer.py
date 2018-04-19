@@ -12,23 +12,6 @@ Created Wed Apr 18 14:48 2018
 import numpy as np
 
 
-def row_col_to_id(row, col, num_cols):
-    """Return ID for node at given row and column.
-
-    Examples
-    --------
-    >>> row_col_to_id(0, 1, 8)
-    4
-    >>> row_col_to_id(0, 6, 8)
-    3
-    >>> row_col_to_id(0, 1, 5)
-    3
-    >>> row_col_to_id(2, 3, 5)
-    14
-    """
-    return row * num_cols + col // 2 + (col % 2) * ((num_cols + 1) // 2)
-
-
 class SlopeMeasurer(object):
     """SlopeMeasurer: extracts nodes at the bedrock-air or regolith-air
     surface, and fits to this data according to user choices."""
