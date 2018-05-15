@@ -16,6 +16,37 @@ from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 
 
+def plot_hill(grid, filename=None, array=None):
+    """Generate a plot of the modeled hillslope."""
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+
+    # Set color map
+    rock = '#5F594D'
+    sed = '#A4874B'
+    sky = '#D0E4F2'
+    mob = '#D98859'
+    clist = [sky, mob, mob, mob, mob, mob, mob, sed, rock]
+    my_cmap = mpl.colors.ListedColormap(clist)
+
+    if array is None:
+        array = grid.at_node['node_state']
+
+    # Generate the plot
+    ax = grid.hexplot(array, color_map=my_cmap)
+    ax.set_aspect('equal')
+
+    # If applicable, save to file. Otherwise display the figure.
+    # (Note: the latter option freezes execution until user dismisses window)
+    if filename is not None:
+        plt.savefig(filename, bbox_inches='tight')
+        plt.clf()
+        print('Figure saved to ' + filename)
+    else:
+        plt.show()
+        
+
+
 class GrainHill(CTSModel):
     """
     Model hillslope evolution with block uplift.
