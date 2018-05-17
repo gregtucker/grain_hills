@@ -1,4 +1,5 @@
 from .grain_hill import GrainHill
+from .grain_hill import plot_hill
 from .block_hill import BlockHill
 from .cosmogenic_irradiator import CosmogenicIrradiator
 
