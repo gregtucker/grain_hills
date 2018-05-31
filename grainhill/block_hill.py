@@ -13,7 +13,6 @@ from lattice_grain import (lattice_grain_node_states,
                            lattice_grain_transition_list)
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 from landlab.ca.celllab_cts import Transition
-import sys
 
 BLOCK_ID = 9
 
@@ -32,7 +31,6 @@ class BlockHill(GrainHill):
                  layer_left_x=0.0, y0_top=0.0,
                  show_plots=True, **kwds):
         """Call the initialize() method."""
-        print('BH__i')
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
@@ -48,7 +46,6 @@ class BlockHill(GrainHill):
                    block_layer_dip_angle, block_layer_thickness, layer_left_x,
                    y0_top, show_plots, **kwds):
         """Initialize the BlockHill model."""
-        print('bh initil')
 
         # Set block-related variables
         self.block_layer_dip_angle = block_layer_dip_angle
@@ -70,7 +67,7 @@ class BlockHill(GrainHill):
                                           rock_state_for_uplift=rock_state_for_uplift,
                                           opt_rock_collapse=opt_rock_collapse,
                                           show_plots=show_plots, **kwds)
-        
+
         self.uplifter = LatticeUplifter(self.grid, 
                                 self.grid.at_node['node_state'],
                                 opt_block_layer=True,
@@ -78,8 +75,6 @@ class BlockHill(GrainHill):
                                 block_layer_dip_angle=block_layer_dip_angle,
                                 block_layer_thickness=block_layer_thickness,
                                 layer_left_x=layer_left_x, y0_top=y0_top)
-#        print('bh initil done')
-        sys.stdout.flush()
 
     def node_state_dictionary(self):
         """
@@ -209,6 +204,38 @@ class BlockHill(GrainHill):
         xn_list = self.add_block_transitions(xn_list)
         return xn_list
         
+    def initialize_node_state_grid(self):
+        """Set up initial node states.
+
+        Examples
+        --------
+        >>> bh = BlockHill((5, 7))
+        >>> bh.grid.at_node['node_state']        
+        array([9, 7, 7, 9, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        """
+
+        # For shorthand, get a reference to the node-state grid
+        nsg = self.grid.at_node['node_state']
+
+        # Fill the bottom two rows with grains
+        right_side_x = 0.866025403784 * (self.grid.number_of_node_columns - 1)
+        for i in range(self.grid.number_of_nodes):
+            if self.grid.node_y[i] < 2.0:
+                if (self.grid.node_x[i] > 0.0 and
+                    self.grid.node_x[i] < right_side_x):
+                    nsg[i] = 7
+        
+        # Place "wall" particles in the lower-left and lower-right corners
+        if self.grid.number_of_node_columns % 2 == 0:
+            bottom_right = self.grid.number_of_node_columns - 1
+        else:
+            bottom_right = self.grid.number_of_node_columns // 2
+        nsg[0] = BLOCK_ID  # bottom left
+        nsg[bottom_right] = BLOCK_ID
+        
+        return nsg
+
 
 if __name__ == '__main__':
     bh = BlockHill(grid_size=(3, 3))
