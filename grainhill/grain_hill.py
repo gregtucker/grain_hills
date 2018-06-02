@@ -279,7 +279,7 @@ class GrainHill(CTSModel):
             # know that the sim is running ok
             current_real_time = time.time()
             if current_real_time >= self.next_report:
-                print('Current sim time' + str(self.current_time) + '(' + \
+                print('Current sim time ' + str(self.current_time) + '(' + \
                       str(100 * self.current_time / self.run_duration) + '%)')
                 self.next_report = current_real_time + self.report_interval
 
