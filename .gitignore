@@ -185,4 +185,5 @@ TSWLatexianTemp*
 */.ipynb_checkpoints/*
 *.pyc
 *.egg-info
+.pytest_cache
 
