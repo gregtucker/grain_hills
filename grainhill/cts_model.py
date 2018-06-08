@@ -7,6 +7,7 @@ _DEBUG = False
 
 import time
 from numpy import random
+from landlab import CLOSED_BOUNDARY
 from landlab.io.native_landlab import save_grid
 from landlab.ca.celllab_cts import Transition, CAPlotter
 from matplotlib.pyplot import axis
@@ -21,7 +22,7 @@ class CTSModel(object):
 
     def __init__(self, grid_size=(5, 5), report_interval=5.0,
                  grid_orientation='vertical', grid_shape='rect',
-                 show_plots=False, cts_type='oriented_hex', 
+                 show_plots=False, cts_type='oriented_hex',
                  run_duration=1.0, output_interval=1.0e99,
                  plot_every_transition=False, initial_state_grid=None,
                  prop_data=None, prop_reset_value=None, **kwds):
@@ -35,9 +36,9 @@ class CTSModel(object):
 
     def initialize(self, grid_size=(5, 5), report_interval=5.0,
                  grid_orientation='vertical', grid_shape='rect',
-                 show_plots=False, cts_type='oriented_hex', 
+                 show_plots=False, cts_type='oriented_hex',
                  run_duration=1.0, output_interval=1.0e99,
-                 plot_every_transition=False, initial_state_grid=None, 
+                 plot_every_transition=False, initial_state_grid=None,
                  prop_data=None, prop_reset_value=None, **kwds):
         """Initialize CTSModel."""
         # Remember the clock time, and calculate when we next want to report
@@ -53,10 +54,10 @@ class CTSModel(object):
         self.run_duration = run_duration
 
         # Create a grid
-        self.create_grid_and_node_state_field(grid_size[0], grid_size[1], 
+        self.create_grid_and_node_state_field(grid_size[0], grid_size[1],
                                               grid_orientation, grid_shape,
                                               cts_type)
-        
+
         # If prop_data is a string, we assume it is a field name
         if isinstance(prop_data, string_types):
             prop_data = self.grid.add_zeros('node', prop_data)
@@ -103,7 +104,7 @@ class CTSModel(object):
             self.initialize_plotting(**kwds)
 
 
-    def create_grid_and_node_state_field(self, num_rows, num_cols, 
+    def create_grid_and_node_state_field(self, num_rows, num_cols,
                                          grid_orientation, grid_shape,
                                          cts_type):
         """Create the grid and the field containing node states."""
@@ -114,27 +115,30 @@ class CTSModel(object):
                                         spacing=1.0)
         else:
             from landlab import HexModelGrid
-            self.grid = HexModelGrid(num_rows, num_cols, 1.0, 
-                                     orientation=grid_orientation, 
+            self.grid = HexModelGrid(num_rows, num_cols, 1.0,
+                                     orientation=grid_orientation,
                                      shape=grid_shape)
 
         self.grid.add_zeros('node', 'node_state', dtype=int)
+        for edge in (self.grid.nodes_at_right_edge,
+                     self.grid.nodes_at_top_edge):
+            self.grid.status_at_node[edge] = CLOSED_BOUNDARY
 
 
     def node_state_dictionary(self):
         """Create and return a dictionary of all possible node (cell) states.
-        
+
         This method creates a default set of states (just two); it is a
         template meant to be overridden.
         """
-        ns_dict = { 0 : 'on', 
+        ns_dict = { 0 : 'on',
                     1 : 'off'}
         return ns_dict
 
 
     def transition_list(self):
         """Create and return a list of transition objects.
-        
+
         This method creates a default set of transitions (just two); it is a
         template meant to be overridden.
         """
@@ -152,8 +156,8 @@ class CTSModel(object):
 
     def initialize_node_state_grid(self):
         """Initialize values in the node-state grid.
-        
-        This method should be overridden. The default is random "on" and "off".        
+
+        This method should be overridden. The default is random "on" and "off".
         """
         num_states = 2
         for i in range(self.grid.number_of_nodes):
