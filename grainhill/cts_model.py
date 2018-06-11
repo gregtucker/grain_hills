@@ -7,7 +7,6 @@ _DEBUG = False
 
 import time
 from numpy import random
-from landlab import CLOSED_BOUNDARY
 from landlab.io.native_landlab import save_grid
 from landlab.ca.celllab_cts import Transition, CAPlotter
 from matplotlib.pyplot import axis
@@ -120,9 +119,6 @@ class CTSModel(object):
                                      shape=grid_shape)
 
         self.grid.add_zeros('node', 'node_state', dtype=int)
-        for edge in (self.grid.nodes_at_right_edge,
-                     self.grid.nodes_at_top_edge):
-            self.grid.status_at_node[edge] = CLOSED_BOUNDARY
 
 
     def node_state_dictionary(self):

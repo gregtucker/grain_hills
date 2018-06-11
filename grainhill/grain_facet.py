@@ -12,6 +12,7 @@ from lattice_grain import (lattice_grain_node_states,
 import time
 from numpy import zeros, count_nonzero, where, amax, logical_and
 from matplotlib.pyplot import axis
+from landlab import CLOSED_BOUNDARY
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeNormalFault
 
@@ -72,6 +73,11 @@ class GrainFacet(CTSModel):
                                            prop_data=prop_data,
                                            prop_reset_value=prop_reset_value,
                                            **kwds)
+
+        # Close top and right edges so as to avoid boundary bug issue
+        for edge in (self.grid.nodes_at_right_edge,
+                     self.grid.nodes_at_top_edge):
+            self.grid.status_at_node[edge] = CLOSED_BOUNDARY
 
         # Set some things related to property-swapping and/or callback fn
         # if the user wants to track grain motion.
@@ -321,8 +327,8 @@ def main(params):
     """Initialize model with dict of params then run it."""
     grid_size = (int(params['number_of_node_rows']),
                  int(params['number_of_node_columns']))
-    grain_hill_model = GrainHill(grid_size, **params)
-    grain_hill_model.run()
+    grain_facet_model = GrainFacet(grid_size, **params)
+    grain_facet_model.run()
 
     # Temporary: save last image to file
     import matplotlib.pyplot as plt
