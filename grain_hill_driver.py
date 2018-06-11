@@ -53,15 +53,15 @@ def plot_blocky_hill(grid, filename=None, array=None):
         print('Figure saved to ' + filename)
     else:
         plt.show()
-  
+
 
 
 class GrainHillDriver(object):
     """Driver for the GrainHill model: handles initialization, run, cleanup."""
-    
+
     def __init__(self, input_file=None):
         """Construct a GrainHillDriver; if passed a file name, initialize."""
-        
+
         if input_file is not None:
             self.initialize(input_file)
         else:
@@ -136,7 +136,7 @@ class GrainHillDriver(object):
         self.plot_number = 0
 
         self.find_or_create_output_folder()
-        
+
         self.initialized = True
 
     def find_or_create_output_folder(self):
@@ -182,13 +182,13 @@ class GrainHillDriver(object):
 
 
 if __name__ == '__main__':
-    
+
     try:
         filename = sys.argv[1]
     except:
         print('Please specify a file name as the first argument')
         raise
-    
+
     gh = GrainHillDriver()
     gh.initialize(filename)
     gh.run()
