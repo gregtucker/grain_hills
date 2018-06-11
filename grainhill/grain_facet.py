@@ -204,7 +204,7 @@ class GrainFacet(CTSModel):
 
         Examples
         --------
-        >>> gh = GrainHill((5, 7))
+        >>> gh = GrainFacet((5, 7))
         >>> gh.grid.at_node['node_state']
         array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -272,7 +272,9 @@ class GrainFacet(CTSModel):
 
             # Handle uplift
             if self.current_time >= self.next_uplift:
-                self.uplifter.do_offset(rock_state=self.rock_state)
+                self.uplifter.do_offset(
+                    ca=self.ca, current_time=self.current_time,
+                    rock_state=self.rock_state)
                 self.next_uplift += self.uplift_interval
 
     def get_profile_and_soil_thickness(self, grid, data):
