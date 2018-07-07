@@ -59,12 +59,9 @@ class GrainFacetSimulator(CTSModel):
                                           cts_type='oriented_hex',
                                           run_duration=run_duration,
                                           output_interval=output_interval,
-                                          plot_every_transition=False)
-
-        # Close top and right edges so as to avoid boundary bug issue
-        for edge in (self.grid.nodes_at_right_edge,
-                     self.grid.nodes_at_top_edge):
-            self.grid.status_at_node[edge] = CLOSED_BOUNDARY
+                                          plot_every_transition=False,
+                                          closed_boundaries=(True, True,
+                                                             False, False))
 
         ns = self.grid.at_node['node_state']
         self.uplifter = LatticeNormalFault(fault_x_intercept=fault_x,
@@ -246,6 +243,9 @@ class GrainFacetSimulator(CTSModel):
             if current_time >= next_uplift:
                 self.uplifter.do_offset(ca=self.ca, current_time=current_time,
                                         rock_state=8)
+                for i in range(self.grid.number_of_links):
+                    if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
+                        print i
                 next_uplift += self.uplift_interval
 
     def nodes_in_column(self, col, num_rows, num_cols):
