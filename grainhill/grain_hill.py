@@ -168,6 +168,7 @@ class GrainHill(CTSModel):
         return xn_list
         
     def add_weathering_and_disturbance_transitions(self, xn_list, d=0.0, w=0.0,
+                                                   diss=0.0,
                                                    collapse_rate=0.0,
                                                    swap=False, callback=None):
         """
@@ -187,6 +188,9 @@ class GrainHill(CTSModel):
         w : float (optional)
             Rate of transition (1/time) from fluid / rock pair to
             fluid / resting-grain pair, representing weathering.
+        diss : float (optional)
+            Dissolution rate: transition rate from fluid / rock pair to 
+            fluid / fluid pair.
         
         Returns
         -------
@@ -217,6 +221,15 @@ class GrainHill(CTSModel):
             if collapse_rate > 0.0:
                 xn_list.append( Transition((0,8,0), (4,0,0), collapse_rate,
                                            'rock collapse', swap, callback))
+
+        # Dissolution rule
+        if diss > 0.0:
+            xn_list.append( Transition((8,0,0), (0,0,0), diss, 'dissolution') )
+            xn_list.append( Transition((8,0,1), (0,0,1), diss, 'dissolution') )
+            xn_list.append( Transition((8,0,2), (0,0,2), diss, 'dissolution') )
+            xn_list.append( Transition((0,8,0), (0,0,0), diss, 'dissolution') )
+            xn_list.append( Transition((0,8,1), (0,0,1), diss, 'dissolution') )
+            xn_list.append( Transition((0,8,2), (0,0,2), diss, 'dissolution') )
 
         if _DEBUG:
             print()
