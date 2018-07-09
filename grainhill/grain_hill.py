@@ -54,8 +54,9 @@ class GrainHill(CTSModel):
     """
     def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0, 
                  output_interval=1.0e99, settling_rate=2.2e8,
-                 disturbance_rate=1.0, weathering_rate=1.0, 
-                 uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
+                 disturbance_rate=1.0, weathering_rate=1.0,
+                 dissolution_rate=0.0, uplift_interval=1.0,
+                 plot_interval=1.0e99, friction_coef=0.3,
                  rock_state_for_uplift=7, opt_rock_collapse=False,
                  show_plots=True, initial_state_grid=None, 
                  opt_track_grains=False, prop_data=None,
@@ -71,14 +72,16 @@ class GrainHill(CTSModel):
 
     def initializer(self, grid_size, report_interval, run_duration,
                    output_interval, settling_rate, disturbance_rate,
-                   weathering_rate, uplift_interval, plot_interval,
-                   friction_coef, rock_state_for_uplift, opt_rock_collapse,
-                   show_plots, initial_state_grid, opt_track_grains, prop_data,
-                   prop_reset_value, callback_fn, **kwds):
+                   weathering_rate, dissolution_rate, uplift_interval,
+                   plot_interval, friction_coef, rock_state_for_uplift,
+                   opt_rock_collapse, show_plots, initial_state_grid,
+                   opt_track_grains, prop_data, prop_reset_value, callback_fn,
+                   **kwds):
         """Initialize the grain hill model."""
         self.settling_rate = settling_rate
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
+        self.dissolution_rate = dissolution_rate
         self.uplift_interval = uplift_interval
         self.plot_interval = plot_interval
         self.friction_coef = friction_coef
@@ -164,12 +167,11 @@ class GrainHill(CTSModel):
                                                 callback=self.callback_fn)
         xn_list = self.add_weathering_and_disturbance_transitions(xn_list,
                     self.disturbance_rate, self.weathering_rate,
-                    collapse_rate=self.collapse_rate)
+                    self.dissolution_rate, collapse_rate=self.collapse_rate)
         return xn_list
         
     def add_weathering_and_disturbance_transitions(self, xn_list, d=0.0, w=0.0,
-                                                   diss=0.0,
-                                                   collapse_rate=0.0,
+                                                   diss=0.0, collapse_rate=0.0,
                                                    swap=False, callback=None):
         """
         Add transition rules representing weathering and/or grain disturbance
