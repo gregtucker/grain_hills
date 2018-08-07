@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Simple driver for GrainHill model
@@ -89,7 +90,7 @@ class GrainHillDriver(object):
             else:
                 layer_left_x = 0.0
             self.model = BlockHill((params['number_of_node_rows'],
-                             params['number_of_node_columns']),
+                            params['number_of_node_columns']),
                             report_interval=params['report_interval'],
                             run_duration=self.run_duration,
                             output_interval=params['output_interval'],
