@@ -258,6 +258,45 @@ class SlopeMeasurer(object):
         return polyparams
 
 
+    def fit_zero_intercept_line_to_surface(self, min_x=None, max_x=None,
+                                           first_nodes=None):
+        """
+        Fit a straight line with zero intercept to a surface that has already
+        been found with pick_rock_surface().
+
+        Examples
+        --------
+        >>> from grainhill import GrainHill
+        >>> import numpy as np
+        >>> gh = GrainHill((4, 8), show_plots=False)
+        >>> gh.ca.node_state[:8] = 8
+        >>> gh.ca.node_state[9:12] = 8
+        >>> gh.ca.node_state[13:16] = 8
+        >>> other_rock_nodes = np.array([18, 19, 22, 23, 27, 31])
+        >>> gh.ca.node_state[other_rock_nodes] = 8
+        >>> gh.ca.assign_link_states_from_node_types()
+        >>> sm = SlopeMeasurer(gh)
+        >>> sm.pick_rock_surface()
+        array([ 9, 13, 18, 22])
+        >>> p = sm.fit_zero_intercept_line_to_surface()
+        >>> round(1000 * p[0][0])
+        577.0
+        >>> round(sm.dip_angle)
+        30.0
+        """
+        surface_x, surface_z = self.calc_coords_of_surface_points(
+            min_x, max_x, first_nodes)
+        surface_x = surface_x[:,np.newaxis]
+        fit_params = np.linalg.lstsq(surface_x, surface_z, rcond=None)
+        self.m = fit_params[0][0]
+        self.S = np.abs(self.m)
+        self.dip_angle = np.arctan(self.S)*180./np.pi
+
+        return fit_params
+
+
+        
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
