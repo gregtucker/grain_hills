@@ -63,8 +63,6 @@ class GrainHill(CTSModel):
                  prop_reset_value=None, callback_fn=None, 
                  closed_boundaries=(False, False, False, False), **kwds):
         """Call the initialize() method."""
-        print 'init'
-        print type(self)
         self.initializer(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, dissolution_rate, uplift_interval,
@@ -81,8 +79,6 @@ class GrainHill(CTSModel):
                    opt_track_grains, prop_data, prop_reset_value, callback_fn,
                    closed_boundaries, **kwds):
         """Initialize the grain hill model."""
-        print 'initialize'
-        print type(self)
         self.settling_rate = settling_rate
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
