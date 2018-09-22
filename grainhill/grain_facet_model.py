@@ -25,26 +25,28 @@ class GrainFacetSimulator(CTSModel):
     def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0, 
                  output_interval=1.0e99, disturbance_rate=0.0,
                  weathering_rate=0.0, dissolution_rate=0.0,
-                 uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
+                 uplift_interval=1.0, baselevel_rise_interval=0,
+                 plot_interval=1.0e99, friction_coef=0.3,
                  fault_x=1.0, cell_width=1.0, grav_accel=9.8,
                  plot_file_name=None, **kwds):
         """Call the initialize() method."""
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, disturbance_rate, weathering_rate,
-                        dissolution_rate, uplift_interval, plot_interval,
-                        friction_coef, fault_x,cell_width, grav_accel,
-                        plot_file_name, **kwds)
+                        dissolution_rate, uplift_interval, 
+                        baselevel_rise_interval, plot_interval, friction_coef,
+                        fault_x,cell_width, grav_accel, plot_file_name, **kwds)
 
     def initialize(self, grid_size, report_interval, run_duration,
                    output_interval, disturbance_rate, weathering_rate, 
-                   dissolution_rate, uplift_interval, plot_interval,
-                   friction_coef, fault_x, cell_width, grav_accel,
-                   plot_file_name=None, **kwds):
+                   dissolution_rate, uplift_interval, baselevel_rise_interval,
+                   plot_interval, friction_coef, fault_x, cell_width,
+                   grav_accel, plot_file_name=None, **kwds):
         """Initialize the grain hill model."""
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
         self.dissolution_rate = dissolution_rate
         self.uplift_interval = uplift_interval
+        self.baselevel_rise_interval = baselevel_rise_interval
         self.plot_interval = plot_interval
         self.friction_coef = friction_coef
 
@@ -168,9 +170,8 @@ class GrainFacetSimulator(CTSModel):
         --------
         >>> from grainhill import GrainHill
         >>> gh = GrainHill((5, 7))
-        >>> gh.grid.at_node['node_state']        
-        array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
-               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        >>> gh.grid.at_node['node_state'][:20] 
+        array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0])
         """
 
         # For shorthand, get a reference to the node-state grid
@@ -206,6 +207,11 @@ class GrainFacetSimulator(CTSModel):
 
         # And baselevel adjustment
         next_uplift = self.uplift_interval
+        if self.baselevel_rise_interval > 0:
+            next_baselevel = self.baselevel_rise_interval
+            baselevel_row = 1
+        else:
+            next_baselevel = self.run_duration + 1
 
         current_time = 0.0
         while current_time < self.run_duration:
@@ -213,6 +219,7 @@ class GrainFacetSimulator(CTSModel):
             # Figure out what time to run to this iteration
             next_pause = min(next_output, next_plot)
             next_pause = min(next_pause, next_uplift)
+            next_pause = min(next_pause, next_baselevel)
             next_pause = min(next_pause, self.run_duration)
 
             # Once in a while, print out simulation and real time to let the user
@@ -247,6 +254,47 @@ class GrainFacetSimulator(CTSModel):
                     if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
                         print i
                 next_uplift += self.uplift_interval
+
+            # Handle baselevel rise
+            if current_time >= next_baselevel:
+                self.raise_baselevel(baselevel_row)
+                baselevel_row += 1
+                next_baselevel += self.baselevel_rise_interval
+
+    def raise_baselevel(self, baselevel_row):
+        """Raise baselevel on left by closing a node on the left boundary.
+        
+        Parameters
+        ----------
+        baselevel_row : int
+            Row number of the next left-boundary node to be closed
+        
+        Examples
+        --------
+        >>> params = { 'grid_size' : (10,5), 'baselevel_rise_interval' : 1.0 }
+        >>> params['run_duration'] = 10.0
+        >>> params['uplift_interval'] = 11.0
+        >>> gfs = GrainFacetSimulator(**params)
+        >>> gfs.run()
+        Current sim time0.0(0.0%)
+        Running to...1.0
+        Running to...2.0
+        Running to...3.0
+        Running to...4.0
+        Running to...5.0
+        Running to...6.0
+        Running to...7.0
+        Running to...8.0
+        Running to...9.0
+        Running to...10.0
+        >>> gfs.ca.node_state[:50:5]
+        array([8, 8, 8, 8, 8, 8, 8, 8, 8, 8])
+        """
+        baselevel_node = self.grid.number_of_node_columns * baselevel_row
+        if baselevel_node < self.grid.number_of_nodes:
+            self.ca.node_state[baselevel_node] = 8
+            self.ca.bnd_lnk[self.grid.links_at_node[baselevel_node]] = True
+            self.grid.status_at_node[baselevel_node] = CLOSED_BOUNDARY
 
     def nodes_in_column(self, col, num_rows, num_cols):
         """Return array of node IDs in given column.
