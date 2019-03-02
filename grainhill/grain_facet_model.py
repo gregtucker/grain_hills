@@ -252,7 +252,7 @@ class GrainFacetSimulator(CTSModel):
                                         rock_state=8)
                 for i in range(self.grid.number_of_links):
                     if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
-                        print i
+                        print(i)
                 next_uplift += self.uplift_interval
 
             # Handle baselevel rise

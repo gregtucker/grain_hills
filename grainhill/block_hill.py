@@ -9,7 +9,7 @@ Created on Sat Jun 24 10:54:53 2017
 """
 
 from grainhill import GrainHill
-from lattice_grain import (lattice_grain_node_states,
+from .lattice_grain import (lattice_grain_node_states,
                            lattice_grain_transition_list)
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 from landlab.ca.celllab_cts import Transition
