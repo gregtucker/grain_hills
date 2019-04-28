@@ -65,12 +65,13 @@ class CosmogenicIrradiator(object):
         >>> gh.ca.node_state
         array([8, 7, 8, 7, 7, 0, 7, 0, 7, 7, 0, 0, 0, 0, 0])
         >>> ci = CosmogenicIrradiator(gh, 1.0, 2.0)
-        >>> ci.cosmo
-        array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
+        >>> np.amax(ci.cosmo)
+        0.0
         >>> ci.add_cosmos(1.0)
-        >>> np.round(ci.cosmo, 3)
-        array([0.   , 0.472, 0.   , 0.472, 0.472, 0.   , 0.779, 0.   , 0.779,
-               0.779, 0.   , 0.   , 0.   , 0.   , 0.   ])
+        >>> a = 1000 * np.round(ci.cosmo, 3)
+        >>> a.astype(np.int)
+        array([  0, 472,   0, 472, 472,   0, 779,   0, 779, 779,   0,   0,   0,
+                 0,   0])
         """
         for c in range(1, self.grid.number_of_node_columns - 1):
             cumulative_depth = cell_width / 2.0

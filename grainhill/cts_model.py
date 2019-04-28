@@ -114,14 +114,14 @@ class CTSModel(object):
         ----------
         closed_boundaries : 4-element tuple of bool\
             Whether right, top, left, and bottom edges have closed nodes
-        
+
         Examples
         --------
         >>> from grainhill import CTSModel
         >>> cm = CTSModel(closed_boundaries=(True, True, True, True))
-        >>> cm.grid.status_at_node
-        array([4, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 4,
-               4, 4, 4], dtype=uint8)
+        >>> cm.grid.status_at_node  # doctest: +NORMALIZE_WHITESPACE
+        array([4, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4,
+               4, 4, 4, 4], dtype=uint8)
         """
         g = self.grid
         if closed_boundaries[0]:

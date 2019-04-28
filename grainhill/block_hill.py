@@ -210,9 +210,9 @@ class BlockHill(GrainHill):
         Examples
         --------
         >>> bh = BlockHill((5, 7))
-        >>> bh.grid.at_node['node_state']        
-        array([9, 7, 7, 9, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
-               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        >>> bh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE     
+        array([9, 7, 7, 9, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         """
 
         # For shorthand, get a reference to the node-state grid

@@ -176,8 +176,8 @@ class SlopeMeasurer(object):
         array([10, 11, 12, 13, 14, 15, 17])
         >>> x, z = sm.calc_coords_of_surface_points()
         >>> m_and_c = sm.fit_straight_line_to_coords(x, z)
-        >>> round(m_and_c[0], 3)  # the gradient
-        -0.082
+        >>> '%.3f' % round(m_and_c[0], 3)  # the gradient
+        '-0.082'
         >>> round(m_and_c[1], 3)  # the intersect
         1.714
 
@@ -222,12 +222,12 @@ class SlopeMeasurer(object):
         >>> sm.pick_rock_surface()
         array([10, 11, 12, 13, 14, 15, 17])
         >>> m_and_c = sm.fit_straight_line_to_surface()
-        >>> round(m_and_c[0], 3)  # the gradient
-        -0.082
-        >>> round(sm.S, 3)
-        0.082
-        >>> round(sm.dip_angle, 2)
-        4.72
+        >>> '%.3f' % round(m_and_c[0], 3)  # the gradient
+        '-0.082'
+        >>> '%.3f' % round(sm.S, 3)
+        '0.082'
+        >>> '%.2f' % round(sm.dip_angle, 2)
+        '4.72'
 
         ...and without the bump...
 
