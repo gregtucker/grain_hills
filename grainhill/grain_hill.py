@@ -252,9 +252,9 @@ class GrainHill(CTSModel):
         Examples
         --------
         >>> gh = GrainHill((5, 7))
-        >>> gh.grid.at_node['node_state']        
-        array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
-               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        >>> gh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE   
+        array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         """
 
         # For shorthand, get a reference to the node-state grid
@@ -335,10 +335,10 @@ class GrainHill(CTSModel):
         >>> ns[[8, 13, 11, 16, 14]] = 7
         >>> gh = GrainHill((3, 7))  # grid size arbitrary here
         >>> (elev, thickness) = gh.get_profile_and_soil_thickness(hg, ns)
-        >>> elev
-        array([0. , 2.5, 3. , 2.5, 0. ])
-        >>> thickness
-        array([0., 2., 2., 1., 0.])
+        >>> list(elev)
+        [0.0, 2.5, 3.0, 2.5, 0.0]
+        >>> list(thickness)
+        [0.0, 2.0, 2.0, 1.0, 0.0]
         """
         nc = grid.number_of_node_columns
         elev = zeros(nc)

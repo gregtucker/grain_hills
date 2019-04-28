@@ -26,13 +26,13 @@ class CTSModel(object):
                  show_plots=False, cts_type='oriented_hex',
                  run_duration=1.0, output_interval=1.0e99,
                  plot_every_transition=False, initial_state_grid=None,
-                 prop_data=None, prop_reset_value=None,
+                 prop_data=None, prop_reset_value=None, seed=0,
                  closed_boundaries=(False, False, False, False), **kwds):
 
         self.initialize(grid_size, report_interval, grid_orientation,
                         grid_shape, show_plots, cts_type, run_duration,
                         output_interval, plot_every_transition,
-                        initial_state_grid, prop_data, prop_reset_value,
+                        initial_state_grid, prop_data, prop_reset_value, seed,
                         closed_boundaries, **kwds)
 
 
@@ -41,7 +41,7 @@ class CTSModel(object):
                  show_plots=False, cts_type='oriented_hex',
                  run_duration=1.0, output_interval=1.0e99,
                  plot_every_transition=False, initial_state_grid=None,
-                 prop_data=None, prop_reset_value=None,
+                 prop_data=None, prop_reset_value=None, seed=0,
                  closed_boundaries=(False, False, False, False), **kwds):
         """Initialize CTSModel."""
         # Remember the clock time, and calculate when we next want to report
@@ -87,11 +87,11 @@ class CTSModel(object):
         if cts_type == 'raster':
             from landlab.ca.raster_cts import RasterCTS
             self.ca = RasterCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
-                                prop_reset_value)
+                                prop_reset_value, seed=seed)
         elif cts_type == 'oriented_raster':
             from landlab.ca.oriented_raster_cts import OrientedRasterCTS
             self.ca = OrientedRasterCTS(self.grid, ns_dict, xn_list, nsg,
-                                        prop_data, prop_reset_value)
+                                        prop_data, prop_reset_value, seed=seed)
         elif cts_type == 'hex':
             from landlab.ca.hex_cts import HexCTS
             self.ca = HexCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
@@ -114,14 +114,14 @@ class CTSModel(object):
         ----------
         closed_boundaries : 4-element tuple of bool\
             Whether right, top, left, and bottom edges have closed nodes
-        
+
         Examples
         --------
         >>> from grainhill import CTSModel
         >>> cm = CTSModel(closed_boundaries=(True, True, True, True))
-        >>> cm.grid.status_at_node
-        array([4, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 4,
-               4, 4, 4], dtype=uint8)
+        >>> cm.grid.status_at_node  # doctest: +NORMALIZE_WHITESPACE
+        array([4, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4,
+               4, 4, 4, 4], dtype=uint8)
         """
         g = self.grid
         if closed_boundaries[0]:
