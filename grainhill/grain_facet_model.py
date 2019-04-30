@@ -77,6 +77,23 @@ class GrainFacetSimulator(CTSModel):
             self.plot_number = 0
             self.plot_to_file()
 
+        # Work out the next times to plot and output
+        self.next_output = self.output_interval
+        self.next_plot = self.plot_interval
+
+        # Next time for a progress report to user
+        self.next_report = self.report_interval
+
+        # And baselevel adjustment
+        self.next_uplift = self.uplift_interval
+        if self.baselevel_rise_interval > 0:
+            self.next_baselevel = self.baselevel_rise_interval
+            self.baselevel_row = 1
+        else:
+            self.next_baselevel = self.run_duration + 1
+
+        self.current_time = 0.0
+
     def node_state_dictionary(self):
         """
         Create and return dict of node states.
@@ -196,72 +213,60 @@ class GrainFacetSimulator(CTSModel):
         nsg[bottom_right] = 8
 
         return nsg
-
-    def run(self):
-        """Run the model."""
-
-        # Work out the next times to plot and output
-        next_output = self.output_interval
-        next_plot = self.plot_interval
-
-        # Next time for a progress report to user
-        next_report = self.report_interval
-
-        # And baselevel adjustment
-        next_uplift = self.uplift_interval
-        if self.baselevel_rise_interval > 0:
-            next_baselevel = self.baselevel_rise_interval
-            baselevel_row = 1
-        else:
-            next_baselevel = self.run_duration + 1
-
-        current_time = 0.0
-        while current_time < self.run_duration:
+    
+    def update_until(self, run_to_time):
+        """Advance up to a specified time."""
+        while self.current_time < run_to_time:
 
             # Figure out what time to run to this iteration
-            next_pause = min(next_output, next_plot)
-            next_pause = min(next_pause, next_uplift)
-            next_pause = min(next_pause, next_baselevel)
-            next_pause = min(next_pause, self.run_duration)
+            next_pause = min(self.next_output, self.next_plot)
+            next_pause = min(next_pause, self.next_uplift)
+            next_pause = min(next_pause, self.next_baselevel)
+            next_pause = min(next_pause, run_to_time)
 
             # Once in a while, print out simulation and real time to let the user
             # know that the sim is running ok
             current_real_time = time.time()
-            if current_real_time >= next_report:
-                print('Current sim time' + str(current_time) + '(' + \
-                      str(100 * current_time / self.run_duration) + '%)')
-                next_report = current_real_time + self.report_interval
+            if current_real_time >= self.next_report:
+                print('Current sim time' + str(self.current_time) + '(' + \
+                      str(100 * self.current_time / self.run_duration) + '%)')
+                self.next_report = current_real_time + self.report_interval
 
             # Run the model forward in time until the next output step
             print('Running to...' + str(next_pause))
             self.ca.run(next_pause, self.ca.node_state)
-            current_time = next_pause
+            self.current_time = next_pause
 
             # Handle output to file
-            if current_time >= next_output:
-                next_output += self.output_interval
+            if self.current_time >= self.next_output:
+                self.next_output += self.output_interval
 
             # Handle plotting on display
-            if current_time >= next_plot:
+            if self.current_time >= self.next_plot:
                 self.ca_plotter.update_plot()
                 if self.plot_file_name is not None:
                     self.plot_to_file()
-                next_plot += self.plot_interval
+                self.next_plot += self.plot_interval
 
             # Handle fault slip
-            if current_time >= next_uplift:
-                self.uplifter.do_offset(ca=self.ca, current_time=current_time,
+            if self.current_time >= self.next_uplift:
+                self.uplifter.do_offset(ca=self.ca,
+                                        current_time=self.current_time,
                                         rock_state=8)
                 for i in range(self.grid.number_of_links):
                     if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
                         print(i)
-                next_uplift += self.uplift_interval
+                self.next_uplift += self.uplift_interval
 
             # Handle baselevel rise
-            if current_time >= next_baselevel:
-                self.raise_baselevel(baselevel_row)
-                baselevel_row += 1
-                next_baselevel += self.baselevel_rise_interval
+            if self.current_time >= self.next_baselevel:
+                self.raise_baselevel(self.baselevel_row)
+                self.baselevel_row += 1
+                self.next_baselevel += self.baselevel_rise_interval
+
+    def run(self):
+        """Run the model."""
+        self.update_until(self.run_duration)
 
     def raise_baselevel(self, baselevel_row):
         """Raise baselevel on left by closing a node on the left boundary.
