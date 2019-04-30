@@ -28,20 +28,21 @@ class GrainFacetSimulator(CTSModel):
                  uplift_interval=1.0, baselevel_rise_interval=0,
                  plot_interval=1.0e99, friction_coef=0.3,
                  fault_x=1.0, cell_width=1.0, grav_accel=9.8,
-                 plot_file_name=None, seed=0, **kwds):
+                 init_state_grid=None, plot_file_name=None, seed=0, **kwds):
         """Call the initialize() method."""
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, disturbance_rate, weathering_rate,
                         dissolution_rate, uplift_interval, 
                         baselevel_rise_interval, plot_interval, friction_coef,
-                        fault_x,cell_width, grav_accel, plot_file_name,
-                        seed, **kwds)
+                        fault_x,cell_width, grav_accel, init_state_grid,
+                        plot_file_name, seed, **kwds)
 
     def initialize(self, grid_size, report_interval, run_duration,
                    output_interval, disturbance_rate, weathering_rate, 
                    dissolution_rate, uplift_interval, baselevel_rise_interval,
                    plot_interval, friction_coef, fault_x, cell_width,
-                   grav_accel, plot_file_name=None, seed=0, **kwds):
+                   grav_accel, init_state_grid=None, plot_file_name=None,
+                   seed=0, **kwds):
         """Initialize the grain hill model."""
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
@@ -63,6 +64,7 @@ class GrainFacetSimulator(CTSModel):
                                           run_duration=run_duration,
                                           output_interval=output_interval,
                                           plot_every_transition=False,
+                                          initial_state_grid=init_state_grid,
                                           closed_boundaries=(True, True,
                                                              False, False),
                                           seed=seed)
