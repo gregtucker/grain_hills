@@ -44,6 +44,7 @@ class CTSModel(object):
                  prop_data=None, prop_reset_value=None, seed=0,
                  closed_boundaries=(False, False, False, False), **kwds):
         """Initialize CTSModel."""
+
         # Remember the clock time, and calculate when we next want to report
         # progress.
         self.current_real_time = time.time()
@@ -95,11 +96,11 @@ class CTSModel(object):
         elif cts_type == 'hex':
             from landlab.ca.hex_cts import HexCTS
             self.ca = HexCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
-                             prop_reset_value)
+                             prop_reset_value, seed=seed)
         else:
             from landlab.ca.oriented_hex_cts import OrientedHexCTS
             self.ca = OrientedHexCTS(self.grid, ns_dict, xn_list, nsg,
-                                     prop_data, prop_reset_value)
+                                     prop_data, prop_reset_value, seed=seed)
 
         # Initialize graphics
         self._show_plots = show_plots
