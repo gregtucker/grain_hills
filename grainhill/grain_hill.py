@@ -16,7 +16,7 @@ from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 
 
-def plot_hill(grid, filename=None, array=None, cmap=None):
+def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
     """Generate a plot of the modeled hillslope."""
     import matplotlib.pyplot as plt
     import matplotlib as mpl
@@ -43,9 +43,9 @@ def plot_hill(grid, filename=None, array=None, cmap=None):
         plt.savefig(filename, bbox_inches='tight')
         plt.clf()
         print('Figure saved to ' + filename)
-    else:
+    elif show:
         plt.show()
-  
+
 
 
 class GrainHill(CTSModel):
@@ -252,22 +252,22 @@ class GrainHill(CTSModel):
         Examples
         --------
         >>> gh = GrainHill((5, 7))
-        >>> gh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE   
+        >>> gh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE
         array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         """
 
-        # For shorthand, get a reference to the node-state grid
+        # For shorthand, get a reference to the node-state grid and to x coord
         nsg = self.grid.at_node['node_state']
+        nodex = self.grid.node_x
 
         # Fill the bottom two rows with grains
         right_side_x = 0.866025403784 * (self.grid.number_of_node_columns - 1)
         for i in range(self.grid.number_of_nodes):
             if self.grid.node_y[i] < 2.0:
-                if (self.grid.node_x[i] > 0.0 and
-                    self.grid.node_x[i] < right_side_x):
+                if (nodex[i] > 0.0 and nodex[i] < right_side_x):
                     nsg[i] = 7
-        
+
         # Place "wall" particles in the lower-left and lower-right corners
         if self.grid.number_of_node_columns % 2 == 0:
             bottom_right = self.grid.number_of_node_columns - 1
@@ -275,7 +275,7 @@ class GrainHill(CTSModel):
             bottom_right = self.grid.number_of_node_columns // 2
         nsg[0] = 8  # bottom left
         nsg[bottom_right] = 8
-        
+
         return nsg
 
     def run(self, to=None):
@@ -291,12 +291,12 @@ class GrainHill(CTSModel):
             next_pause = min(self.next_output, self.next_plot)
             next_pause = min(next_pause, self.next_uplift)
             next_pause = min(next_pause, run_to)
-    
-            # Once in a while, print out simulation and real time to let the user
-            # know that the sim is running ok
+
+            # Once in a while, print out simulation and real time to let the
+            # user know that the sim is running ok
             current_real_time = time.time()
             if current_real_time >= self.next_report:
-                print('Current sim time ' + str(self.current_time) + '(' + \
+                print('Current sim time ' + str(self.current_time) + ' (' +
                       str(100 * self.current_time / self.run_duration) + '%)')
                 self.next_report = current_real_time + self.report_interval
 
@@ -322,10 +322,10 @@ class GrainHill(CTSModel):
                 self.uplifter.uplift_interior_nodes(self.ca, self.current_time,
                                                     rock_state=self.rock_state)
                 self.next_uplift += self.uplift_interval
-        
+
     def get_profile_and_soil_thickness(self, grid, data):
         """Calculate and return profiles of elevation and soil thickness.
-        
+
         Examples
         --------
         >>> from landlab import HexModelGrid
@@ -344,14 +344,14 @@ class GrainHill(CTSModel):
         elev = zeros(nc)
         soil = zeros(nc)
         for col in range(nc):
-            states = data[grid.nodes[:, col]]  
+            states = data[grid.nodes[:, col]]
             (rows_with_rock_or_sed, ) = where(states > 0)
             if len(rows_with_rock_or_sed) == 0:
                 elev[col] = 0.0
             else:
                 elev[col] = amax(rows_with_rock_or_sed) + 0.5 * (col % 2)
             soil[col] = count_nonzero(logical_and(states > 0, states < 8))
-        
+
         return elev, soil
 
 
@@ -365,7 +365,7 @@ def get_params_from_input_file(filename):
 
 def main(params):
     """Initialize model with dict of params then run it."""
-    grid_size = (int(params['number_of_node_rows']), 
+    grid_size = (int(params['number_of_node_rows']),
                  int(params['number_of_node_columns']))
     grain_hill_model = GrainHill(grid_size, **params)
     grain_hill_model.run()
@@ -374,7 +374,8 @@ def main(params):
     import matplotlib.pyplot as plt
     plt.savefig('grain_hill_final.png')
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     """Executes model."""
     try:
         infile = sys.argv[1]
