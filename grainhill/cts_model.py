@@ -44,6 +44,7 @@ class CTSModel(object):
                  prop_data=None, prop_reset_value=None, seed=0,
                  closed_boundaries=(False, False, False, False), **kwds):
         """Initialize CTSModel."""
+
         # Remember the clock time, and calculate when we next want to report
         # progress.
         self.current_real_time = time.time()
