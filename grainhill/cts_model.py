@@ -95,11 +95,11 @@ class CTSModel(object):
         elif cts_type == 'hex':
             from landlab.ca.hex_cts import HexCTS
             self.ca = HexCTS(self.grid, ns_dict, xn_list, nsg, prop_data,
-                             prop_reset_value)
+                             prop_reset_value, seed=seed)
         else:
             from landlab.ca.oriented_hex_cts import OrientedHexCTS
             self.ca = OrientedHexCTS(self.grid, ns_dict, xn_list, nsg,
-                                     prop_data, prop_reset_value)
+                                     prop_data, prop_reset_value, seed=seed)
 
         # Initialize graphics
         self._show_plots = show_plots
