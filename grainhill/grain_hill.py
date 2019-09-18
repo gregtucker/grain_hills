@@ -10,7 +10,7 @@ from .cts_model import CTSModel
 from .lattice_grain import (lattice_grain_node_states,
                            lattice_grain_transition_list)
 import time
-from numpy import zeros, count_nonzero, where, amax, logical_and
+from numpy import zeros, count_nonzero, where, amax, logical_and, arange
 from matplotlib.pyplot import axis
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
@@ -344,7 +344,9 @@ class GrainHill(CTSModel):
         elev = zeros(nc)
         soil = zeros(nc)
         for col in range(nc):
-            states = data[grid.nodes[:, col]]
+            base_id = (col // 2) + (col % 2) * ((nc + 1) // 2)
+            node_ids = arange(base_id, grid.number_of_nodes, nc)
+            states = data[node_ids]
             (rows_with_rock_or_sed, ) = where(states > 0)
             if len(rows_with_rock_or_sed) == 0:
                 elev[col] = 0.0
