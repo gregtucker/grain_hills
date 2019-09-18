@@ -285,7 +285,7 @@ class GrainFacetSimulator(CTSModel):
         >>> params['uplift_interval'] = 11.0
         >>> gfs = GrainFacetSimulator(**params)
         >>> gfs.run()
-        Current sim time0.0(0.0%)
+        Current sim time 0.0 (0.0%)
         Running to...1.0
         Running to...2.0
         Running to...3.0
