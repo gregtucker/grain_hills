@@ -3,8 +3,6 @@
 Base class for a "full" generic CTS model.
 """
 
-_DEBUG = False
-
 import time
 from numpy import random
 from landlab import CLOSED_BOUNDARY
@@ -12,6 +10,8 @@ from landlab.io.native_landlab import save_grid
 from landlab.ca.celllab_cts import Transition, CAPlotter
 from matplotlib.pyplot import axis
 from six import string_types
+
+_DEBUG = False
 
 
 class CTSModel(object):
@@ -35,14 +35,13 @@ class CTSModel(object):
                         initial_state_grid, prop_data, prop_reset_value, seed,
                         closed_boundaries, **kwds)
 
-
     def initialize(self, grid_size=(5, 5), report_interval=5.0,
-                 grid_orientation='vertical', grid_shape='rect',
-                 show_plots=False, cts_type='oriented_hex',
-                 run_duration=1.0, output_interval=1.0e99,
-                 plot_every_transition=False, initial_state_grid=None,
-                 prop_data=None, prop_reset_value=None, seed=0,
-                 closed_boundaries=(False, False, False, False), **kwds):
+                   grid_orientation='vertical', grid_shape='rect',
+                   show_plots=False, cts_type='oriented_hex',
+                   run_duration=1.0, output_interval=1.0e99,
+                   plot_every_transition=False, initial_state_grid=None,
+                   prop_data=None, prop_reset_value=None, seed=0,
+                   closed_boundaries=(False, False, False, False), **kwds):
         """Initialize CTSModel."""
 
         # Remember the clock time, and calculate when we next want to report
@@ -76,8 +75,7 @@ class CTSModel(object):
             try:
                 nsg = initial_state_grid
                 self.grid.at_node['node_state'][:] = nsg
-            except:
-                #TODO: use new Messaging capability
+            except TypeError:
                 print('If initial_state_grid given, must be array of int')
                 raise
 
@@ -104,13 +102,12 @@ class CTSModel(object):
 
         # Initialize graphics
         self._show_plots = show_plots
-        if show_plots == True:
+        if show_plots:
             self.initialize_plotting(**kwds)
-
 
     def _set_closed_boundaries_for_hex_grid(self, closed_boundaries):
         """Setup one or more closed boundaries for a hex grid.
-        
+
         Parameters
         ----------
         closed_boundaries : 4-element tuple of bool\
@@ -133,7 +130,6 @@ class CTSModel(object):
             g.status_at_node[g.nodes_at_left_edge] = CLOSED_BOUNDARY
         if closed_boundaries[3]:
             g.status_at_node[g.nodes_at_bottom_edge] = CLOSED_BOUNDARY
-
 
     def create_grid_and_node_state_field(self, num_rows, num_cols,
                                          grid_orientation, grid_shape,
@@ -158,17 +154,15 @@ class CTSModel(object):
 
         self.grid.add_zeros('node', 'node_state', dtype=int)
 
-
     def node_state_dictionary(self):
         """Create and return a dictionary of all possible node (cell) states.
 
         This method creates a default set of states (just two); it is a
         template meant to be overridden.
         """
-        ns_dict = { 0 : 'on',
-                    1 : 'off'}
+        ns_dict = {0: 'on',
+                   1: 'off'}
         return ns_dict
-
 
     def transition_list(self):
         """Create and return a list of transition objects.
@@ -181,12 +175,10 @@ class CTSModel(object):
         xn_list.append(Transition((1, 0, 0), (0, 1, 0), 1.0))
         return xn_list
 
-
     def write_output(self, grid, outfilename, iteration):
         """Write output to file (currently netCDF)."""
         filename = outfilename + str(iteration).zfill(4) + '.nc'
         save_grid(grid, filename)
-
 
     def initialize_node_state_grid(self):
         """Initialize values in the node-state grid.
@@ -198,13 +190,11 @@ class CTSModel(object):
             self.grid.at_node['node_state'][i] = random.randint(num_states)
         return self.grid.at_node['node_state']
 
-
     def initialize_plotting(self, **kwds):
         """Create and configure CAPlotter object."""
         self.ca_plotter = CAPlotter(self.ca, **kwds)
         self.ca_plotter.update_plot()
         axis('off')
-
 
     def run_for(self, dt):
 
