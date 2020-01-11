@@ -9,7 +9,6 @@ from grainhill.lattice_grain import (lattice_grain_node_states,
                                      lattice_grain_transition_list)
 import time
 import numpy as np
-from landlab import CLOSED_BOUNDARY
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeNormalFault
 
@@ -303,7 +302,7 @@ class GrainFacetSimulator(CTSModel):
         if baselevel_node < self.grid.number_of_nodes:
             self.ca.node_state[baselevel_node] = 8
             self.ca.bnd_lnk[self.grid.links_at_node[baselevel_node]] = True
-            self.grid.status_at_node[baselevel_node] = CLOSED_BOUNDARY
+            self.grid.status_at_node[baselevel_node] = self.grid.BC_NODE_IS_CLOSED
 
     def nodes_in_column(self, col, num_rows, num_cols):
         """Return array of node IDs in given column.
