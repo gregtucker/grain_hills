@@ -8,7 +8,7 @@ Simple driver for GrainHill model
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from grainhill import GrainFacet, CosmogenicIrradiator
+from grainhill import GrainFacetSimulator, CosmogenicIrradiator
 from landlab import imshow_grid
 
 
@@ -91,24 +91,24 @@ params['prop_reset_value'] = 0.0
 params['prop_data'] = 'cosmogenic_nuclide__concentration'
 
 # instantiate a GrainFacet model
-gh = GrainFacet((num_rows, num_cols), **params)
+gh = GrainFacetSimulator((num_rows, num_cols), **params)
 
 # instantiate a Cosmo handler
 ci = CosmogenicIrradiator(gh, cosmo_prod_rate, cosmo_decay_depth)
 
 
 #run the model
-current_time = 0.0
-while current_time < params['run_duration']:
-    run_to = min(next_cosmo, params['run_duration'])
-    print('current time ' + str(current_time))
-    print('running to ' + str(run_to))
-    gh.run(to=run_to)
-    ci.add_cosmos(run_to - current_time, delta)
-    next_cosmo += cosmo_interval
-    current_time = run_to
+#current_time = 0.0
+#while current_time < params['run_duration']:
+#    run_to = min(next_cosmo, params['run_duration'])
+#    print('current time ' + str(current_time))
+#    print('running to ' + str(run_to))
+#    gh.run(to=run_to)
+#    ci.add_cosmos(run_to - current_time, delta)
+#    next_cosmo += cosmo_interval
+#    current_time = run_to
 
 
-plot_hill(gh.grid, 'grain_hill_test_cosmo_ns.png')
-gh.grid.hexplot(ci.cosmo[gh.ca.propid])
-plt.savefig('grain_hill_test_cosmo_co.png', bbox_inches='tight')
+#plot_hill(gh.grid, 'grain_hill_test_cosmo_ns.png')
+#gh.grid.hexplot(ci.cosmo[gh.ca.propid])
+#plt.savefig('grain_hill_test_cosmo_co.png', bbox_inches='tight')

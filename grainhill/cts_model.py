@@ -5,7 +5,6 @@ Base class for a "full" generic CTS model.
 
 import time
 from numpy import random
-from landlab import CLOSED_BOUNDARY
 from landlab.io.native_landlab import save_grid
 from landlab.ca.celllab_cts import Transition, CAPlotter
 from matplotlib.pyplot import axis
@@ -22,7 +21,7 @@ class CTSModel(object):
     """
 
     def __init__(self, grid_size=(5, 5), report_interval=5.0,
-                 grid_orientation='vertical', grid_shape='rect',
+                 grid_orientation='vertical', node_layout='rect',
                  show_plots=False, cts_type='oriented_hex',
                  run_duration=1.0, output_interval=1.0e99,
                  plot_every_transition=False, initial_state_grid=None,
@@ -30,13 +29,13 @@ class CTSModel(object):
                  closed_boundaries=(False, False, False, False), **kwds):
 
         self.initialize(grid_size, report_interval, grid_orientation,
-                        grid_shape, show_plots, cts_type, run_duration,
+                        node_layout, show_plots, cts_type, run_duration,
                         output_interval, plot_every_transition,
                         initial_state_grid, prop_data, prop_reset_value, seed,
                         closed_boundaries, **kwds)
 
     def initialize(self, grid_size=(5, 5), report_interval=5.0,
-                   grid_orientation='vertical', grid_shape='rect',
+                   grid_orientation='vertical', node_layout='rect',
                    show_plots=False, cts_type='oriented_hex',
                    run_duration=1.0, output_interval=1.0e99,
                    plot_every_transition=False, initial_state_grid=None,
@@ -58,7 +57,7 @@ class CTSModel(object):
 
         # Create a grid
         self.create_grid_and_node_state_field(grid_size[0], grid_size[1],
-                                              grid_orientation, grid_shape,
+                                              grid_orientation, node_layout,
                                               cts_type, closed_boundaries)
 
         # If prop_data is a string, we assume it is a field name
@@ -123,16 +122,16 @@ class CTSModel(object):
         """
         g = self.grid
         if closed_boundaries[0]:
-            g.status_at_node[g.nodes_at_right_edge] = CLOSED_BOUNDARY
+            g.status_at_node[g.nodes_at_right_edge] = g.BC_NODE_IS_CLOSED
         if closed_boundaries[1]:
-            g.status_at_node[g.nodes_at_top_edge] = CLOSED_BOUNDARY
+            g.status_at_node[g.nodes_at_top_edge] = g.BC_NODE_IS_CLOSED
         if closed_boundaries[2]:
-            g.status_at_node[g.nodes_at_left_edge] = CLOSED_BOUNDARY
+            g.status_at_node[g.nodes_at_left_edge] = g.BC_NODE_IS_CLOSED
         if closed_boundaries[3]:
-            g.status_at_node[g.nodes_at_bottom_edge] = CLOSED_BOUNDARY
+            g.status_at_node[g.nodes_at_bottom_edge] = g.BC_NODE_IS_CLOSED
 
     def create_grid_and_node_state_field(self, num_rows, num_cols,
-                                         grid_orientation, grid_shape,
+                                         grid_orientation, node_layout,
                                          cts_type, closed_bounds):
         """Create the grid and the field containing node states."""
 
@@ -146,9 +145,10 @@ class CTSModel(object):
                                                           closed_bounds[3])
         else:
             from landlab import HexModelGrid
-            self.grid = HexModelGrid(num_rows, num_cols, 1.0,
+            self.grid = HexModelGrid(shape=(num_rows, num_cols), 
+                                     spacing=1.0,
                                      orientation=grid_orientation,
-                                     shape=grid_shape)
+                                     node_layout=node_layout)
             if True in closed_bounds:
                 self._set_closed_boundaries_for_hex_grid(closed_bounds)
 

@@ -16,7 +16,8 @@ def test_initial_state_grid():
     """Test passing in an initial array of node states."""
     nr = 4
     nc = 3
-    hg = HexModelGrid(shape=(nr, nc), node_layout='rect', orientation='vert')
+    hg = HexModelGrid(shape=(nr, nc), node_layout='rect',
+                      orientation='vertical')
     ins = hg.add_zeros('node', 'node_state', dtype=np.int)
     ins[hg.y_of_node < 2] = 8
 
