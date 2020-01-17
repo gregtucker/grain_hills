@@ -1,14 +1,43 @@
-# grain_hills
+# Grain Hill Model
 
-This repository contains source code for the Grain Hill cellular automaton model. 
- Grain Hill simulates the morphology and evolution of a hypothetical hillslope cross-sectional profile. The model builds on [CellLab-CTS](https://github.com/landlab/landlab/wiki/CellLab-CTS-2015-Users-Manual) framework, which is an element of the [Landlab Toolkit](http://landlab.github.io).  
+## About
+
+This repository contains source code for the Grain Hill cellular automaton model.
+ Grain Hill simulates the morphology and evolution of a hypothetical hillslope cross-sectional profile. The model builds on [CellLab-CTS](https://github.com/landlab/landlab/wiki/CellLab-CTS-2015-Users-Manual) framework, which is an element of the [Landlab Toolkit](http://landlab.github.io).  The package includes the Grain Facet model, which is a variant of Grain Hill that models the cross-sectional profile evolution of a normal-fault facet, with slip on a 60-degree dipping normal fault. The Grain Hill and Grain Facet models, their underlying continuous-time stochastic algorithms, and the Landlab framework on which they are built, are described in several journal articles. Tucker et al. (2016) present the general CellLab-CTS framework and its algorithms. Tucker et al. (2018) describe the Grain Hill model, and use the model to analyze a range of different types of hillslope landform. Tucker et al. (in review) present the Grain Facet model and use it to analyze the necessary and sufficient conditions to account for observed facet landforms and their variations. The Landlab Toolkit itself is described by Hobley et al. (2017) and Barnhart et al. (in review).
+
+## Dependencies
+
+Grain Hill requires [Landlab](https://landlab.github.io) version 2.0.0beta or higher.
+
+## Installation
+
+Clone or fork this repository. To install, navigate to the `grain_hills` folder and run `python setup.py`.
+
+## How to Run
+
+(include an example)
+
+## Input and Output Files
+
+
+## Examples
+
+
+## How to Cite
+
+
+## Licensing
+
 
 ## References:
 
-Tucker, G.E., Hobley, D.E.J., Hutton, E., Gasparini, N.M., Istanbulluoglu, E., Adams, J.M., and Nudurupati, S.S. (2016) CellLab-CTS 2015: [Continuous-time stochastic cellular automaton modeling using Landlab.](https://www.geosci-model-dev.net/9/823/2016/) Geoscientific Model Development., v. 9, p. 823-839, doi:10.5194/gmd-9-823-2016.
+Barnhart, K. R., et al. (in review) Landlab v2.0: A software package
+for Earth surface dynamics.
+
+Tucker, G. E., Hobley, D. E. J., McCoy, S. W., & Struble, W. T. (in review). Modeling the Shape and Evolution of Normal-Fault Facets.
+
+Tucker, G. E., McCoy, S. W., & Hobley, D. E. (2018). [A lattice grain model of hillslope evolution.](https://doi.org/10.5194/esurf-6-563-2018) Earth Surface Dynamics, 6(3), 563-582, doi:10.5194/esurf-6-563-2018.
 
 Hobley, D. E., Adams, J. M., Nudurupati, S. S., Hutton, E. W., Gasparini, N. M., Istanbulluoglu, E., & Tucker, G. E. (2017) [Creative computing with Landlab: an open-source toolkit for building, coupling, and exploring two-dimensional numerical models of Earth-surface dynamics.](https://www.earth-surf-dynam.net/5/21/2017/) Earth Surface Dynamics. doi:10.5194/esurf-5-21-2017.
 
-Tucker, G.E., McCoy, S.W., and Hobley, D.E.J. (discussion paper in review) A lattice grain model of hillslope evolution. Earth Surface Dynamics Discussions. doi:10.5194/esurf-2018-4.
-
-
+Tucker, G.E., Hobley, D.E.J., Hutton, E., Gasparini, N.M., Istanbulluoglu, E., Adams, J.M., and Nudurupati, S.S. (2016) CellLab-CTS 2015: [Continuous-time stochastic cellular automaton modeling using Landlab.](https://www.geosci-model-dev.net/9/823/2016/) Geoscientific Model Development., v. 9, p. 823-839, doi:10.5194/gmd-9-823-2016.
