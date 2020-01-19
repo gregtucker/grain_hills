@@ -30,9 +30,9 @@ class BmiGrainHill(Bmi):
 
     """Simulate hillslope profile evolution."""
 
-    _name = "GrainHill"
-    #_input_var_names = ("plate_surface__temperature",)
-    #_output_var_names = ("plate_surface__temperature",)
+    _name = "BmiGrainHill"
+    _input_var_names = ("node_state",)
+    _output_var_names = ("node_state",)
 
     def __init__(self):
         """Create a BmiGrainHill model that is ready for initialization."""
@@ -68,8 +68,9 @@ class BmiGrainHill(Bmi):
             p.pop('number_of_node_columns')
 
         self._model = GrainHill(**p)
+        self.grid = self._model.grid  # Landlab grid as public attribute
 
-        self._values = {"node_state": self._model.grid.at_node['node_state']}
+        self._values = {"node_state": self.grid.at_node['node_state']}
         self._var_units = {"node_state": "-"}
         self._var_loc = {"node_state": "node"}
         self._grids = {0: ["node_state"]}
@@ -184,7 +185,7 @@ class BmiGrainHill(Bmi):
         int
             Rank of grid.
         """
-        return len(self.get_grid_shape(grid_id))
+        return 2
 
     def get_grid_size(self, grid_id):
         """Size of grid.
@@ -199,7 +200,7 @@ class BmiGrainHill(Bmi):
         int
             Size of grid.
         """
-        return np.prod(self.get_grid_shape(grid_id))
+        return self.grid.number_of_nodes
 
     def get_value_ptr(self, var_name):
         """Reference to values.
@@ -298,16 +299,17 @@ class BmiGrainHill(Bmi):
 
     def get_grid_shape(self, grid_id):
         """Number of rows and columns of uniform rectilinear grid."""
-        var_name = self._grids[grid_id][0]
-        return self.get_value_ptr(var_name).shape
+        return np.array([self.grid.number_of_node_rows,
+                         self.grid.number_of_node_columns],
+                         dtype=np.int)
 
     def get_grid_spacing(self, grid_id):
         """Spacing of rows and columns of uniform rectilinear grid."""
-        return self._model.spacing
+        return 1.0
 
     def get_grid_origin(self, grid_id):
         """Origin of uniform rectilinear grid."""
-        return self._model.origin
+        return np.zeros(2)
 
     def get_grid_type(self, grid_id):
         """Type of grid."""
@@ -315,47 +317,54 @@ class BmiGrainHill(Bmi):
 
     def get_start_time(self):
         """Start time of model."""
-        return self._start_time
+        return 0.0
 
     def get_end_time(self):
         """End time of model."""
-        return self._end_time
+        return self._model.run_duration
 
     def get_current_time(self):
         return self._model.current_time
 
     def get_time_step(self):
-        return self._model.time_step
+        return 1.0  # GrainHill does not use a time step
 
     def get_time_units(self):
-        return self._time_units
+        return "y"
 
     def get_grid_edge_count(self, grid):
-        raise NotImplementedError("get_grid_edge_count")
+        return self.grid.number_of_links
 
     def get_grid_edge_nodes(self, grid, edge_nodes):
-        raise NotImplementedError("get_grid_edge_nodes")
+        edge_nodes[:] = self.grid.nodes_at_link.flatten()
+        return 0
 
     def get_grid_face_count(self, grid):
-        raise NotImplementedError("get_grid_face_count")
-
-    def get_grid_face_nodes(self, grid, face_nodes):
-        raise NotImplementedError("get_grid_face_nodes")
+        return self.grid.number_of_cells
 
     def get_grid_node_count(self, grid):
-        raise NotImplementedError("get_grid_node_count")
+        return self.grid.number_of_nodes
 
     def get_grid_nodes_per_face(self, grid, nodes_per_face):
-        raise NotImplementedError("get_grid_nodes_per_face")
-
-    def get_grid_face_edges(self, grid, face_edges):
-        raise NotImplementedError("get_grid_face_edges")
+        nodes_per_face[:] = 6 + np.zeros(self.grid.number_of_cells,
+                                         dtype=np.int)
+        return 0
 
     def get_grid_x(self, grid, x):
-        raise NotImplementedError("get_grid_x")
+        x[:] = self.grid.x_of_node
+        return 0
 
     def get_grid_y(self, grid, y):
-        raise NotImplementedError("get_grid_y")
+        y[:] = self.grid.y_of_node
+        return 0
+
+    # To implement, Landlab HexModelGrid first needs
+    # a nodes_at_cell property
+    def get_grid_face_nodes(self, grid, face_nodes):
+        raise NotImplementedError("get_grid_node_count")
+
+    def get_grid_face_edges(self, grid, face_edges):
+        raise NotImplementedError("get_grid_node_count")
 
     def get_grid_z(self, grid, z):
         raise NotImplementedError("get_grid_z")
