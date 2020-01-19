@@ -1,0 +1,16 @@
+number_of_node_rows: 5
+number_of_node_columns: 5
+report_interval: 1.0e8
+run_duration: 1.0
+output_interval: 1.0e99
+settling_rate: 2.2e8
+disturbance_rate: 1.0
+weathering_rate: 1.0
+dissolution_rate: 0.0
+uplift_interval: 1.0
+plot_interval: 1.0e99
+friction_coef: 0.3
+rock_state_for_uplift: 7
+opt_rock_collapse: False
+show_plots: True
+opt_track_grains: False
