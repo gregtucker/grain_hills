@@ -69,15 +69,15 @@ class BmiGrainHill(Bmi):
 
         self._model = GrainHill(**p)
 
-        self._values = {"node_state": self.model.grid.at_node['node_state']}
+        self._values = {"node_state": self._model.grid.at_node['node_state']}
         self._var_units = {"node_state": "-"}
         self._var_loc = {"node_state": "node"}
         self._grids = {0: ["node_state"]}
         self._grid_type = {0: "unstructured"}  # closest BMI category to hexagona
 
     def update(self):
-        """Advance model by one time step."""
-        self._model.advance_in_time()
+        """Advance forward for one year."""
+        self._model.run(to=self._model.current_time + 1.0)
 
     def update_frac(self, time_frac):
         """Update model by a fraction of a time step.
@@ -85,12 +85,9 @@ class BmiGrainHill(Bmi):
         Parameters
         ----------
         time_frac : float
-            Fraction fo a time step.
+            Fraction of a year.
         """
-        time_step = self.get_time_step()
-        self._model.time_step = time_frac * time_step
-        self.update()
-        self._model.time_step = time_step
+        self._model.run(to=self._model.current_time + time_frac)
 
     def update_until(self, then):
         """Update model until a particular time.
@@ -100,11 +97,7 @@ class BmiGrainHill(Bmi):
         then : float
             Time to run model until.
         """
-        n_steps = (then - self.get_current_time()) / self.get_time_step()
-
-        for _ in range(int(n_steps)):
-            self.update()
-        self.update_frac(n_steps - int(n_steps))
+        self._model.run(to=then)
 
     def finalize(self):
         """Finalize model."""
@@ -329,7 +322,7 @@ class BmiGrainHill(Bmi):
         return self._end_time
 
     def get_current_time(self):
-        return self._model.time
+        return self._model.current_time
 
     def get_time_step(self):
         return self._model.time_step
