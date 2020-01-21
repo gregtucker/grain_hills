@@ -33,6 +33,7 @@ def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
         array = grid.at_node["node_state"]
 
     # Generate the plot
+    plt.clf()
     ax = grid.hexplot(array, color_map=cmap)
     ax.set_aspect("equal")
 
@@ -42,8 +43,9 @@ def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
         plt.savefig(filename, bbox_inches="tight")
         plt.clf()
         print("Figure saved to " + filename)
-    elif show:
-        plt.show()
+    if show:
+        plt.draw()
+        plt.pause(0.001)  # needed to make plot appear, don't know why
 
 
 class GrainHill(CTSModel):
@@ -67,6 +69,8 @@ class GrainHill(CTSModel):
         rock_state_for_uplift=7,
         opt_rock_collapse=False,
         show_plots=True,
+        plot_filename=None,
+        plot_filetype='.png',
         initial_state_grid=None,
         opt_track_grains=False,
         prop_data=None,
@@ -91,6 +95,8 @@ class GrainHill(CTSModel):
             rock_state_for_uplift,
             opt_rock_collapse,
             show_plots,
+            plot_filename,
+            plot_filetype,
             initial_state_grid,
             opt_track_grains,
             prop_data,
@@ -146,7 +152,7 @@ class GrainHill(CTSModel):
             report_interval=report_interval,
             grid_orientation="vertical",
             grid_shape="rect",
-            show_plots=show_plots,
+            show_plots=False, # we will override the built-in CTS plotting
             cts_type="oriented_hex",
             run_duration=run_duration,
             output_interval=output_interval,
@@ -176,6 +182,19 @@ class GrainHill(CTSModel):
             output_interval, plot_interval, uplift_interval, report_interval
         )
 
+        # EXPERIMENTAL: initialize plotting
+        if show_plots:
+            import matplotlib.pyplot as plt
+            plt.ion()
+            plt.figure(1)
+            if plot_filename is not None:
+                filename=[plot_filename + '0000' + plot_filetype]
+                self.plot_filename = plot_filename
+                self.plot_filetype = plot_filetype
+            plot_hill(self.grid, filename, show=show_plots)
+
+            ##WIP: GET PLOT TO SCREEN AND FILE WORKING, AND PUT IN BMI RUN
+
     def initialize_timing(
         self, output_interval, plot_interval, uplift_interval, report_interval
     ):
@@ -187,7 +206,7 @@ class GrainHill(CTSModel):
         self.next_output = output_interval
 
         # Next time for a plot
-        if self._show_plots:
+        if True: #self._show_plots:
             self.next_plot = plot_interval
         else:
             self.next_plot = self.run_duration + 1
@@ -411,9 +430,10 @@ class GrainHill(CTSModel):
                 self.next_output += self.output_interval
 
             # Handle plotting on display
-            if self._show_plots and self.current_time >= self.next_plot:
-                self.ca_plotter.update_plot()
-                axis("off")
+            if self.current_time >= self.next_plot: #self._show_plots and self.current_time >= self.next_plot:
+                plot_hill(self.grid)
+                #self.ca_plotter.update_plot()
+                #axis("off")
                 self.next_plot += self.plot_interval
 
             # Handle uplift

@@ -21,6 +21,7 @@ _DEFAULT_PARAMETERS = {
     'rock_state_for_uplift': 7,
     'opt_rock_collapse': False,
     'show_plots': True,
+    'print_plots_to_file': True,
     'opt_track_grains': False,
     'grid_size': (5, 5)
 }
@@ -67,6 +68,9 @@ class BmiGrainHill(Bmi):
             p.pop('number_of_node_rows')
             p.pop('number_of_node_columns')
 
+        # Handle plotting and output options
+
+
         self._model = GrainHill(**p)
         self.grid = self._model.grid  # Landlab grid as public attribute
 
@@ -75,6 +79,8 @@ class BmiGrainHill(Bmi):
         self._var_loc = {"node_state": "node"}
         self._grids = {0: ["node_state"]}
         self._grid_type = {0: "unstructured"}  # closest BMI category to hexagona
+
+        self._initialized = True
 
     def update(self):
         """Advance forward for one year."""
@@ -100,6 +106,29 @@ class BmiGrainHill(Bmi):
         """
         self._model.run(to=then)
 
+    # def run(self):
+    #     """Run model from start to finish.
+    #
+    #     This is not a BMI function, but helpful to have nonetheless.
+    #     """
+    #     if not self._initialized:
+    #         print('Must call initialize() before run()')
+    #         raise Exception
+    #
+    #     self.plot_to_file()
+    #     next_file_plot = self.file_plot_interval
+    #     uplift_change_time = self.uplift_duration
+    #     while self.model.current_time < self.run_duration:
+    #         next_pause = min(next_file_plot, self.run_duration)
+    #         next_pause = min(next_pause, uplift_change_time)
+    #         if self.model.current_time >= uplift_change_time:
+    #             self.model.next_uplift = self.run_duration
+    #             uplift_change_time = self.run_duration
+    #         self.update_until(next_pause)
+    #         if self.model.current_time >= next_file_plot:
+    #             self.plot_to_file()
+    #             next_file_plot += self.file_plot_interval
+    #
     def finalize(self):
         """Finalize model."""
         self._model = None
