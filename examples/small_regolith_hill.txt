@@ -16,8 +16,9 @@ weathering_rate: 0.001
 rock_state_for_uplift: 7
 opt_rock_collapse: 0
 opt_track_grains: False
-show_plots: True
-plot_to_file: True
+save_plots: True 
+plot_filename: 'small_hill' 
+plot_filetype: '.png'
 plot_interval: 500.0
 output_interval: 1.0e20
 report_interval: 5.0

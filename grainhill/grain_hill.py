@@ -7,7 +7,7 @@ import sys
 from .cts_model import CTSModel
 from .lattice_grain import lattice_grain_node_states, lattice_grain_transition_list
 import time
-from numpy import zeros, count_nonzero, where, amax, logical_and, arange
+import numpy as np
 from matplotlib.pyplot import axis
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
@@ -15,7 +15,7 @@ from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 _DEBUG = False
 
 
-def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
+def plot_hill(grid, filename=None, array=None, cmap=None):
     """Generate a plot of the modeled hillslope."""
     import matplotlib.pyplot as plt
     import matplotlib as mpl
@@ -37,15 +37,12 @@ def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
     ax = grid.hexplot(array, color_map=cmap)
     ax.set_aspect("equal")
 
-    # If applicable, save to file. Otherwise display the figure.
-    # (Note: the latter option freezes execution until user dismisses window)
+    # Draw the plot and if requested, save the plot to a file
+    plt.draw()
+    plt.pause(0.001)  # needed to make plot appear, don't know why
     if filename is not None:
         plt.savefig(filename, bbox_inches="tight")
-        plt.clf()
         print("Figure saved to " + filename)
-    if show:
-        plt.draw()
-        plt.pause(0.001)  # needed to make plot appear, don't know why
 
 
 class GrainHill(CTSModel):
@@ -68,8 +65,8 @@ class GrainHill(CTSModel):
         friction_coef=0.3,
         rock_state_for_uplift=7,
         opt_rock_collapse=False,
-        show_plots=True,
-        plot_filename=None,
+        save_plots=False,
+        plot_filename='grain_hill_plot',
         plot_filetype='.png',
         initial_state_grid=None,
         opt_track_grains=False,
@@ -80,7 +77,7 @@ class GrainHill(CTSModel):
         **kwds
     ):
         """Call the initialize() method."""
-        self.initializer(
+        self.initialize(
             grid_size,
             report_interval,
             run_duration,
@@ -94,7 +91,7 @@ class GrainHill(CTSModel):
             friction_coef,
             rock_state_for_uplift,
             opt_rock_collapse,
-            show_plots,
+            save_plots,
             plot_filename,
             plot_filetype,
             initial_state_grid,
@@ -106,7 +103,7 @@ class GrainHill(CTSModel):
             **kwds
         )
 
-    def initializer(
+    def initialize(
         self,
         grid_size,
         report_interval,
@@ -121,7 +118,9 @@ class GrainHill(CTSModel):
         friction_coef,
         rock_state_for_uplift,
         opt_rock_collapse,
-        show_plots,
+        save_plots,
+        plot_filename,
+        plot_filetype,
         initial_state_grid,
         opt_track_grains,
         prop_data,
@@ -182,18 +181,23 @@ class GrainHill(CTSModel):
             output_interval, plot_interval, uplift_interval, report_interval
         )
 
-        # EXPERIMENTAL: initialize plotting
-        if show_plots:
+        # initialize plotting
+        if plot_interval <= run_duration:
             import matplotlib.pyplot as plt
             plt.ion()
             plt.figure(1)
-            if plot_filename is not None:
-                filename=[plot_filename + '0000' + plot_filetype]
+            self.save_plots = save_plots
+            if save_plots:
                 self.plot_filename = plot_filename
                 self.plot_filetype = plot_filetype
-            plot_hill(self.grid, filename, show=show_plots)
-
-            ##WIP: GET PLOT TO SCREEN AND FILE WORKING, AND PUT IN BMI RUN
+                nplots = (self.run_duration / self.plot_interval) + 1
+                self.ndigits = int(np.floor(np.log10(nplots))) + 1
+                this_filename = (plot_filename + '0'.zfill(self.ndigits)
+                                 + plot_filetype)
+                print(this_filename)
+            else:
+                this_filename = None
+            plot_hill(self.grid, this_filename)
 
     def initialize_timing(
         self, output_interval, plot_interval, uplift_interval, report_interval
@@ -217,8 +221,9 @@ class GrainHill(CTSModel):
         # Next time to add baselevel adjustment
         self.next_uplift = uplift_interval
 
-        # Iteration numbers, for output files
+        # Iteration numbers, for output files and plot files
         self.output_iteration = 1
+        self.plot_iteration = 1
 
     def node_state_dictionary(self):
         """
@@ -431,9 +436,14 @@ class GrainHill(CTSModel):
 
             # Handle plotting on display
             if self.current_time >= self.next_plot: #self._show_plots and self.current_time >= self.next_plot:
-                plot_hill(self.grid)
-                #self.ca_plotter.update_plot()
-                #axis("off")
+                if self.save_plots:
+                    this_filename = (self.plot_filename
+                                     + str(self.plot_iteration).zfill(self.ndigits)
+                                     + self.plot_filetype)
+                else:
+                    this_filename = None
+                plot_hill(self.grid, this_filename)
+                self.plot_iteration += 1
                 self.next_plot += self.plot_interval
 
             # Handle uplift
@@ -450,7 +460,7 @@ class GrainHill(CTSModel):
         --------
         >>> from landlab import HexModelGrid
         >>> hg = HexModelGrid(shape=(4, 5), node_layout='rect', orientation='vertical')
-        >>> ns = hg.add_zeros('node', 'node_state', dtype=int)
+        >>> ns = hg.add_'node', 'node_state', dtype=int)
         >>> ns[[0, 3, 1, 6, 4, 9, 2]] = 8
         >>> ns[[8, 13, 11, 16, 14]] = 7
         >>> gh = GrainHill((3, 7))  # grid size arbitrary here
@@ -461,18 +471,18 @@ class GrainHill(CTSModel):
         [0.0, 2.0, 2.0, 1.0, 0.0]
         """
         nc = grid.number_of_node_columns
-        elev = zeros(nc)
-        soil = zeros(nc)
+        elev = np.zeros(nc)
+        soil = np.zeros(nc)
         for col in range(nc):
             base_id = (col // 2) + (col % 2) * ((nc + 1) // 2)
-            node_ids = arange(base_id, grid.number_of_nodes, nc)
+            node_ids = np.arange(base_id, grid.number_of_nodes, nc)
             states = data[node_ids]
-            (rows_with_rock_or_sed,) = where(states > 0)
+            (rows_with_rock_or_sed,) = np.where(states > 0)
             if len(rows_with_rock_or_sed) == 0:
                 elev[col] = 0.0
             else:
-                elev[col] = amax(rows_with_rock_or_sed) + 0.5 * (col % 2)
-            soil[col] = count_nonzero(logical_and(states > 0, states < 8))
+                elev[col] = np.amax(rows_with_rock_or_sed) + 0.5 * (col % 2)
+            soil[col] = np.count_nonzero(np.logical_and(states > 0, states < 8))
 
         return elev, soil
 
