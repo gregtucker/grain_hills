@@ -1,0 +1,19 @@
+# GrainHill input file for generating frames used in animations.
+number_of_node_rows: 79
+number_of_node_columns: 184
+cell_size: 0.1
+grav_accel: 9.8
+friction_coef: 1.0
+run_duration: 15000.0
+output_name: 'regolith_hill_d1'
+uplift_interval: 100.0
+disturbance_rate: 0.01
+weathering_rate: 0.001
+rock_state_for_uplift: 7
+opt_rock_collapse: 0
+opt_track_grains: False
+show_plots: False
+plot_to_file: True
+plot_interval: 150.0
+output_interval: 1.0e20
+report_interval: 60.0
