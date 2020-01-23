@@ -57,7 +57,7 @@ class SlopeMeasurer(object):
         Examples
         --------
         >>> from grainhill import GrainHill
-        >>> gh = GrainHill((5, 7), show_plots=False)
+        >>> gh = GrainHill((5, 7))
         >>> gh.ca.node_state[:18] = 8
         >>> gh.ca.node_state[19:21] = 7  # a partial soil mantle
         >>> gh.ca.node_state[22] = 8  # a rock nubbin
@@ -109,7 +109,7 @@ class SlopeMeasurer(object):
         --------
         >>> import numpy as np
         >>> from grainhill import GrainHill
-        >>> gh = GrainHill((4, 8), show_plots=False)
+        >>> gh = GrainHill((4, 8))
         >>> gh.ca.node_state[:16] = 8
         >>> gh.ca.node_state[17] = 8  # make the surface imperfect
         >>> gh.ca.assign_link_states_from_node_types()
@@ -167,7 +167,7 @@ class SlopeMeasurer(object):
         Examples
         --------
         >>> from grainhill import GrainHill
-        >>> gh = GrainHill((4, 8), show_plots=False)
+        >>> gh = GrainHill((4, 8))
         >>> gh.ca.node_state[:16] = 8
         >>> gh.ca.node_state[17] = 8  # make the surface imperfect
         >>> gh.ca.assign_link_states_from_node_types()
@@ -214,7 +214,7 @@ class SlopeMeasurer(object):
         Examples
         --------
         >>> from grainhill import GrainHill
-        >>> gh = GrainHill((4, 8), show_plots=False)
+        >>> gh = GrainHill((4, 8))
         >>> gh.ca.node_state[:16] = 8
         >>> gh.ca.node_state[17] = 8  # make the surface imperfect
         >>> gh.ca.assign_link_states_from_node_types()
@@ -268,7 +268,7 @@ class SlopeMeasurer(object):
         --------
         >>> from grainhill import GrainHill
         >>> import numpy as np
-        >>> gh = GrainHill((4, 8), show_plots=False)
+        >>> gh = GrainHill((4, 8))
         >>> gh.ca.node_state[:8] = 8
         >>> gh.ca.node_state[9:12] = 8
         >>> gh.ca.node_state[13:16] = 8

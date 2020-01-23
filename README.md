@@ -7,7 +7,7 @@ This repository contains source code for the Grain Hill cellular automaton model
 
 ## Dependencies
 
-Grain Hill requires [Landlab](https://landlab.github.io) version 2.0.0beta or higher.
+Grain Hill requires [Landlab](https://landlab.github.io) version 2.0.0beta or higher, and [bmipy](https://github.com/csdms/bmi-python).
 
 ## Installation
 
@@ -15,9 +15,23 @@ Clone or fork this repository. To install, navigate to the `grain_hills` folder 
 
 ## How to Run
 
-(include an example)
+The simplest usage is to navigate to the `grain_hills` folder in a terminal window, and run:
+
+`python run_grain_hill.py <input file>`
+
+A good starting example, available in the `examples` folder, is:
+
+`python run_grain_hill.py examples/small_regolith_hill.txt`
+
+GrainHill can also be run using [Basic Model Interface (BMI)](https://bmi.readthedocs.org) functions executed in a Python script, shell, or notebook. Because the GrainHill (and BlockHill and GrainFacetSimulator) models are implemented as classes, they can be directly instantiated and initialized in a Python script, with parameters passed as individual arguments to the `__init__` method, or in a dictionary (passed using `**` preceding the name of the dictionary).
+
 
 ## Input and Output Files
+
+The `run_grain_hill.py` script reads parameters from a text file in `yaml` format. An example is:
+
+
+
 
 
 ## Examples

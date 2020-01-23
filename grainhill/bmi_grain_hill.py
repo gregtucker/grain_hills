@@ -20,8 +20,6 @@ _DEFAULT_PARAMETERS = {
     'friction_coef': 0.3,
     'rock_state_for_uplift': 7,
     'opt_rock_collapse': False,
-    'show_plots': True,
-    'print_plots_to_file': True,
     'opt_track_grains': False,
     'grid_size': (5, 5)
 }

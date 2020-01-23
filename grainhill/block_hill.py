@@ -22,29 +22,28 @@ class BlockHill(GrainHill):
     Model hillslope evolution with 'block' particles that can be undermined
     and weathered but not disturbed/activated.
     """
-    def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0, 
+    def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0,
                  output_interval=1.0e99, settling_rate=2.2e8,
-                 disturbance_rate=1.0, weathering_rate=1.0, 
+                 disturbance_rate=1.0, weathering_rate=1.0,
                  uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
                  rock_state_for_uplift=7, opt_rock_collapse=False,
                  block_layer_dip_angle=0.0, block_layer_thickness=1.0,
-                 layer_left_x=0.0, y0_top=0.0,
-                 show_plots=True, **kwds):
+                 layer_left_x=0.0, y0_top=0.0):
         """Call the initialize() method."""
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, settling_rate, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
                         friction_coef, rock_state_for_uplift,
                         opt_rock_collapse, block_layer_dip_angle,
-                        block_layer_thickness, layer_left_x, y0_top,
-                        show_plots, **kwds)
+                        block_layer_thickness, layer_left_x, y0_top)
+                        #**kwds)
 
     def initialize(self, grid_size, report_interval, run_duration,
                    output_interval, settling_rate, disturbance_rate,
                    weathering_rate, uplift_interval, plot_interval,
                    friction_coef, rock_state_for_uplift, opt_rock_collapse,
                    block_layer_dip_angle, block_layer_thickness, layer_left_x,
-                   y0_top, show_plots, **kwds):
+                   y0_top): #, **kwds):
         """Initialize the BlockHill model."""
 
         # Set block-related variables
@@ -54,8 +53,8 @@ class BlockHill(GrainHill):
         self.y0_top = y0_top
 
         # Call parent class init
-        super(BlockHill, self).__init__(grid_size=grid_size, 
-                                          report_interval=report_interval, 
+        super(BlockHill, self).__init__(grid_size=grid_size,
+                                          report_interval=report_interval,
                                           run_duration=run_duration,
                                           output_interval=output_interval,
                                           settling_rate=settling_rate,
@@ -65,10 +64,9 @@ class BlockHill(GrainHill):
                                           plot_interval=plot_interval,
                                           friction_coef=friction_coef,
                                           rock_state_for_uplift=rock_state_for_uplift,
-                                          opt_rock_collapse=opt_rock_collapse,
-                                          show_plots=show_plots, **kwds)
+                                          opt_rock_collapse=opt_rock_collapse)
 
-        self.uplifter = LatticeUplifter(self.grid, 
+        self.uplifter = LatticeUplifter(self.grid,
                                 self.grid.at_node['node_state'],
                                 opt_block_layer=True,
                                 block_ID=8,
@@ -79,7 +77,7 @@ class BlockHill(GrainHill):
     def node_state_dictionary(self):
         """
         Create and return dict of node states.
-        
+
         Overrides base-class method. Here, we call on a function in
         the lattice_grain module, and then add an additional state for blocks.
         """
@@ -93,11 +91,11 @@ class BlockHill(GrainHill):
         Add transition rules representing weathering and/or grain disturbance
         to the list, and return the list. Overrides method of same name in
         GrainHill.
-        
+
         Parameters
         ----------
         xn_list : list of Transition objects
-            List of objects that encode information about the link-state 
+            List of objects that encode information about the link-state
             transitions. Normally should first be initialized with lattice-grain
             transition rules, then passed to this function to add rules for
             weathering and disturbance.
@@ -107,7 +105,7 @@ class BlockHill(GrainHill):
         w : float (optional)
             Rate of transition (1/time) from fluid / rock pair to
             fluid / resting-grain pair, representing weathering.
-        
+
         Returns
         -------
         xn_list : list of Transition objects
@@ -200,17 +198,17 @@ class BlockHill(GrainHill):
         xn_list = self.add_weathering_and_disturbance_transitions(xn_list,
                     self.disturbance_rate, self.weathering_rate,
                     collapse_rate=self.collapse_rate)
-        
+
         xn_list = self.add_block_transitions(xn_list)
         return xn_list
-        
+
     def initialize_node_state_grid(self):
         """Set up initial node states.
 
         Examples
         --------
         >>> bh = BlockHill((5, 7))
-        >>> bh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE     
+        >>> bh.grid.at_node['node_state']  # doctest: +NORMALIZE_WHITESPACE
         array([9, 7, 7, 9, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0,
                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         """
@@ -225,7 +223,7 @@ class BlockHill(GrainHill):
                 if (self.grid.node_x[i] > 0.0 and
                     self.grid.node_x[i] < right_side_x):
                     nsg[i] = 7
-        
+
         # Place "wall" particles in the lower-left and lower-right corners
         if self.grid.number_of_node_columns % 2 == 0:
             bottom_right = self.grid.number_of_node_columns - 1
@@ -233,11 +231,9 @@ class BlockHill(GrainHill):
             bottom_right = self.grid.number_of_node_columns // 2
         nsg[0] = BLOCK_ID  # bottom left
         nsg[bottom_right] = BLOCK_ID
-        
+
         return nsg
 
 
 if __name__ == '__main__':
     bh = BlockHill(grid_size=(3, 3))
-
-        

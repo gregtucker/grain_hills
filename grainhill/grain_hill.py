@@ -73,11 +73,10 @@ class GrainHill(CTSModel):
         prop_data=None,
         prop_reset_value=None,
         callback_fn=None,
-        closed_boundaries=(False, False, False, False),
-        **kwds
+        closed_boundaries=(False, False, False, False)
     ):
         """Call the initialize() method."""
-        self.initialize(
+        self.initializeR(
             grid_size,
             report_interval,
             run_duration,
@@ -100,10 +99,9 @@ class GrainHill(CTSModel):
             prop_reset_value,
             callback_fn,
             closed_boundaries,
-            **kwds
         )
 
-    def initialize(
+    def initializeR(
         self,
         grid_size,
         report_interval,
@@ -127,7 +125,6 @@ class GrainHill(CTSModel):
         prop_reset_value,
         callback_fn,
         closed_boundaries,
-        **kwds
     ):
         """Initialize the grain hill model."""
         self.settling_rate = settling_rate
@@ -151,15 +148,13 @@ class GrainHill(CTSModel):
             report_interval=report_interval,
             grid_orientation="vertical",
             grid_shape="rect",
-            show_plots=False, # we will override the built-in CTS plotting
             cts_type="oriented_hex",
             run_duration=run_duration,
             output_interval=output_interval,
             initial_state_grid=initial_state_grid,
             prop_data=prop_data,
             prop_reset_value=prop_reset_value,
-            closed_boundaries=closed_boundaries,
-            **kwds
+            closed_boundaries=closed_boundaries
         )
 
         # Set some things related to property-swapping and/or callback fn
@@ -210,10 +205,7 @@ class GrainHill(CTSModel):
         self.next_output = output_interval
 
         # Next time for a plot
-        if True: #self._show_plots:
-            self.next_plot = plot_interval
-        else:
-            self.next_plot = self.run_duration + 1
+        self.next_plot = plot_interval
 
         # Next time for a progress report to user
         self.next_report = report_interval
@@ -435,7 +427,7 @@ class GrainHill(CTSModel):
                 self.next_output += self.output_interval
 
             # Handle plotting on display
-            if self.current_time >= self.next_plot: #self._show_plots and self.current_time >= self.next_plot:
+            if self.current_time >= self.next_plot:
                 if self.save_plots:
                     this_filename = (self.plot_filename
                                      + str(self.plot_iteration).zfill(self.ndigits)
@@ -460,7 +452,7 @@ class GrainHill(CTSModel):
         --------
         >>> from landlab import HexModelGrid
         >>> hg = HexModelGrid(shape=(4, 5), node_layout='rect', orientation='vertical')
-        >>> ns = hg.add_'node', 'node_state', dtype=int)
+        >>> ns = hg.add_zeros('node', 'node_state', dtype=int)
         >>> ns[[0, 3, 1, 6, 4, 9, 2]] = 8
         >>> ns[[8, 13, 11, 16, 14]] = 7
         >>> gh = GrainHill((3, 7))  # grid size arbitrary here

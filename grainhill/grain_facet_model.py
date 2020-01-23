@@ -21,7 +21,7 @@ class GrainFacetSimulator(CTSModel):
     """
     Model facet-slope evolution with 60-degree normal-fault slip.
     """
-    def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0, 
+    def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0,
                  output_interval=1.0e99, disturbance_rate=0.0,
                  weathering_rate=0.0, dissolution_rate=0.0,
                  uplift_interval=1.0, baselevel_rise_interval=0,
@@ -31,13 +31,13 @@ class GrainFacetSimulator(CTSModel):
         """Call the initialize() method."""
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, disturbance_rate, weathering_rate,
-                        dissolution_rate, uplift_interval, 
+                        dissolution_rate, uplift_interval,
                         baselevel_rise_interval, plot_interval, friction_coef,
                         fault_x,cell_width, grav_accel, init_state_grid,
                         plot_file_name, seed, **kwds)
 
     def initialize(self, grid_size, report_interval, run_duration,
-                   output_interval, disturbance_rate, weathering_rate, 
+                   output_interval, disturbance_rate, weathering_rate,
                    dissolution_rate, uplift_interval, baselevel_rise_interval,
                    plot_interval, friction_coef, fault_x, cell_width,
                    grav_accel, init_state_grid=None, plot_file_name=None,
@@ -54,11 +54,11 @@ class GrainFacetSimulator(CTSModel):
         self.settling_rate = calculate_settling_rate(cell_width, grav_accel)
 
         # Call base class init
-        super(GrainFacetSimulator, self).initialize(grid_size=grid_size, 
-                                          report_interval=report_interval, 
+        super(GrainFacetSimulator, self).initialize(grid_size=grid_size,
+                                          report_interval=report_interval,
                                           grid_orientation='vertical',
                                           grid_shape='rect',
-                                          show_plots=True,
+                                          show_plots=False,
                                           cts_type='oriented_hex',
                                           run_duration=run_duration,
                                           output_interval=output_interval,
@@ -70,7 +70,7 @@ class GrainFacetSimulator(CTSModel):
 
         ns = self.grid.at_node['node_state']
         self.uplifter = LatticeNormalFault(fault_x_intercept=fault_x,
-                                           grid=self.grid, 
+                                           grid=self.grid,
                                            node_state=ns)
 
         self.plot_file_name = plot_file_name
@@ -125,7 +125,7 @@ class GrainFacetSimulator(CTSModel):
         Parameters
         ----------
         xn_list : list of Transition objects
-            List of objects that encode information about the link-state 
+            List of objects that encode information about the link-state
             transitions. Normally should first be initialized with lattice-grain
             transition rules, then passed to this function to add rules for
             weathering and disturbance.
@@ -136,7 +136,7 @@ class GrainFacetSimulator(CTSModel):
             Rate of transition (1/time) from fluid / rock pair to
             fluid / resting-grain pair, representing weathering.
         diss : float (optional, default=0.0)
-            Dissolution: rate of transition from fluid / rock pair to 
+            Dissolution: rate of transition from fluid / rock pair to
             fluid / fluid pair.
 
         Returns
@@ -190,7 +190,7 @@ class GrainFacetSimulator(CTSModel):
         --------
         >>> from grainhill import GrainHill
         >>> gh = GrainHill((5, 7))
-        >>> gh.grid.at_node['node_state'][:20] 
+        >>> gh.grid.at_node['node_state'][:20]
         array([8, 7, 7, 8, 7, 7, 7, 0, 7, 7, 0, 7, 7, 7, 0, 0, 0, 0, 0, 0])
         """
 
@@ -214,7 +214,7 @@ class GrainFacetSimulator(CTSModel):
         nsg[bottom_right] = 8
 
         return nsg
-    
+
     def update_until(self, run_to_time):
         """Advance up to a specified time."""
         while self.current_time < run_to_time:
@@ -271,12 +271,12 @@ class GrainFacetSimulator(CTSModel):
 
     def raise_baselevel(self, baselevel_row):
         """Raise baselevel on left by closing a node on the left boundary.
-        
+
         Parameters
         ----------
         baselevel_row : int
             Row number of the next left-boundary node to be closed
-        
+
         Examples
         --------
         >>> params = { 'grid_size' : (10,5), 'baselevel_rise_interval' : 1.0 }
@@ -306,7 +306,7 @@ class GrainFacetSimulator(CTSModel):
 
     def nodes_in_column(self, col, num_rows, num_cols):
         """Return array of node IDs in given column.
-        
+
         Examples
         --------
         >>> gfs = GrainFacetSimulator((3, 5))
@@ -336,7 +336,7 @@ class GrainFacetSimulator(CTSModel):
         for c in range(nc):
             e = (c%2)/2.0
             s = 0
-            r = 0 
+            r = 0
             while r<nr and data[c*nr+r]!=0:
                 e+=1
                 if data[c*nr+r]==7:
@@ -353,15 +353,15 @@ class GrainFacetSimulator(CTSModel):
         print(self.ca.node_state)
         for lnk in range(self.grid.number_of_links):
             if self.grid.status_at_link[lnk] == 0:
-                print((lnk, self.grid.node_at_link_tail[lnk], 
+                print((lnk, self.grid.node_at_link_tail[lnk],
                        self.grid.node_at_link_head[lnk],
-                       self.ca.node_state[self.grid.node_at_link_tail[lnk]], 
+                       self.ca.node_state[self.grid.node_at_link_tail[lnk]],
                        self.ca.node_state[self.grid.node_at_link_head[lnk]],
                        self.ca.link_state[lnk],self.ca.next_update[lnk],
                        self.ca.next_trn_id[lnk]))
         print('PQ:')
         print(self.ca.priority_queue._queue)
-        
+
     def plot_to_file(self):
         """Plot profile of hill to file."""
         fname = self.plot_file_name + str(self.plot_number).zfill(4) + '.png'
@@ -372,7 +372,7 @@ class GrainFacetSimulator(CTSModel):
 def get_params_from_input_file(filename):
     """Fetch parameter values from input file."""
     from landlab.core import load_params
-    
+
     mpd_params = load_params(filename)
 
     return mpd_params
@@ -381,7 +381,7 @@ def calculate_settling_rate(cell_width, grav_accel):
     """
     Calculate and store gravitational settling rate constant, based on
     given cell size and gravitational acceleration.
-    
+
     Parameters
     ----------
     cell_width : float
@@ -391,9 +391,9 @@ def calculate_settling_rate(cell_width, grav_accel):
 
     Notes
     -----
-    Returns settling rate in yr^-1, with the conversion from s to yr 
+    Returns settling rate in yr^-1, with the conversion from s to yr
     calculated using 1 year = 365.25 days.
-    
+
     Examples
     --------
     >>> round(calculate_settling_rate(1.0, 9.8))
@@ -404,7 +404,7 @@ def calculate_settling_rate(cell_width, grav_accel):
 
 def main(params):
     """Initialize model with dict of params then run it."""
-    grid_size = (int(params['number_of_node_rows']), 
+    grid_size = (int(params['number_of_node_rows']),
                  int(params['number_of_node_columns']))
     grain_facet_model = GrainFacetSimulator(grid_size, **params)
     grain_facet_model.run()

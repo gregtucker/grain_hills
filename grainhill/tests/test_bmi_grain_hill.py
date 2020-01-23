@@ -9,7 +9,6 @@ from grainhill import BmiGrainHill
 params_dict = {
     'grid_size': (6, 5),
     'run_duration': 4.0,
-    'show_plots': False
 }
 
 params_for_file = \
@@ -27,7 +26,6 @@ plot_interval: 1.0e99
 friction_coef: 0.3
 rock_state_for_uplift: 7
 opt_rock_collapse: False
-show_plots: True
 opt_track_grains: False
 """
 
