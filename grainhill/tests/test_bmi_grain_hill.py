@@ -120,3 +120,23 @@ def test_other_bmi_funcs():
     assert_raises(NotImplementedError, model.get_grid_face_nodes, 0, 0)
     assert_raises(NotImplementedError, model.get_grid_face_edges, 0, 0)
     assert_raises(NotImplementedError, model.get_grid_z, 0, 0)
+
+def test_model_type():
+
+    model = BmiGrainHill()
+    p = {
+        'model_type': 'block_hill',
+        'grid_size': (6, 5),
+        'run_duration': 4.0,
+    }
+    model.initialize(p)
+    assert 'BlockHill' in str(type(model._model))
+
+    model = BmiGrainHill()
+    p = {
+        'model_type': 'facet',
+        'grid_size': (6, 5),
+        'run_duration': 4.0,
+    }
+    model.initialize(p)
+    assert 'GrainFacetSimulator' in str(type(model._model))
