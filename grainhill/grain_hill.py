@@ -12,6 +12,7 @@ from matplotlib.pyplot import axis
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 
+SECONDS_PER_YEAR = 365.25 * 24 * 3600
 _DEBUG = False
 
 
@@ -44,6 +45,31 @@ def plot_hill(grid, filename=None, array=None, cmap=None):
         plt.savefig(filename, bbox_inches="tight")
         print("Figure saved to " + filename)
 
+def calculate_settling_rate(cell_width, grav_accel):
+    """
+    Calculate and store gravitational settling rate constant, based on
+    given cell size and gravitational acceleration.
+
+    Parameters
+    ----------
+    cell_width : float
+        Width of cells, m
+    grav_accel : float
+        Gravitational acceleration, m/s^2
+
+    Notes
+    -----
+    Returns settling rate in yr^-1, with the conversion from s to yr
+    calculated using 1 year = 365.25 days.
+
+    Examples
+    --------
+    >>> round(calculate_settling_rate(1.0, 9.8))
+    69855725.0
+    """
+    time_to_settle_one_cell = np.sqrt(2.0 * cell_width / grav_accel)
+    return SECONDS_PER_YEAR / time_to_settle_one_cell
+
 
 class GrainHill(CTSModel):
     """
@@ -53,6 +79,7 @@ class GrainHill(CTSModel):
     def __init__(
         self,
         grid_size,
+        cell_size=1.0,
         report_interval=1.0e8,
         run_duration=1.0,
         output_interval=1.0e99,
