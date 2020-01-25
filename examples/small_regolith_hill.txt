@@ -5,11 +5,11 @@
 #
 number_of_node_rows: 40
 number_of_node_columns: 92
-cell_size: 0.1
+cell_width: 0.1
 grav_accel: 9.8
 friction_coef: 1.0
 run_duration: 3000.0
-output_name: 'small_regolith_hill'
+#output_name: 'small_regolith_hill'
 uplift_interval: 100.0
 disturbance_rate: 0.01
 weathering_rate: 0.001
