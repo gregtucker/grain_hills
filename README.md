@@ -65,11 +65,17 @@ In addition, if `save_plots` is `True` and the `plot_interval` is less than the 
 
 ## Examples
 
+Several example input files can be found in the `examples` folder.
+
 
 ## How to Cite
 
+Recommended citations:
 
-## Licensing
+- GrainHill package: Tucker et al. (2018)
+- GrainFacet package: Tucker et al. (in review)
+- CellLab-CTS : Tucker et al. (2016)
+- Landlab Toolkit: Hobley et al. (2017), Barnhart et al. (in review)
 
 
 ## References:
