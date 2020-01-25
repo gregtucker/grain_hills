@@ -17,7 +17,6 @@ number_of_node_columns: 5
 report_interval: 1.0e8
 run_duration: 1.0
 output_interval: 1.0e99
-settling_rate: 2.2e8
 disturbance_rate: 1.0
 weathering_rate: 1.0
 dissolution_rate: 0.0

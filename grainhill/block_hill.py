@@ -22,28 +22,27 @@ class BlockHill(GrainHill):
     Model hillslope evolution with 'block' particles that can be undermined
     and weathered but not disturbed/activated.
     """
-    def __init__(self, grid_size, report_interval=1.0e8, run_duration=1.0,
-                 output_interval=1.0e99, settling_rate=2.2e8,
-                 disturbance_rate=1.0, weathering_rate=1.0,
-                 uplift_interval=1.0, plot_interval=1.0e99, friction_coef=0.3,
-                 rock_state_for_uplift=7, opt_rock_collapse=False,
-                 block_layer_dip_angle=0.0, block_layer_thickness=1.0,
-                 layer_left_x=0.0, y0_top=0.0):
+    def __init__(self, grid_size, cell_width=1.0, grav_accel=9.8,
+                 report_interval=1.0e8, run_duration=1.0,
+                 output_interval=1.0e99, disturbance_rate=1.0,
+                 weathering_rate=1.0, uplift_interval=1.0, plot_interval=1.0e99,
+                 friction_coef=0.3, rock_state_for_uplift=7,
+                 opt_rock_collapse=False, block_layer_dip_angle=0.0,
+                 block_layer_thickness=1.0, layer_left_x=0.0, y0_top=0.0):
         """Call the initialize() method."""
-        self.initialize(grid_size, report_interval, run_duration,
-                        output_interval, settling_rate, disturbance_rate,
+        self.bh_initialize(grid_size, cell_width, grav_accel, report_interval,
+                        run_duration,output_interval, disturbance_rate,
                         weathering_rate, uplift_interval, plot_interval,
                         friction_coef, rock_state_for_uplift,
                         opt_rock_collapse, block_layer_dip_angle,
                         block_layer_thickness, layer_left_x, y0_top)
-                        #**kwds)
 
-    def initialize(self, grid_size, report_interval, run_duration,
-                   output_interval, settling_rate, disturbance_rate,
+    def bh_initialize(self, grid_size, cell_width, grav_accel, report_interval,
+                   run_duration, output_interval, disturbance_rate,
                    weathering_rate, uplift_interval, plot_interval,
                    friction_coef, rock_state_for_uplift, opt_rock_collapse,
                    block_layer_dip_angle, block_layer_thickness, layer_left_x,
-                   y0_top): #, **kwds):
+                   y0_top):
         """Initialize the BlockHill model."""
 
         # Set block-related variables
@@ -54,17 +53,18 @@ class BlockHill(GrainHill):
 
         # Call parent class init
         super(BlockHill, self).__init__(grid_size=grid_size,
-                                          report_interval=report_interval,
-                                          run_duration=run_duration,
-                                          output_interval=output_interval,
-                                          settling_rate=settling_rate,
-                                          disturbance_rate=disturbance_rate,
-                                          weathering_rate=weathering_rate,
-                                          uplift_interval=uplift_interval,
-                                          plot_interval=plot_interval,
-                                          friction_coef=friction_coef,
-                                          rock_state_for_uplift=rock_state_for_uplift,
-                                          opt_rock_collapse=opt_rock_collapse)
+                                        cell_width=cell_width,
+                                        grav_accel=grav_accel,
+                                        report_interval=report_interval,
+                                        run_duration=run_duration,
+                                        output_interval=output_interval,
+                                        disturbance_rate=disturbance_rate,
+                                        weathering_rate=weathering_rate,
+                                        uplift_interval=uplift_interval,
+                                        plot_interval=plot_interval,
+                                        friction_coef=friction_coef,
+                                        rock_state_for_uplift=rock_state_for_uplift,
+                                        opt_rock_collapse=opt_rock_collapse)
 
         self.uplifter = LatticeUplifter(self.grid,
                                 self.grid.at_node['node_state'],

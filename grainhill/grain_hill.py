@@ -79,11 +79,11 @@ class GrainHill(CTSModel):
     def __init__(
         self,
         grid_size,
-        cell_size=1.0,
+        cell_width=1.0,
+        grav_accel=9.8,
         report_interval=1.0e8,
         run_duration=1.0,
         output_interval=1.0e99,
-        settling_rate=2.2e8,
         disturbance_rate=1.0,
         weathering_rate=1.0,
         dissolution_rate=0.0,
@@ -103,12 +103,13 @@ class GrainHill(CTSModel):
         closed_boundaries=(False, False, False, False)
     ):
         """Call the initialize() method."""
-        self.initializeR(
+        self.initialize(
             grid_size,
+            cell_width,
+            grav_accel,
             report_interval,
             run_duration,
             output_interval,
-            settling_rate,
             disturbance_rate,
             weathering_rate,
             dissolution_rate,
@@ -128,13 +129,14 @@ class GrainHill(CTSModel):
             closed_boundaries,
         )
 
-    def initializeR(
+    def initialize(
         self,
         grid_size,
+        cell_width,
+        grav_accel,
         report_interval,
         run_duration,
         output_interval,
-        settling_rate,
         disturbance_rate,
         weathering_rate,
         dissolution_rate,
@@ -154,7 +156,7 @@ class GrainHill(CTSModel):
         closed_boundaries,
     ):
         """Initialize the grain hill model."""
-        self.settling_rate = settling_rate
+        self.settling_rate = calculate_settling_rate(cell_width, grav_accel)
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
         self.dissolution_rate = dissolution_rate

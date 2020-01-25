@@ -11,7 +11,6 @@ _DEFAULT_PARAMETERS = {
     'report_interval': 100000000.0,
     'run_duration': 1.0,
     'output_interval': 1e+99,
-    'settling_rate': 220000000.0,
     'disturbance_rate': 1.0,
     'weathering_rate': 1.0,
     'dissolution_rate': 0.0,
@@ -21,7 +20,9 @@ _DEFAULT_PARAMETERS = {
     'rock_state_for_uplift': 7,
     'opt_rock_collapse': False,
     'opt_track_grains': False,
-    'grid_size': (5, 5)
+    'grid_size': (5, 5),
+    'cell_width': 1.0,
+    'grav_accel': 9.8,
 }
 
 
