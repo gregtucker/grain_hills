@@ -27,21 +27,22 @@ class GrainFacetSimulator(CTSModel):
                  uplift_interval=1.0, baselevel_rise_interval=0,
                  plot_interval=1.0e99, friction_coef=0.3,
                  fault_x=1.0, cell_width=1.0, grav_accel=9.8,
-                 init_state_grid=None, plot_file_name=None, seed=0, **kwds):
+                 init_state_grid=None, save_plots=False, plot_filename=None,
+                 plot_filetype='.png', seed=0, **kwds):
         """Call the initialize() method."""
         self.initialize(grid_size, report_interval, run_duration,
                         output_interval, disturbance_rate, weathering_rate,
                         dissolution_rate, uplift_interval,
                         baselevel_rise_interval, plot_interval, friction_coef,
                         fault_x,cell_width, grav_accel, init_state_grid,
-                        plot_file_name, seed, **kwds)
+                        save_plots, plot_filename, plot_filetype, seed, **kwds)
 
     def initialize(self, grid_size, report_interval, run_duration,
                    output_interval, disturbance_rate, weathering_rate,
                    dissolution_rate, uplift_interval, baselevel_rise_interval,
                    plot_interval, friction_coef, fault_x, cell_width,
-                   grav_accel, init_state_grid=None, plot_file_name=None,
-                   seed=0, **kwds):
+                   grav_accel, init_state_grid=None, save_plots=False,
+                   plot_filename=None, plot_filetype='.png', seed=0, **kwds):
         """Initialize the grain hill model."""
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
@@ -73,14 +74,28 @@ class GrainFacetSimulator(CTSModel):
                                            grid=self.grid,
                                            node_state=ns)
 
-        self.plot_file_name = plot_file_name
-        if plot_file_name is not None:
-            self.plot_number = 0
-            self.plot_to_file()
+        # initialize plotting
+        if plot_interval <= run_duration:
+            import matplotlib.pyplot as plt
+            plt.ion()
+            plt.figure(1)
+            self.save_plots = save_plots
+            if save_plots:
+                self.plot_filename = plot_filename
+                self.plot_filetype = plot_filetype
+                nplots = (self.run_duration / self.plot_interval) + 1
+                self.ndigits = int(np.floor(np.log10(nplots))) + 1
+                this_filename = (plot_filename + '0'.zfill(self.ndigits)
+                                 + plot_filetype)
+                print(this_filename)
+            else:
+                this_filename = None
+            plot_hill(self.grid, this_filename)
 
         # Work out the next times to plot and output
         self.next_output = self.output_interval
         self.next_plot = self.plot_interval
+        self.plot_iteration = 1
 
         # Next time for a progress report to user
         self.next_report = self.report_interval
@@ -244,9 +259,14 @@ class GrainFacetSimulator(CTSModel):
 
             # Handle plotting on display
             if self.current_time >= self.next_plot:
-                self.ca_plotter.update_plot()
-                if self.plot_file_name is not None:
-                    self.plot_to_file()
+                if self.save_plots:
+                    this_filename = (self.plot_filename
+                                     + str(self.plot_iteration).zfill(self.ndigits)
+                                     + self.plot_filetype)
+                else:
+                    this_filename = None
+                plot_hill(self.grid, this_filename)
+                self.plot_iteration += 1
                 self.next_plot += self.plot_interval
 
             # Handle fault slip
@@ -265,9 +285,11 @@ class GrainFacetSimulator(CTSModel):
                 self.baselevel_row += 1
                 self.next_baselevel += self.baselevel_rise_interval
 
-    def run(self):
+    def run(self, to=None):
         """Run the model."""
-        self.update_until(self.run_duration)
+        if to is None:
+            to = self.run_duration
+        self.update_until(to)
 
     def raise_baselevel(self, baselevel_row):
         """Raise baselevel on left by closing a node on the left boundary.
