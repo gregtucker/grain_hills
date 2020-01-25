@@ -45,7 +45,6 @@ The `run_grain_hill.py` script reads parameters from a text file in `yaml` forma
     grav_accel: 9.8
     friction_coef: 1.0
     run_duration: 3000.0
-    output_name: 'small_regolith_hill'
     uplift_interval: 100.0
     disturbance_rate: 0.01
     weathering_rate: 0.001
