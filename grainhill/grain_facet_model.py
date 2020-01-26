@@ -274,9 +274,13 @@ class GrainFacetSimulator(CTSModel):
                 self.uplifter.do_offset(ca=self.ca,
                                         current_time=self.current_time,
                                         rock_state=8)
-                for i in range(self.grid.number_of_links):
-                    if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
-                        print(i)
+#                for i in range(self.grid.number_of_links):
+#                    if self.grid.status_at_link[i] == 4 and self.ca.next_trn_id[i] != -1:
+#                        print((i, self.ca.next_trn_id[i]))
+#                        print((self.grid.x_of_node[self.grid.node_at_link_tail[i]]))
+#                        print((self.grid.y_of_node[self.grid.node_at_link_tail[i]]))
+#                        print((self.grid.x_of_node[self.grid.node_at_link_head[i]]))
+#                        print((self.grid.y_of_node[self.grid.node_at_link_head[i]]))
                 self.next_uplift += self.uplift_interval
 
             # Handle baselevel rise
