@@ -61,7 +61,7 @@ class CosmogenicIrradiator(object):
         Examples
         --------
         >>> from grainhill import GrainHill
-        >>> gh = GrainHill((3, 5), show_plots=False)
+        >>> gh = GrainHill((3, 5))
         >>> gh.ca.node_state
         array([8, 7, 8, 7, 7, 0, 7, 0, 7, 7, 0, 0, 0, 0, 0])
         >>> ci = CosmogenicIrradiator(gh, 1.0, 2.0)

@@ -1,0 +1,24 @@
+# GrainHill input file:
+#
+# small_regolith_hill: runs a simulation with steady uplift and
+# all regolith material (no rock)
+#
+number_of_node_rows: 40
+number_of_node_columns: 92
+cell_width: 0.1
+grav_accel: 9.8
+friction_coef: 1.0
+run_duration: 3000.0
+#output_name: 'small_regolith_hill'
+uplift_interval: 100.0
+disturbance_rate: 0.01
+weathering_rate: 0.001
+rock_state_for_uplift: 7
+opt_rock_collapse: 0
+opt_track_grains: False
+save_plots: True 
+plot_filename: 'small_hill' 
+plot_filetype: '.png'
+plot_interval: 500.0
+output_interval: 1.0e20
+report_interval: 5.0

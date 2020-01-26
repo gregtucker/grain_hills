@@ -7,15 +7,16 @@ import sys
 from .cts_model import CTSModel
 from .lattice_grain import lattice_grain_node_states, lattice_grain_transition_list
 import time
-from numpy import zeros, count_nonzero, where, amax, logical_and, arange
+import numpy as np
 from matplotlib.pyplot import axis
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 
+SECONDS_PER_YEAR = 365.25 * 24 * 3600
 _DEBUG = False
 
 
-def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
+def plot_hill(grid, filename=None, array=None, cmap=None):
     """Generate a plot of the modeled hillslope."""
     import matplotlib.pyplot as plt
     import matplotlib as mpl
@@ -33,17 +34,41 @@ def plot_hill(grid, filename=None, array=None, cmap=None, show=True):
         array = grid.at_node["node_state"]
 
     # Generate the plot
+    plt.clf()
     ax = grid.hexplot(array, color_map=cmap)
     ax.set_aspect("equal")
 
-    # If applicable, save to file. Otherwise display the figure.
-    # (Note: the latter option freezes execution until user dismisses window)
+    # Draw the plot and if requested, save the plot to a file
+    plt.draw()
+    plt.pause(0.001)  # needed to make plot appear, don't know why
     if filename is not None:
         plt.savefig(filename, bbox_inches="tight")
-        plt.clf()
         print("Figure saved to " + filename)
-    elif show:
-        plt.show()
+
+def calculate_settling_rate(cell_width, grav_accel):
+    """
+    Calculate and store gravitational settling rate constant, based on
+    given cell size and gravitational acceleration.
+
+    Parameters
+    ----------
+    cell_width : float
+        Width of cells, m
+    grav_accel : float
+        Gravitational acceleration, m/s^2
+
+    Notes
+    -----
+    Returns settling rate in yr^-1, with the conversion from s to yr
+    calculated using 1 year = 365.25 days.
+
+    Examples
+    --------
+    >>> round(calculate_settling_rate(1.0, 9.8))
+    69855725.0
+    """
+    time_to_settle_one_cell = np.sqrt(2.0 * cell_width / grav_accel)
+    return SECONDS_PER_YEAR / time_to_settle_one_cell
 
 
 class GrainHill(CTSModel):
@@ -54,10 +79,11 @@ class GrainHill(CTSModel):
     def __init__(
         self,
         grid_size,
+        cell_width=1.0,
+        grav_accel=9.8,
         report_interval=1.0e8,
         run_duration=1.0,
         output_interval=1.0e99,
-        settling_rate=2.2e8,
         disturbance_rate=1.0,
         weathering_rate=1.0,
         dissolution_rate=0.0,
@@ -66,22 +92,24 @@ class GrainHill(CTSModel):
         friction_coef=0.3,
         rock_state_for_uplift=7,
         opt_rock_collapse=False,
-        show_plots=True,
+        save_plots=False,
+        plot_filename='grain_hill_plot',
+        plot_filetype='.png',
         initial_state_grid=None,
         opt_track_grains=False,
         prop_data=None,
         prop_reset_value=None,
         callback_fn=None,
-        closed_boundaries=(False, False, False, False),
-        **kwds
+        closed_boundaries=(False, False, False, False)
     ):
         """Call the initialize() method."""
-        self.initializer(
+        self.initialize(
             grid_size,
+            cell_width,
+            grav_accel,
             report_interval,
             run_duration,
             output_interval,
-            settling_rate,
             disturbance_rate,
             weathering_rate,
             dissolution_rate,
@@ -90,23 +118,25 @@ class GrainHill(CTSModel):
             friction_coef,
             rock_state_for_uplift,
             opt_rock_collapse,
-            show_plots,
+            save_plots,
+            plot_filename,
+            plot_filetype,
             initial_state_grid,
             opt_track_grains,
             prop_data,
             prop_reset_value,
             callback_fn,
             closed_boundaries,
-            **kwds
         )
 
-    def initializer(
+    def initialize(
         self,
         grid_size,
+        cell_width,
+        grav_accel,
         report_interval,
         run_duration,
         output_interval,
-        settling_rate,
         disturbance_rate,
         weathering_rate,
         dissolution_rate,
@@ -115,17 +145,18 @@ class GrainHill(CTSModel):
         friction_coef,
         rock_state_for_uplift,
         opt_rock_collapse,
-        show_plots,
+        save_plots,
+        plot_filename,
+        plot_filetype,
         initial_state_grid,
         opt_track_grains,
         prop_data,
         prop_reset_value,
         callback_fn,
         closed_boundaries,
-        **kwds
     ):
         """Initialize the grain hill model."""
-        self.settling_rate = settling_rate
+        self.settling_rate = calculate_settling_rate(cell_width, grav_accel)
         self.disturbance_rate = disturbance_rate
         self.weathering_rate = weathering_rate
         self.dissolution_rate = dissolution_rate
@@ -146,15 +177,13 @@ class GrainHill(CTSModel):
             report_interval=report_interval,
             grid_orientation="vertical",
             grid_shape="rect",
-            show_plots=show_plots,
             cts_type="oriented_hex",
             run_duration=run_duration,
             output_interval=output_interval,
             initial_state_grid=initial_state_grid,
             prop_data=prop_data,
             prop_reset_value=prop_reset_value,
-            closed_boundaries=closed_boundaries,
-            **kwds
+            closed_boundaries=closed_boundaries
         )
 
         # Set some things related to property-swapping and/or callback fn
@@ -176,6 +205,24 @@ class GrainHill(CTSModel):
             output_interval, plot_interval, uplift_interval, report_interval
         )
 
+        # initialize plotting
+        if plot_interval <= run_duration:
+            import matplotlib.pyplot as plt
+            plt.ion()
+            plt.figure(1)
+            self.save_plots = save_plots
+            if save_plots:
+                self.plot_filename = plot_filename
+                self.plot_filetype = plot_filetype
+                nplots = (self.run_duration / self.plot_interval) + 1
+                self.ndigits = int(np.floor(np.log10(nplots))) + 1
+                this_filename = (plot_filename + '0'.zfill(self.ndigits)
+                                 + plot_filetype)
+                print(this_filename)
+            else:
+                this_filename = None
+            plot_hill(self.grid, this_filename)
+
     def initialize_timing(
         self, output_interval, plot_interval, uplift_interval, report_interval
     ):
@@ -187,10 +234,7 @@ class GrainHill(CTSModel):
         self.next_output = output_interval
 
         # Next time for a plot
-        if self._show_plots:
-            self.next_plot = plot_interval
-        else:
-            self.next_plot = self.run_duration + 1
+        self.next_plot = plot_interval
 
         # Next time for a progress report to user
         self.next_report = report_interval
@@ -198,8 +242,9 @@ class GrainHill(CTSModel):
         # Next time to add baselevel adjustment
         self.next_uplift = uplift_interval
 
-        # Iteration numbers, for output files
+        # Iteration numbers, for output files and plot files
         self.output_iteration = 1
+        self.plot_iteration = 1
 
     def node_state_dictionary(self):
         """
@@ -411,9 +456,15 @@ class GrainHill(CTSModel):
                 self.next_output += self.output_interval
 
             # Handle plotting on display
-            if self._show_plots and self.current_time >= self.next_plot:
-                self.ca_plotter.update_plot()
-                axis("off")
+            if self.current_time >= self.next_plot:
+                if self.save_plots:
+                    this_filename = (self.plot_filename
+                                     + str(self.plot_iteration).zfill(self.ndigits)
+                                     + self.plot_filetype)
+                else:
+                    this_filename = None
+                plot_hill(self.grid, this_filename)
+                self.plot_iteration += 1
                 self.next_plot += self.plot_interval
 
             # Handle uplift
@@ -441,18 +492,18 @@ class GrainHill(CTSModel):
         [0.0, 2.0, 2.0, 1.0, 0.0]
         """
         nc = grid.number_of_node_columns
-        elev = zeros(nc)
-        soil = zeros(nc)
+        elev = np.zeros(nc)
+        soil = np.zeros(nc)
         for col in range(nc):
             base_id = (col // 2) + (col % 2) * ((nc + 1) // 2)
-            node_ids = arange(base_id, grid.number_of_nodes, nc)
+            node_ids = np.arange(base_id, grid.number_of_nodes, nc)
             states = data[node_ids]
-            (rows_with_rock_or_sed,) = where(states > 0)
+            (rows_with_rock_or_sed,) = np.where(states > 0)
             if len(rows_with_rock_or_sed) == 0:
                 elev[col] = 0.0
             else:
-                elev[col] = amax(rows_with_rock_or_sed) + 0.5 * (col % 2)
-            soil[col] = count_nonzero(logical_and(states > 0, states < 8))
+                elev[col] = np.amax(rows_with_rock_or_sed) + 0.5 * (col % 2)
+            soil[col] = np.count_nonzero(np.logical_and(states > 0, states < 8))
 
         return elev, soil
 

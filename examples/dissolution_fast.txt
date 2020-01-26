@@ -1,0 +1,25 @@
+# GrainHill input file:
+#
+# dissolution_fast: runs a simulation with steady fault slip and
+# dissolution (only), with a relatively high dissolution efficiency.
+# Reproduces the run in Figure 7d in Tucker et al. (2020). 
+#
+model_type: 'facet'
+number_of_node_rows: 111
+number_of_node_columns: 81
+cell_width: 0.5
+grav_accel: 9.8
+report_interval: 5.0
+run_duration: 130000.0 
+output_interval: 1.0e99
+dissolution_rate: 4.4e-4
+disturbance_rate: 0.0
+weathering_rate: 0.0
+uplift_interval: 866.0
+plot_interval: 26000.0
+save_plots: True
+plot_filename: 'dissolve_dr44_'
+plot_filetype: '.png'
+friction_coef: 1.0
+fault_x: -0.01 
+

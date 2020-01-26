@@ -4,14 +4,13 @@
 import numpy as np
 
 from bmipy import Bmi
-from grainhill import GrainHill
+from grainhill import GrainHill, BlockHill, GrainFacetSimulator
 from landlab import load_params
 
 _DEFAULT_PARAMETERS = {
     'report_interval': 100000000.0,
     'run_duration': 1.0,
     'output_interval': 1e+99,
-    'settling_rate': 220000000.0,
     'disturbance_rate': 1.0,
     'weathering_rate': 1.0,
     'dissolution_rate': 0.0,
@@ -20,9 +19,10 @@ _DEFAULT_PARAMETERS = {
     'friction_coef': 0.3,
     'rock_state_for_uplift': 7,
     'opt_rock_collapse': False,
-    'show_plots': True,
     'opt_track_grains': False,
-    'grid_size': (5, 5)
+    'grid_size': (5, 5),
+    'cell_width': 1.0,
+    'grav_accel': 9.8,
 }
 
 
@@ -53,7 +53,7 @@ class BmiGrainHill(Bmi):
         Parameters
         ----------
         filename : str, optional
-            Path to name of input file.
+            Path to name of input file, or dict.
         """
         if isinstance(filename, str):
             p = load_params(filename)
@@ -67,7 +67,19 @@ class BmiGrainHill(Bmi):
             p.pop('number_of_node_rows')
             p.pop('number_of_node_columns')
 
-        self._model = GrainHill(**p)
+        # Handle model type
+        if 'model_type' in p:
+            model_type = p.pop('model_type')
+        else:
+            model_type = 'grain_hill'
+
+        # Instantiate model and get handle to grid
+        if 'block' in model_type.lower():
+            self._model = BlockHill(**p)
+        elif 'facet' in model_type.lower():
+            self._model = GrainFacetSimulator(**p)
+        else:
+            self._model = GrainHill(**p)
         self.grid = self._model.grid  # Landlab grid as public attribute
 
         self._values = {"node_state": self.grid.at_node['node_state']}
@@ -75,6 +87,8 @@ class BmiGrainHill(Bmi):
         self._var_loc = {"node_state": "node"}
         self._grids = {0: ["node_state"]}
         self._grid_type = {0: "unstructured"}  # closest BMI category to hexagona
+
+        self._initialized = True
 
     def update(self):
         """Advance forward for one year."""

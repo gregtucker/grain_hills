@@ -9,7 +9,6 @@ from grainhill import BmiGrainHill
 params_dict = {
     'grid_size': (6, 5),
     'run_duration': 4.0,
-    'show_plots': False
 }
 
 params_for_file = \
@@ -18,7 +17,6 @@ number_of_node_columns: 5
 report_interval: 1.0e8
 run_duration: 1.0
 output_interval: 1.0e99
-settling_rate: 2.2e8
 disturbance_rate: 1.0
 weathering_rate: 1.0
 dissolution_rate: 0.0
@@ -27,7 +25,6 @@ plot_interval: 1.0e99
 friction_coef: 0.3
 rock_state_for_uplift: 7
 opt_rock_collapse: False
-show_plots: True
 opt_track_grains: False
 """
 
@@ -123,3 +120,23 @@ def test_other_bmi_funcs():
     assert_raises(NotImplementedError, model.get_grid_face_nodes, 0, 0)
     assert_raises(NotImplementedError, model.get_grid_face_edges, 0, 0)
     assert_raises(NotImplementedError, model.get_grid_z, 0, 0)
+
+def test_model_type():
+
+    model = BmiGrainHill()
+    p = {
+        'model_type': 'block_hill',
+        'grid_size': (6, 5),
+        'run_duration': 4.0,
+    }
+    model.initialize(p)
+    assert 'BlockHill' in str(type(model._model))
+
+    model = BmiGrainHill()
+    p = {
+        'model_type': 'facet',
+        'grid_size': (6, 5),
+        'run_duration': 4.0,
+    }
+    model.initialize(p)
+    assert 'GrainFacetSimulator' in str(type(model._model))
