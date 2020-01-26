@@ -1,0 +1,27 @@
+# GrainHill input file:
+#
+# facet_with_wedge_blrise_high_w_low_d: runs a simulation with steady fault
+# slip, a relatively high weathering rate, and a relatively low disturbance
+# rate. Fault is positioned at x=23, allowing the formation of a colluvial
+# wedge. Baselevel rise is imposed at left model boundary. Reproduces the run
+# in upper left corner of Figure 13 in Tucker et al. (2020).
+#
+model_type: 'facet'
+number_of_node_rows: 111
+number_of_node_columns: 81
+cell_width: 0.5
+grav_accel: 9.8
+report_interval: 5.0
+run_duration: 130000.0
+output_interval: 1.0e99
+dissolution_rate: 0.0
+disturbance_rate: 0.0001
+weathering_rate: 0.1
+uplift_interval: 866.0
+baselevel_rise_interval: 4000.0
+plot_interval: 26000.0
+save_plots: True
+plot_filename: 'facet_with_wedge_blrise_high_w_low_d'
+plot_filetype: '.png'
+friction_coef: 1.0
+fault_x: 23.0
