@@ -1,0 +1,26 @@
+# GrainHill input file:
+#
+# regolith_hill_dp10: symmetric, all-regolith hillslope with d = 0.1 1/yr,
+# tau = 100 yr, and d' = d tau = 10.
+#    Run is similar to the top right panel of Figure 8 of Tucker et al. (2018),
+# but with a shorter hill (~18 m wide instead of ~58 m).
+#
+model_type: 'grainhill'
+number_of_node_rows: 79
+number_of_node_columns: 184
+cell_width: 0.1
+grav_accel: 9.8
+friction_coef: 1.0
+run_duration: 15000.0
+uplift_interval: 100.0
+disturbance_rate: 0.1
+weathering_rate: 0.001
+rock_state_for_uplift: 7
+opt_rock_collapse: 0
+opt_track_grains: False
+save_plots: True
+plot_filename: 'regolith_hill_dp10'
+plot_filetype: '.png'
+plot_interval: 3000.0
+output_interval: 1.0e20
+report_interval: 5.0

@@ -1,0 +1,27 @@
+# GrainHill input file:
+#
+# rock_hill_dp10wp0p4: symmetric, rock-based hillslope with relatively
+# inefficient weathering, and efficient disturbance.
+#    Run is similar to the bottom middle panel of Figure 11 of
+# Tucker et al. (2018), but with a slightly shorter hill (~18 m wide instead
+# of ~26 m).
+#
+model_type: 'grainhill'
+number_of_node_rows: 158
+number_of_node_columns: 184
+cell_width: 0.1
+grav_accel: 9.8
+friction_coef: 1.0
+run_duration: 100000.0
+uplift_interval: 1000.0
+disturbance_rate: 0.01
+weathering_rate: 0.0004
+rock_state_for_uplift: 8
+opt_rock_collapse: 0
+opt_track_grains: False
+save_plots: True
+plot_filename: 'rock_hill_dp10wp0p4'
+plot_filetype: '.png'
+plot_interval: 10000.0
+output_interval: 1.0e20
+report_interval: 5.0
