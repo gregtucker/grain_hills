@@ -88,6 +88,7 @@ class GrainHill(CTSModel):
         weathering_rate=1.0,
         dissolution_rate=0.0,
         uplift_interval=1.0,
+        uplift_duration=None,
         plot_interval=1.0e99,
         friction_coef=0.3,
         rock_state_for_uplift=7,
@@ -114,6 +115,7 @@ class GrainHill(CTSModel):
             weathering_rate,
             dissolution_rate,
             uplift_interval,
+            uplift_duration,
             plot_interval,
             friction_coef,
             rock_state_for_uplift,
@@ -141,6 +143,7 @@ class GrainHill(CTSModel):
         weathering_rate,
         dissolution_rate,
         uplift_interval,
+        uplift_duration,
         plot_interval,
         friction_coef,
         rock_state_for_uplift,
@@ -161,6 +164,10 @@ class GrainHill(CTSModel):
         self.weathering_rate = weathering_rate
         self.dissolution_rate = dissolution_rate
         self.uplift_interval = uplift_interval
+        if uplift_duration is not None:
+            self.uplift_duration = uplift_duration
+        else:
+            self.uplift_duration = run_duration
         self.plot_interval = plot_interval
         self.friction_coef = friction_coef
         self.rock_state = rock_state_for_uplift  # 7 (resting sed) or 8 (rock)
@@ -473,6 +480,8 @@ class GrainHill(CTSModel):
                     self.ca, self.current_time, rock_state=self.rock_state
                 )
                 self.next_uplift += self.uplift_interval
+            if self.current_time >= self.uplift_duration:
+                self.next_uplift = self.run_duration + 1.0  # no more uplift
 
     def get_profile_and_soil_thickness(self, grid, data):
         """Calculate and return profiles of elevation and soil thickness.
