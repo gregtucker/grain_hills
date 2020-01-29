@@ -1,0 +1,27 @@
+# GrainHill input file:
+#
+# block_hill_with_dike: "block hill" model that includes a cell state to
+# represent boulders. Here boulders form a vertical dike in the center of the
+# domain. Similar to Figure 18d in Tucker et al. (2018).
+#
+model_type: 'blockhill'
+number_of_node_rows: 61
+number_of_node_columns: 101
+cell_width: 0.1
+grav_accel: 9.8
+friction_coef: 1.0
+run_duration: 10000.0
+uplift_interval: 200.0
+disturbance_rate: 0.01
+weathering_rate: 0.0005
+rock_state_for_uplift: 7
+block_layer_dip_angle: 90.0
+block_layer_thickness: 10.0
+layer_left_x: 39.0
+opt_rock_collapse: 1
+save_plots: True
+plot_filename: 'block_hill_with_dike'
+plot_filetype: '.png'
+plot_interval: 1000.0
+output_interval: 1.0e20
+report_interval: 5.0
