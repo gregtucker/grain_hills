@@ -1,0 +1,2 @@
+landlab>=2.0.0-beta
+bmipy>=0
