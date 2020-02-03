@@ -12,6 +12,7 @@ from matplotlib.pyplot import axis
 from landlab.ca.celllab_cts import Transition
 from landlab.ca.boundaries.hex_lattice_tectonicizer import LatticeUplifter
 
+VERSION = '2.0.1'
 SECONDS_PER_YEAR = 365.25 * 24 * 3600
 _DEBUG = False
 

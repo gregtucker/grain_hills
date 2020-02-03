@@ -3,14 +3,19 @@
 
 import sys
 
+args = sys.argv
 
-if len(sys.argv) > 1:  # Check command-line argument
-
+if len(args) > 1:  # Check for version argument
+    for arg in args:
+        if ('-v' in arg) or ('--version' in arg):
+            from grainhill import VERSION
+            print('Version ' + VERSION)
+            args.pop(args.index(arg))
+if len(args) > 1:  # Check other arguments (input file name)
     from grainhill import BmiGrainHill
-
     print("Initializing...")
     gh = BmiGrainHill()
-    gh.initialize(sys.argv[1])
+    gh.initialize(args[1])
     print("Running...")
     gh.update_until(gh._model.run_duration)
     print("Cleaning up...")
