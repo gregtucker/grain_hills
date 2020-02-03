@@ -68,6 +68,15 @@ In addition, if `save_plots` is `True` and the `plot_interval` is less than the 
 Several example input files can be found in the `examples` folder.
 
 
+## Running tests
+
+If you have `pytest` installed, you can run the built-in tests by navigating to the `grainhill` folder and running:
+
+`pytest --doctest-modules`
+
+The result should say something like: `22 passed` (plus some number of warnings, which you can usually safely ignore).
+
+
 ## How to Cite
 
 Recommended citations:
